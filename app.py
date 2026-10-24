@@ -14,10 +14,13 @@ A single-file Streamlit application with two jobs:
 Run with:  streamlit run app.py
 """
 
+import os
 import random
 import time
 import uuid
 from contextlib import contextmanager
+from datetime import datetime, timezone
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -30,6 +33,10 @@ from statsmodels.stats.anova import anova_lm
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 from statsmodels.stats.power import TTestIndPower
 
+from lab.design import AI_BOT, CART_CODE, COLUMNS, JOB_LEVELS, JOB_ROLES, LEGACY, PRIMING_TEXT, TESTS
+from lab.features import enrich
+from lab.simulate import simulate_panel
+
 st.set_page_config(
     page_title="Enterprise AI & Statistics Lab",
     page_icon="📊",
@@ -37,31 +44,8 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------------------------
-# Constants
+# Display constants
 # ---------------------------------------------------------------------------
-
-JOB_LEVELS = ["IC / Associate", "Lead / Manager", "Director / Executive"]
-JOB_ROLES = ["Project / Product Management", "Engineering / Tech", "Operations", "Other"]
-LEGACY, AI_BOT = "Legacy Ticketing", "AI Bot"
-
-TESTS = {
-    1: dict(name="Password Reset", short="T1 Password", workflow=LEGACY, chaos=0),
-    2: dict(name="Software License Request", short="T2 License", workflow=LEGACY, chaos=0),
-    3: dict(name="VPN Access (AI Assistant)", short="T3 VPN", workflow=AI_BOT, chaos=0),
-    4: dict(name="Laptop Replacement (AI Assistant)", short="T4 Laptop", workflow=AI_BOT, chaos=0),
-    5: dict(name="The Chaos AI Bot", short="T5 Chaos Bot", workflow=AI_BOT, chaos=1),
-    6: dict(name="The Primed Documentation Hunt", short="T6 Doc Hunt", workflow=LEGACY, chaos=1),
-}
-
-# Participants in the primed arm see a banner before each chaos test. Priming both
-# an AI test and a legacy test keeps the workflow x priming design fully crossed,
-# which the two-way ANOVA interaction term needs.
-PRIMING_TEXT = {
-    5: "As a reminder, our AI Assistant resolves 94% of tickets on first contact.",
-    6: "As a reminder, ServiceNow’s single pane of glass is incredibly efficient.",
-}
-
-CART_CODE = "CART-7781"
 
 # Palette: validated dark-mode categorical steps (blue, orange, aqua) on a #1a1a19 surface.
 PAL = dict(
@@ -159,123 +143,14 @@ def mean_ci(series):
     return s.mean(), stats.t.ppf(0.975, n - 1) * s.std(ddof=1) / np.sqrt(n)
 
 
-def enrich(df):
-    df = df.copy()
-    df["years_experience"] = pd.to_numeric(df["years_experience"], errors="coerce")
-    df["priming"] = np.where(df["priming_exposed"] == 1, "Primed", "Unprimed")
-    df["phase"] = np.where(df["workflow_chaos"] == 1, "Chaos (Tests 5–6)", "Baseline (Tests 1–4)")
-    df["test_label"] = df["test_num"].map(lambda t: TESTS[t]["short"])
-    df["completion_min"] = df["completion_time"] / 60
-    df["exp_bucket"] = pd.cut(
-        df["years_experience"], [-0.1, 3, 9, 15, 100],
-        labels=["0–3 yrs", "4–9 yrs", "10–15 yrs", "16+ yrs"],
-    )
-    return df
-
-
 # ---------------------------------------------------------------------------
 # Benchmark synthetic data
 # ---------------------------------------------------------------------------
 
 @st.cache_data
 def generate_benchmark(n=300, seed=42):
-    """Seeded synthetic panel: n participants x 6 tests, built to exhibit the
-    effects the textbook tabs teach (right-skewed chaos times, priming that hits
-    executives hardest, and a Simpson's paradox between experience and
-    perceived efficiency)."""
-    np.random.seed(seed)
-
-    # --- Participant-level attributes ------------------------------------
-    # Seniority is a pyramid, and years of experience are drawn from a band that
-    # overlaps neighbouring levels. That overlap is what lets the Simpson's
-    # paradox appear: experience and seniority are correlated but not identical.
-    levels = np.random.choice(JOB_LEVELS, n, p=[0.50, 0.32, 0.18])
-    year_ranges = {JOB_LEVELS[0]: (0, 7), JOB_LEVELS[1]: (4, 15), JOB_LEVELS[2]: (10, 25)}
-    years = np.array([np.random.randint(year_ranges[l][0], year_ranges[l][1] + 1) for l in levels])
-    roles = np.random.choice(JOB_ROLES, n, p=[0.35, 0.35, 0.20, 0.10])
-    primed_arm = np.random.binomial(1, 0.5, n)  # 50/50 randomisation, as in the live app
-    speed = np.random.lognormal(0, 0.18, n)     # some people are just faster at every task
-
-    # --- Effect-size knobs --------------------------------------------------
-    # level_eff_offset: seniors rate the system higher overall (the between-group
-    #   trend), while efficiency falls with years *within* a level (-0.12/yr below).
-    #   Together they produce the Simpson's paradox shown in Tab 5.
-    # prime_susceptibility: how far the banner moves frustration and efficiency.
-    #   Executives are the most suggestible, which drives Tab 4's job-level plot.
-    # base_time / time_sigma: chaos tests have a higher median and a much larger
-    #   lognormal sigma, which creates the long right tail Tab 2 is about.
-    level_mean_years = {JOB_LEVELS[0]: 3.5, JOB_LEVELS[1]: 9.5, JOB_LEVELS[2]: 17.5}
-    level_eff_offset = {JOB_LEVELS[0]: -1.3, JOB_LEVELS[1]: 0.0, JOB_LEVELS[2]: 1.9}
-    prime_susceptibility = {JOB_LEVELS[0]: 0.3, JOB_LEVELS[1]: 1.0, JOB_LEVELS[2]: 2.4}
-    base_time = {1: 45, 2: 60, 3: 50, 4: 55, 5: 150, 6: 240}
-    time_sigma = {1: 0.25, 2: 0.25, 3: 0.25, 4: 0.25, 5: 0.6, 6: 0.7}
-    base_frust = {1: 3.0, 2: 3.2, 3: 2.6, 4: 2.7, 5: 6.8, 6: 7.2}
-    base_eff = {1: 6.4, 2: 6.2, 3: 7.2, 4: 7.0, 5: 3.0, 6: 2.7}
-    base_errors = {1: 0.2, 2: 0.3, 3: 0.15, 4: 0.15, 5: 2.5, 6: 3.0}
-
-    rows = []
-    for i in range(n):
-        lvl, yrs = levels[i], years[i]
-        for t, meta in TESTS.items():
-            chaos = meta["chaos"]
-            legacy = meta["workflow"] == LEGACY
-            primed = int(primed_arm[i] and chaos)
-            # The banner names the legacy system, so it lands harder on Test 6.
-            prime_weight = 1.0 if legacy else 0.5
-
-            ct = base_time[t] * speed[i] * np.random.lognormal(0, time_sigma[t])
-            ct *= 1 - 0.008 * yrs if not chaos else 1.0
-            if t == 6 and lvl == JOB_LEVELS[2]:
-                ct *= 1.25  # executives are least practiced at hunting through KB articles
-
-            # Rage-quit follows a true logistic model, so Tab 5's regression can
-            # recover these coefficients: chaos raises the odds steeply, experience
-            # lowers them, and priming lowers them slightly (people persist when
-            # told the system is efficient). Baseline quit rate is about 1%.
-            logit = -4.2 + 3.0 * chaos + 0.5 * (t == 6) - 0.06 * yrs - 0.5 * primed
-            rage_quit = int(np.random.rand() < 1 / (1 + np.exp(-logit)))
-            if rage_quit:
-                ct *= np.random.uniform(0.4, 0.9)  # quitters stop the clock early
-
-            # Survey ratings are latent continuous scores, rounded and clipped to 1-10
-            # to match the slider scale participants actually use.
-
-            errors = np.random.poisson(base_errors[t])
-            frust = (
-                base_frust[t]
-                + 0.004 * (ct - base_time[t])
-                + 1.5 * rage_quit
-                + 0.25 * errors
-                - primed * prime_susceptibility[lvl] * prime_weight
-                + np.random.normal(0, 1.0)
-            )
-            eff = (
-                base_eff[t]
-                + level_eff_offset[lvl]
-                - 0.12 * (yrs - level_mean_years[lvl])
-                + primed * prime_susceptibility[lvl] * 1.2 * prime_weight
-                - 1.0 * rage_quit
-                + np.random.normal(0, 1.0)
-            )
-            rows.append(dict(
-                participant_id=f"BENCH-{i:03d}",
-                source="benchmark",
-                years_experience=int(yrs),
-                job_level=lvl,
-                job_role=roles[i],
-                primed_arm=int(primed_arm[i]),
-                test_num=t,
-                test_name=meta["name"],
-                workflow=meta["workflow"],
-                workflow_chaos=chaos,
-                priming_exposed=primed,
-                completion_time=round(float(ct), 1),
-                error_count=int(errors),
-                rage_quit=rage_quit,
-                frustration=int(np.clip(round(frust), 1, 10)),
-                efficiency=int(np.clip(round(eff), 1, 10)),
-            ))
-    return enrich(pd.DataFrame(rows))
+    """Benchmark dataset for the teaching tabs (see lab/simulate.py for the data-generating process)."""
+    return enrich(simulate_panel(n, seed))
 
 
 # ---------------------------------------------------------------------------
@@ -298,6 +173,42 @@ def init_state():
     ss.setdefault("attempts", 0)       # Test 5 submissions, also seeds its chaos
     ss.setdefault("pending", None)     # task result waiting for its survey answers
     ss.setdefault("flash", None)       # error message that must survive one st.rerun()
+
+
+# Every completed test is appended here so data survives across browser sessions
+# and participants. Override with LAB_DATA_PATH; set it to "" to disable writing.
+DATA_PATH = os.environ.get("LAB_DATA_PATH", str(Path(__file__).parent / "data" / "raw" / "live_sessions.csv"))
+
+
+def persist_row(row):
+    if not DATA_PATH:
+        return
+    try:
+        path = Path(DATA_PATH)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame([row], columns=COLUMNS).to_csv(path, mode="a", header=not path.exists(), index=False)
+    except OSError as exc:
+        # Read-only hosts (e.g. some cloud deployments) can't write; the sidebar
+        # CSV download is the fallback.
+        st.toast(f"Couldn't save to {DATA_PATH}: {exc}. Use the sidebar download instead.")
+
+
+def assign_arm():
+    """Permuted-block randomisation (blocks of 4: two primed, two control).
+
+    With the small samples a class study gets, simple coin flips can easily give
+    a 60/40 split. Blocks keep the arms balanced after every 4 participants. The
+    position in the sequence is the number of participants already saved.
+    """
+    k = 0
+    if DATA_PATH and Path(DATA_PATH).exists():
+        try:
+            k = pd.read_csv(DATA_PATH, usecols=["participant_id"])["participant_id"].nunique()
+        except (OSError, ValueError, pd.errors.EmptyDataError):
+            k = 0
+    block = [0, 0, 1, 1]
+    random.Random(f"block-{k // 4}").shuffle(block)
+    return block[k % 4]
 
 
 def live_dataframe():
@@ -604,9 +515,10 @@ def render_survey(test_num):
         # Priming exposure is per row: primed-arm participants only see a banner on
         # chaos tests, so their baseline rows count as unprimed.
         primed = int(p["primed_arm"] and meta["chaos"])
-        ss.telemetry.append(dict(
+        row = dict(
             participant_id=p["id"],
             source="live",
+            submitted_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
             years_experience=p["years"],
             job_level=p["level"],
             job_role=p["role"],
@@ -621,7 +533,9 @@ def render_survey(test_num):
             rage_quit=res["rage_quit"],
             frustration=frust,
             efficiency=eff,
-        ))
+        )
+        ss.telemetry.append(row)
+        persist_row(row)
         ss.step += 1
         ss.phase = "task"
         ss.t_start = None
@@ -647,18 +561,23 @@ with tabs[0]:
             years = c1.number_input("Years of experience (25 = 25+)", 0, 25, value=None, step=1)
             level = c2.selectbox("Job level", JOB_LEVELS, index=None, placeholder="Prefer not to say")
             role = c3.selectbox("Job role", JOB_ROLES, index=None, placeholder="Prefer not to say")
+            consent = st.checkbox(
+                "I agree to take part. I understand my anonymous timings, ratings and optional demographics "
+                "will be recorded for a class research project, and that I can stop at any time."
+            )
             start = st.form_submit_button("🚀 Start the 4:45 PM grind", type="primary")
-        st.caption(
-            "You'll be randomly assigned to a primed or control arm. Your timings and ratings stay in this "
-            "browser session unless you download them."
-        )
-        if start:
+        # Neutral wording on purpose: telling participants about the priming
+        # manipulation up front would contaminate it. They are debriefed at the end.
+        st.caption("No names or contact details are collected. The study takes about 10 minutes.")
+        if start and not consent:
+            st.error("Please tick the consent box to begin.")
+        elif start:
             ss.participant = dict(
                 id=f"LIVE-{uuid.uuid4().hex[:6].upper()}",
                 years=years,
                 level=level,
                 role=role,
-                primed_arm=random.randint(0, 1),
+                primed_arm=assign_arm(),
             )
             ss.step = 1
             st.rerun()
@@ -692,7 +611,15 @@ with tabs[0]:
         summary["benchmark_median_time"] = summary["test_num"].map(bench_median).round(1)
         st.dataframe(summary, hide_index=True)
         arm = "primed" if ss.participant["primed_arm"] else "control"
-        st.caption(f"You were in the **{arm}** arm. Switch the sidebar to live telemetry to analyse your session.")
+        st.info(
+            "**Debrief.** Thank you for taking part. This study tested whether a short marketing-style "
+            "statement (*“ServiceNow’s single pane of glass is incredibly efficient”*) changes how efficient "
+            "people *rate* a system, even when their own experience of it is poor. Half of participants saw "
+            f"that banner and half didn't. You were in the **{arm}** group. Test 6 was deliberately hard: "
+            "the submit button was hidden in the documentation. Please don't tell future participants "
+            "about the banner until data collection is finished."
+        )
+        st.caption("Switch the sidebar to live telemetry to analyse your session.")
         if st.button("➕ Run another participant", type="primary"):
             ss.step = 0
             ss.participant = None
