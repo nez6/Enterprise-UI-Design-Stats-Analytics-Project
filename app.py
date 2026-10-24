@@ -184,13 +184,26 @@ def generate_benchmark(n=300, seed=42):
     executives hardest, and a Simpson's paradox between experience and
     perceived efficiency)."""
     np.random.seed(seed)
+
+    # --- Participant-level attributes ------------------------------------
+    # Seniority is a pyramid, and years of experience are drawn from a band that
+    # overlaps neighbouring levels. That overlap is what lets the Simpson's
+    # paradox appear: experience and seniority are correlated but not identical.
     levels = np.random.choice(JOB_LEVELS, n, p=[0.50, 0.32, 0.18])
     year_ranges = {JOB_LEVELS[0]: (0, 7), JOB_LEVELS[1]: (4, 15), JOB_LEVELS[2]: (10, 25)}
     years = np.array([np.random.randint(year_ranges[l][0], year_ranges[l][1] + 1) for l in levels])
     roles = np.random.choice(JOB_ROLES, n, p=[0.35, 0.35, 0.20, 0.10])
-    primed_arm = np.random.binomial(1, 0.5, n)
-    speed = np.random.lognormal(0, 0.18, n)
+    primed_arm = np.random.binomial(1, 0.5, n)  # 50/50 randomisation, as in the live app
+    speed = np.random.lognormal(0, 0.18, n)     # some people are just faster at every task
 
+    # --- Effect-size knobs --------------------------------------------------
+    # level_eff_offset: seniors rate the system higher overall (the between-group
+    #   trend), while efficiency falls with years *within* a level (-0.12/yr below).
+    #   Together they produce the Simpson's paradox shown in Tab 5.
+    # prime_susceptibility: how far the banner moves frustration and efficiency.
+    #   Executives are the most suggestible, which drives Tab 4's job-level plot.
+    # base_time / time_sigma: chaos tests have a higher median and a much larger
+    #   lognormal sigma, which creates the long right tail Tab 2 is about.
     level_mean_years = {JOB_LEVELS[0]: 3.5, JOB_LEVELS[1]: 9.5, JOB_LEVELS[2]: 17.5}
     level_eff_offset = {JOB_LEVELS[0]: -1.3, JOB_LEVELS[1]: 0.0, JOB_LEVELS[2]: 1.9}
     prime_susceptibility = {JOB_LEVELS[0]: 0.3, JOB_LEVELS[1]: 1.0, JOB_LEVELS[2]: 2.4}
@@ -215,10 +228,17 @@ def generate_benchmark(n=300, seed=42):
             if t == 6 and lvl == JOB_LEVELS[2]:
                 ct *= 1.25  # executives are least practiced at hunting through KB articles
 
+            # Rage-quit follows a true logistic model, so Tab 5's regression can
+            # recover these coefficients: chaos raises the odds steeply, experience
+            # lowers them, and priming lowers them slightly (people persist when
+            # told the system is efficient). Baseline quit rate is about 1%.
             logit = -4.2 + 3.0 * chaos + 0.5 * (t == 6) - 0.06 * yrs - 0.5 * primed
             rage_quit = int(np.random.rand() < 1 / (1 + np.exp(-logit)))
             if rage_quit:
-                ct *= np.random.uniform(0.4, 0.9)
+                ct *= np.random.uniform(0.4, 0.9)  # quitters stop the clock early
+
+            # Survey ratings are latent continuous scores, rounded and clipped to 1-10
+            # to match the slider scale participants actually use.
 
             errors = np.random.poisson(base_errors[t])
             frust = (
@@ -263,16 +283,21 @@ def generate_benchmark(n=300, seed=42):
 # ---------------------------------------------------------------------------
 
 def init_state():
+    """The simulator is a small state machine. Streamlit reruns the whole script on
+    every click, so all progress has to live in session_state:
+
+        step 0 (intro) -> step 1..6 [phase "task" -> phase "survey"] -> step 7 (done)
+    """
     ss = st.session_state
-    ss.setdefault("telemetry", [])
-    ss.setdefault("step", 0)          # 0 = intro, 1..6 = tests, 7 = finished
-    ss.setdefault("phase", "task")    # task | survey
-    ss.setdefault("participant", None)
-    ss.setdefault("t_start", None)
-    ss.setdefault("errors", 0)
-    ss.setdefault("attempts", 0)
-    ss.setdefault("pending", None)
-    ss.setdefault("flash", None)
+    ss.setdefault("telemetry", [])     # one dict per completed test, across all participants
+    ss.setdefault("step", 0)           # 0 = intro, 1..6 = tests, 7 = finished
+    ss.setdefault("phase", "task")     # task | survey
+    ss.setdefault("participant", None) # demographics + id + randomised arm
+    ss.setdefault("t_start", None)     # wall-clock start of the current test
+    ss.setdefault("errors", 0)         # validation / fake-UI errors in the current test
+    ss.setdefault("attempts", 0)       # Test 5 submissions, also seeds its chaos
+    ss.setdefault("pending", None)     # task result waiting for its survey answers
+    ss.setdefault("flash", None)       # error message that must survive one st.rerun()
 
 
 def live_dataframe():
@@ -407,6 +432,8 @@ CHAOS_ERRORS = [
 
 
 def finish_task(rage_quit=False):
+    """Stop the clock and hand the result to the survey phase. The row is only
+    written to telemetry after the survey, so every row has ratings."""
     ss.pending = dict(
         completion_time=round(time.time() - ss.t_start, 1),
         error_count=ss.errors,
@@ -428,6 +455,8 @@ def abandon_button(test_num, prominent=False):
 
 
 def render_clean_test(test_num):
+    """Tests 1-4: ordinary, well-behaved forms. Widget keys include the participant
+    id so the next participant starts with blank fields."""
     pid = ss.participant["id"]
     if test_num in BOT_GREETINGS:
         st.chat_message("assistant").markdown(BOT_GREETINGS[test_num])
@@ -454,8 +483,12 @@ def render_clean_test(test_num):
 
 
 def render_chaos_bot():
+    """Test 5: a half-broken AI assistant. It gives vague replies, hallucinates
+    subcategories, offers nonsense priorities and throws fake errors."""
     pid = ss.participant["id"]
-    # Options reshuffle (and hallucinations rotate) after every failed attempt.
+    # The RNG is seeded per attempt so options stay stable while the user is
+    # choosing (a reshuffle on every rerun would make the form unusable). They
+    # reshuffle, and the hallucinations rotate, after each failed submission.
     rng = random.Random(f"{pid}-{ss.attempts}")
     st.chat_message("assistant").markdown(
         "Hi, I'm **Nova 2.0 (beta)** ✨ — now with *generative categorisation*! " + rng.choice(CHAOS_REPLIES)
@@ -468,11 +501,16 @@ def render_chaos_bot():
         sub = st.selectbox("Subcategory (AI-generated)", options, index=None, placeholder="Nova is thinking…")
         st.radio("Priority (Nova-suggested)", priority_opts, horizontal=True)
         submitted = st.form_submit_button("Send to Nova", type="primary")
+    # Errors are stored and shown after st.rerun() because the rerun is what
+    # rebuilds the form with freshly shuffled options.
     if ss.flash:
         st.error(ss.flash)
         ss.flash = None
     if submitted:
         ss.attempts += 1
+        # Order of checks: missing input, then a hallucinated category, then a random
+        # fake outage. Fake outages stop after 3 attempts so the test is always
+        # winnable for anyone who persists.
         if not desc or sub is None:
             ss.errors += 1
             ss.flash = "Nova: I can't categorise silence. Please describe the issue and pick a subcategory."
@@ -502,6 +540,10 @@ DENSE_FILLER = (
 
 
 def render_doc_hunt():
+    """Test 6: the form has no submit button. Users must scroll past the filler, open
+    the KB article and spot the cart code (paragraph 1.3), then check out from
+    inside the article. Plain widgets are used instead of st.form, because a form
+    must have a submit button."""
     pid = ss.participant["id"]
     st.markdown("#### 🎥 Request: Conference Room AV setup for the 5:00 PM board call")
     abandon_button(6, prominent=True)
@@ -559,6 +601,8 @@ def render_survey(test_num):
     if nxt:
         p = ss.participant
         meta = TESTS[test_num]
+        # Priming exposure is per row: primed-arm participants only see a banner on
+        # chaos tests, so their baseline rows count as unprimed.
         primed = int(p["primed_arm"] and meta["chaos"])
         ss.telemetry.append(dict(
             participant_id=p["id"],
@@ -627,6 +671,8 @@ with tabs[0]:
         if ss.phase == "task":
             if ss.participant["primed_arm"] and t in PRIMING_TEXT:
                 st.markdown(f"<div class='priming-banner'>📣 {PRIMING_TEXT[t]}</div>", unsafe_allow_html=True)
+            # The clock starts the first time the test page renders and survives
+            # the reruns triggered by typing and clicking within the test.
             if ss.t_start is None:
                 ss.t_start = time.time()
             if t <= 4:
@@ -759,6 +805,9 @@ minutes on end stretch the right tail, so the mean overstates what a typical use
 # Tab 3 - Hypothesis testing & assumptions (Chapters 3, 4, 6)
 # ---------------------------------------------------------------------------
 
+# Each comparison returns (group A rows, group B rows, label A, label B, caveat).
+# The between-subjects comparisons come first because they suit independent-samples
+# tests. The pooled ones carry a caveat about repeated measures.
 COMPARISONS = {
     "Test 6 · Primed vs Control arm": lambda d: (
         d[(d.test_num == 6) & (d.primed_arm == 1)], d[(d.test_num == 6) & (d.primed_arm == 0)],
@@ -822,6 +871,9 @@ the direction before seeing the data. The shaded area under the curve below *is*
                    "Collect more live data or switch to the benchmark dataset.")
     else:
         with guarded("Hypothesis test"):
+            # Shapiro-Wilk's p-value is only reliable up to n = 5000, so larger
+            # samples are truncated. All three tests are computed so the table can
+            # show what the diagnostics chose against what they rejected.
             sh_a = stats.shapiro(a[:5000])
             sh_b = stats.shapiro(b[:5000])
             lev = stats.levene(a, b)
@@ -830,9 +882,12 @@ the direction before seeing the data. The shaded area under the curve below *is*
             student = stats.ttest_ind(a, b, equal_var=True, alternative=direction)
             welch = stats.ttest_ind(a, b, equal_var=False, alternative=direction)
             mwu = stats.mannwhitneyu(a, b, alternative=direction)
+            # Decision rule: both normal and equal variance -> Student; normal but
+            # unequal variance -> Welch; any group non-normal -> Mann-Whitney U.
             chosen = ("Student's t-test" if normal and equal_var
                       else "Welch's t-test" if normal else "Mann–Whitney U")
-            pooled = np.sqrt(((len(a) - 1) * a.var(ddof=1) + (len(b) - 1) * b.var(ddof=1)) / (len(a) + len(b) - 2))
+            # Cohen's d with pooled SD. It also seeds the power-analysis slider below.
+            pooled =np.sqrt(((len(a) - 1) * a.var(ddof=1) + (len(b) - 1) * b.var(ddof=1)) / (len(a) + len(b) - 2))
             effect_d = (a.mean() - b.mean()) / pooled if pooled > 0 else 0.0
 
             st.subheader("Step 1 · Assumption checks")
@@ -862,11 +917,15 @@ the direction before seeing the data. The shaded area under the curve below *is*
             )
 
             st.subheader("Step 3 · See the p-value")
+            # Draw the null t distribution for the chosen t-test (Welch stands in for
+            # Mann-Whitney) and shade the tail(s) beyond the observed statistic. That
+            # shaded area is exactly the p-value.
             use_student = chosen == "Student's t-test"
             t_obs = student.statistic if use_student else welch.statistic
             if use_student:
                 dof = len(a) + len(b) - 2
             else:
+                # Welch-Satterthwaite approximation for the degrees of freedom.
                 va, vb = a.var(ddof=1) / len(a), b.var(ddof=1) / len(b)
                 dof = (va + vb) ** 2 / (va ** 2 / (len(a) - 1) + vb ** 2 / (len(b) - 1))
             span = max(4.5, abs(t_obs) + 1)
@@ -920,6 +979,8 @@ $\alpha$. The usual target is 80%. Cohen's benchmarks are small $d=0.2$, medium 
                       help="Defaults to the observed |Cohen's d| from the comparison above.")
     alpha_p = p2.select_slider("α (power)", [0.01, 0.025, 0.05, 0.10], value=alpha)
     n_sel = p3.slider("Sample size per group n", 5, 500, 64, 1)
+    # statsmodels names one-sided alternatives "larger"/"smaller" relative to the sign
+    # of d. Because the slider holds |d|, both one-sided directions map to "larger".
     alt_map = {"two-sided": "two-sided", "greater": "larger", "less": "larger"}
     with guarded("Power analysis"):
         analysis = TTestIndPower()
@@ -980,7 +1041,10 @@ of cells while holding the family-wise error rate at α.
             formula = f"{resp} ~ C(workflow) + C(priming) + C(job_level) + C(workflow):C(priming)"
             st.code(formula, language="text")
             model = smf.ols(formula, data=adf).fit()
+            # Type II sums of squares: each main effect is tested after the other
+            # main effects, which suits unbalanced cells such as job level.
             aov = anova_lm(model, typ=2)
+            # Partial eta squared = SS_effect / (SS_effect + SS_error).
             aov["partial η²"] = aov["sum_sq"] / (aov["sum_sq"] + aov.loc["Residual", "sum_sq"])
             aov.loc["Residual", "partial η²"] = np.nan
             st.dataframe(aov.round(4))
@@ -1033,6 +1097,8 @@ of cells while holding the family-wise error rate at α.
 
         with guarded("Tukey's HSD"):
             st.subheader("Tukey's HSD post-hoc comparisons")
+            # Tukey compares all four workflow x priming cells pairwise and controls
+            # the family-wise error rate.
             cells = adf["workflow"] + " · " + adf["priming"]
             tk = pairwise_tukeyhsd(adf[resp], cells, alpha=0.05)
             table = tk.summary().data
@@ -1141,6 +1207,8 @@ and a bent Q–Q line signals non-normal errors.
             "then split by job level."
         )
         with guarded("Simpson's paradox"):
+            # Collapse to one point per participant (mean rating across their tests).
+            # Otherwise each person would count six times and inflate the scatter.
             pp = (reg.dropna(subset=["job_level"])
                      .groupby(["participant_id", "job_level"], as_index=False)
                      .agg(years_experience=("years_experience", "first"), efficiency=("efficiency", "mean")))
@@ -1201,6 +1269,8 @@ $k$ successes in $n$ tickets, the posterior is simply $\text{Beta}(a+k,\;b+n-k)$
 need lots of evidence to move, and weak priors defer to the data almost immediately.
 """)
 
+    # Evidence stream: AI Bot tickets in a fixed shuffled order, so the "tickets
+    # observed" slider replays the same sequence every time.
     ai_rows = df[df.workflow == AI_BOT].sample(frac=1, random_state=7)
     ai_success = ((ai_rows.rage_quit == 0) & (ai_rows.error_count <= 1)).astype(int).to_numpy()
     st.markdown(
@@ -1214,6 +1284,8 @@ need lots of evidence to move, and weak priors defer to the data almost immediat
     prior_strength = b2.slider("Prior strength (pseudo-tickets)", 2, 300, 40,
                                help="How many tickets' worth of conviction the prior carries.")
     n_obs = b3.slider("Tickets observed so far", 0, max(len(ai_success), 1), min(30, len(ai_success)))
+    # Beta prior from mean and strength: a0 + b0 = strength and a0 / (a0 + b0) = mean.
+    # Conjugacy means the posterior is just Beta(a0 + successes, b0 + failures).
     a0, b0 = prior_mean * prior_strength, (1 - prior_mean) * prior_strength
     seen = ai_success[:n_obs]
     k = int(seen.sum())
@@ -1264,6 +1336,7 @@ need lots of evidence to move, and weak priors defer to the data almost immediat
         p_rel = e1.slider("Prior P(bot is reliable)", 0.01, 0.99, 0.80, 0.01)
         p_err_rel = e2.slider("P(error | reliable)", 0.01, 0.5, 0.10, 0.01)
         p_err_unrel = e3.slider("P(error | unreliable)", 0.05, 0.99, 0.60, 0.01)
+        # Bayes' theorem applied k times: P(R | k errors) ∝ P(R) · P(E | R)^k.
         ks = np.arange(0, 11)
         num = p_rel * p_err_rel ** ks
         post = num / (num + (1 - p_rel) * p_err_unrel ** ks)
