@@ -1,0 +1,33 @@
+{
+  "alpha": 0.05,
+  "target_power": 0.8,
+  "attrition": 0.1,
+  "h1": {
+    "effect_size_d": 0.8,
+    "test": "one-sided Mann-Whitney U",
+    "n_per_group_ttest": 20.03275768840654,
+    "are_correction": 0.864,
+    "n_per_group": 24,
+    "analysable_total": 48,
+    "recruit_total": 54,
+    "monte_carlo_power": 0.435,
+    "monte_carlo_sims": 400,
+    "simulation_model_d": 0.5738186761480066,
+    "n_per_group_for_simulation_d": 45
+  },
+  "h2": {
+    "effect_size_dz": 1.0,
+    "test": "one-sided Wilcoxon signed-rank",
+    "n_pairs_ttest": 7.7276179024108504,
+    "n_pairs": 9
+  },
+  "sensitivity_min_d_by_n_per_group": {
+    "10": 1.156297269864038,
+    "15": 0.9307048198443334,
+    "20": 0.8006803749913616,
+    "25": 0.7134105913160863,
+    "30": 0.6496295651890053,
+    "40": 0.5608809212050552,
+    "50": 0.5007641052602384
+  }
+}

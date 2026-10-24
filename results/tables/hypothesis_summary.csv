@@ -1,0 +1,4 @@
+hypothesis,claim,test,p,p_holm,rank_biserial
+H1,Priming ↑ T6 efficiency,Mann–Whitney U (one-sided),0.6699,,-0.0679
+H2,Chaos ↑ completion time,Wilcoxon signed-rank (one-sided),0.0,0.0,1.0
+H3,Priming ↓ chaos frustration,Mann–Whitney U (one-sided),0.0001,0.0001,-0.5941
