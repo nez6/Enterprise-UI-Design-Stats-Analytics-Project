@@ -4,3 +4,6 @@ __pycache__/
 .DS_Store
 .streamlit/secrets.toml
 .pytest_cache/
+site/node_modules/
+site/dist/
+site/.env.local
