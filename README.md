@@ -1,95 +1,98 @@
-# Selling the Single Pane of Glass
+# SNOW Stats Lab
 
-**Does a one-line efficiency claim change how people rate a broken ticketing workflow?**
-Module Project 2 (Statistical Analysis): a randomised experiment, run in a custom Streamlit simulator, with a fully scripted analysis pipeline.
+**File noisy ServiceNow-style tickets, then learn statistics and AI from the group's own data.**
 
-> ⚠️ **Data status:** the committed results and report come from a **simulated pilot** (`data/raw/simulated_pilot_raw.csv`) used to build and test the pipeline. After collecting real participants, regenerate everything with one command (see [Reproduce with real data](#reproduce-with-real-data)).
+A static website (GitHub Pages) with six pages:
 
-| Deliverable | Where |
-|---|---|
-| Written report | [report/REPORT.md](report/REPORT.md) (generated from [report/report_template.md](report/report_template.md)) |
-| Data collection instrument | [app.py](app.py) |
-| Cleaning / power / analysis scripts | [scripts/](scripts/) |
-| Raw and cleaned data | [data/](data/) (see the [data dictionary](data/README.md)) |
-| Figures and tables | [results/](results/) |
-| Presentation | [presentation/OUTLINE.md](presentation/OUTLINE.md) (8-minute script and slide plan) |
-| Collaboration workflow | [CONTRIBUTING.md](CONTRIBUTING.md) |
-
-## The experiment in one paragraph
-
-Participants play a project lead logging six urgent IT tickets at 4:45 PM on a Friday. Tests 1–4 are clean baselines (two legacy forms, two AI-assisted). Test 5 is a hallucinating AI bot. Test 6 is a "documentation hunt" whose submit button is hidden inside a dense KB article. Participants are randomised (permuted blocks of 4) to a **primed** arm, which sees *"ServiceNow's single pane of glass is incredibly efficient"* before Test 6 (and a similar AI claim before Test 5), or a **control** arm, which sees nothing. After every test they rate frustration and perceived efficiency (1–10). The app also logs completion time, errors and rage-quits.
-
-| | Hypothesis | Test |
+| # | Page | What it teaches |
 |---|---|---|
-| **H1 (primary)** | Priming raises Test 6 perceived efficiency | One-sided Mann–Whitney U |
-| H2 | Chaos tests take longer than baseline (within subjects) | One-sided Wilcoxon signed-rank, Holm-corrected |
-| H3 | Priming lowers chaos-test frustration | One-sided Mann–Whitney U, Holm-corrected |
-| H4 (exploratory) | Priming × job level | Two-way ANOVA + Tukey HSD; mixed model |
-| H5 (exploratory) | Predictors of rage-quitting | Logistic regression, clustered SEs |
+| 1 | **Service Portal** | Participants file six noisy tickets: three in a ServiceNow-style catalog, three with an AI agent built into the form. They rate each one, then give feedback on ServiceNow and the AI. |
+| 2 | **The Shape of Noise** | Distributions, mean vs median (a draggable see-saw), SD/IQR/skew, and an animated **Central Limit Theorem** sampling machine |
+| 3 | **Bayes & the Agent** | **Bayes' theorem** as area, base-rate traps, the AI agent's naive Bayes brain, and trust as a Beta posterior |
+| 4 | **Did It Work?** | Permutation tests, t-tests and assumption checks, paired tests, power, two-way ANOVA + Tukey HSD, chi-square |
+| 5 | **Regression → ML** | Least squares drawn as squares, multiple regression, logistic regression and confusion matrices, overfitting, Simpson's paradox |
+| 6 | **LLMs & the Playbook** | Next-token probabilities, temperature and hallucination, calibration, the perception–performance gap, and an AI-in-ServiceNow implementation playbook |
 
-## Setup
+Every lesson redraws live as tickets arrive. It also has a 300-person benchmark class, so the charts are populated before anyone submits.
+
+**The experiment inside it:** each participant has two independent 50/50 chances of seeing a **positive** banner before the ServiceNow set ("ServiceNow's single pane of glass is incredibly efficient") and a **negative** banner before the AI set ("AI agents are known to hallucinate…"). Do the words change how efficient each tool *feels*, even when the stopwatch says the AI is faster?
+
+> Not affiliated with or endorsed by ServiceNow, Inc. The portal is a look-alike training simulation with no logos and no login.
+
+---
+
+## Run the website locally
 
 ```bash
-git clone https://github.com/nez6/Enterprise-UI-Design-Stats-Analytics-Project.git
-cd Enterprise-UI-Design-Stats-Analytics-Project
-python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+cd site
+npm install
+npm run dev          # http://localhost:5173 (demo mode: data stays in your browser)
+npm test             # checks the in-browser statistics against SciPy/statsmodels
+```
+
+Presenting: in any lesson, **→ / ↓ / Space** jump to the next scene and **← / ↑** go back. Switch the data source (top right) between *Live class*, *Benchmark* and *Live + benchmark*.
+
+## Put it online (GitHub Pages + Supabase)
+
+**1. Create the shared database** (free tier is fine):
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open **SQL Editor**, paste [supabase/schema.sql](supabase/schema.sql) and run it. This creates the `submissions` and `feedback` tables, row-level security (anyone can insert and read; nobody can edit or delete), and live updates.
+3. In **Project Settings → API**, copy the **Project URL** and the **anon public** key.
+
+**2. Point the site at it:** in GitHub, go to **Settings → Secrets and variables → Actions → Variables** and add:
+- `SUPABASE_URL` = the project URL
+- `SUPABASE_ANON_KEY` = the anon key (it's designed to be public; the security policies protect the data)
+
+**3. Turn on Pages:** go to **Settings → Pages → Source** and select **GitHub Actions**. Every push to `main` that touches `site/` builds and deploys via [.github/workflows/pages.yml](.github/workflows/pages.yml). Your URL will be `https://<user>.github.io/Enterprise-UI-Design-Stats-Analytics-Project/`.
+
+**4. On the call:** share `…/?session=pathfinders-nov` (any label you like) so each session's data stays separate. The pill at the top right shows how many people are live.
+
+Without step 2 the site still works in **demo mode**: each browser keeps its own data, and tabs in the same browser update live.
+
+## The statistics course project (Python)
+
+The graded analysis runs on the same data with scripts, not notebooks:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+pytest                                   # cleaning-rule and helper tests
+python scripts/run_pipeline.py           # simulated pilot, end to end
 ```
 
-Tested with Python 3.12.
-
-## Reproduce the analysis (simulated pilot)
+After the live session:
 
 ```bash
-python scripts/run_pipeline.py
-```
-
-This runs five steps in order. Each step is also a standalone script:
-
-| Step | Script | Writes |
-|---|---|---|
-| 1. Power analysis | `scripts/power_analysis.py` | `results/power_analysis.json`, `results/figures/fig5_power_curve.png` |
-| 2. Simulated pilot | `scripts/generate_simulated_data.py` | `data/raw/simulated_pilot_raw.csv` |
-| 3. Cleaning | `scripts/clean_data.py --raw <file>` | `data/clean/*.csv`, `results/cleaning_log.{md,json}` |
-| 4. Analysis | `scripts/analyze.py` | `results/results.json`, `results/tables/*.csv`, `results/figures/*.png` |
-| 5. Report | `scripts/build_report.py` | `report/REPORT.md` |
-
-Every random step is seeded, so reruns reproduce the same numbers. Run the unit tests for the cleaning rules and effect-size helpers with `pytest`.
-
-## Collect real data
-
-```bash
-streamlit run app.py
-```
-
-- Each participant uses **Tab 1 · Live Simulator**: consent → optional demographics → six tests → debrief (about 10 minutes).
-- Every completed test is appended to `data/raw/live_sessions.csv`. Run all sessions from the same machine or deployment so they land in one file. To write somewhere else, set `LAB_DATA_PATH=/path/file.csv`.
-- If the app runs on a host with a read-only disk, participants can download their rows from the sidebar instead. Concatenate those CSVs into `data/raw/live_sessions.csv`.
-- Add your own test runs to `data/raw/excluded_ids.txt` before analysing.
-- **Don't tell participants about the banner** until data collection is finished. The debrief screen asks them not to.
-- Target: **54 participants** (from the power analysis, including 10% attrition).
-
-Tabs 2–6 of the app are an interactive statistics textbook (EDA, hypothesis tests, ANOVA, regression, Bayesian updating). They run on live sessions or a 300-person synthetic benchmark.
-
-## Reproduce with real data
-
-```bash
+export SUPABASE_URL=… SUPABASE_ANON_KEY=…
+python scripts/export_supabase.py --session pathfinders-nov    # → data/raw/live_sessions.csv + live_feedback.csv
 python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
 ```
 
-The report regenerates with real numbers. Every result-dependent sentence (reject / fail to reject, abstract, interpretation) is filled in from `results/results.json`, and the "simulated data" banner disappears. Then reread the generated report and adjust the prose in `report/report_template.md` if the story has changed.
+| Step | Script | Writes |
+|---|---|---|
+| Power analysis | `scripts/power_analysis.py` | `results/power_analysis.json`, power-curve figure |
+| Simulated pilot (default runs only) | `scripts/generate_simulated_data.py` | `data/raw/simulated_pilot_*.csv` |
+| Cleaning (7 pre-registered rules) | `scripts/clean_data.py` | `data/clean/*.csv`, `results/cleaning_log.md` |
+| Analysis (H1–H4 + exploratory) | `scripts/analyze.py` | `results/results.json`, `results/tables/`, `results/figures/` |
+| Written report | `scripts/build_report.py` | [report/REPORT.md](report/REPORT.md) from [report/report_template.md](report/report_template.md) |
+
+> ⚠️ The committed results are from a **simulated pilot**, clearly labelled throughout. Regenerate everything from the live export before submitting.
+
+**Hypotheses.** H1: the praise banner raises ServiceNow ratings. H2: the warning lowers AI ratings. Both are primary, tested with one-sided Mann–Whitney U and Holm-corrected. H3: the AI is faster (paired Wilcoxon). H4: the warning increases AI overrides. The power analysis says to recruit **68 participants**.
 
 ## Repository layout
 
 ```
-app.py                      Streamlit data-collection instrument + teaching dashboard
-lab/                        Shared code: design constants, simulator, plotting style
-scripts/                    Power analysis, simulation, cleaning, analysis, report, pipeline
-data/raw/                   Raw telemetry (simulated pilot; live_sessions.csv once collected)
-data/clean/                 Analysis-ready long table + one-row-per-participant table
-results/                    JSON results, CSV tables, PNG figures, cleaning log
-report/                     Report template (edit) and generated REPORT.md (don't edit)
-presentation/               Slide plan and 8-minute speaker script
-tests/                      pytest unit tests
+site/                 The website (Vite + D3 + KaTeX), deployed to GitHub Pages
+  src/pages/          portal.js + lesson1–5.js (one file per page)
+  src/stats/core.js   In-browser statistics, tested against SciPy (site/tests/)
+  src/data/           Design, AI-agent classifier, benchmark class, Supabase/demo storage
+supabase/schema.sql   Database tables, security policies and realtime
+lab/                  Shared Python design, simulator and plotting style
+scripts/              Export, power, simulation, cleaning, analysis, report, pipeline
+data/                 Raw and cleaned data (see data/README.md)
+results/              Figures, tables, results.json, cleaning log
+report/               Report template (edit) and generated REPORT.md
+presentation/         Talk outline and speaker script
+tests/                Python tests
 ```
