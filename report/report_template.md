@@ -1,6 +1,6 @@
 # Praise for the Incumbent, Warnings for the AI: How One Sentence Shifts Ratings of Enterprise Ticketing Tools
 
-**Author:** [Your name] · Module Project 2: Statistical Analysis · {{report_date}}
+**Author:** Natalie Zachariah · Module Project 2: Statistical Analysis · {{report_date}}
 
 {{data_banner}}
 

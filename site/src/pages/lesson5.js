@@ -230,7 +230,7 @@ function closing(root) {
     ['Design for trust', 'Calibrated confidence, easy overrides, and honest messaging, because framing moves ratings.'],
     ['Audit for everyone', 'Check accuracy and adoption by group. Simpson’s paradox hides in averages.'],
   ].map(([k, v]) => `<div class="stat"><div class="v" style="font-size:20px">${k}</div><div style="color:var(--l-ink2);font-size:14px;margin-top:6px">${v}</div></div>`).join('')));
-  callout(s, '<b>[Your name]</b> · Built this lab to show how statistics turns AI from a bet into a measurable programme. <span style="color:var(--l-ink2)">Replace this line with your own close and contact details.</span>');
+  callout(s, '<b>Natalie Zachariah</b> · Built this lab to show how statistics turns AI from a bet into a measurable programme.');
 }
 
 export { JOB_LEVELS };

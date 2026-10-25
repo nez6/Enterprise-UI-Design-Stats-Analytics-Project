@@ -2,7 +2,7 @@
 
 # Praise for the Incumbent, Warnings for the AI: How One Sentence Shifts Ratings of Enterprise Ticketing Tools
 
-**Author:** [Your name] · Module Project 2: Statistical Analysis · October 24, 2026
+**Author:** Natalie Zachariah · Module Project 2: Statistical Analysis · October 24, 2026
 
 > ⚠️ **These results come from a SIMULATED pilot dataset** (`data/raw/simulated_pilot_raw.csv`), generated to build and test the analysis pipeline before real participants were run. They are not empirical findings. After the live session, run `python scripts/export_supabase.py` and `python scripts/run_pipeline.py --raw data/raw/live_sessions.csv` to regenerate this report.
 
