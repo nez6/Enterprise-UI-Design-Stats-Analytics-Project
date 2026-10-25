@@ -1,8 +1,8 @@
-streamlit>=1.40
+# Python course pipeline (power analysis, cleaning, analysis, report).
+# The teaching website has its own dependencies in site/package.json.
 pandas>=2.0
 numpy>=1.26
 scipy>=1.11
 statsmodels>=0.14
-plotly>=5.18
 matplotlib>=3.8
 pytest>=8.0

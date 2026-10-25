@@ -1,110 +1,85 @@
-"""Seeded synthetic participants for the benchmark dataset and the simulated pilot.
+"""Seeded synthetic participants in the site's schema (a Python port of
+site/src/data/synthetic.js, minus the text classifier: the AI agent's accuracy is
+drawn directly).
 
-The data-generating process is deliberately built to contain the effects the
-course teaches (right-skewed chaos times, priming that hits executives hardest,
-a logistic rage-quit process and a Simpson's paradox), so every analysis has
-something real to find. It is NOT a substitute for collecting real participants.
+Built-in effects: AI tickets ~3x faster; the positive banner raises ServiceNow
+ratings; the hallucination warning lowers AI ratings and makes people override the
+agent more; seniors are the most suggestible; a Simpson's paradox between
+experience and ratings. It is NOT a substitute for real participants.
 """
 
 import numpy as np
 import pandas as pd
 
-from lab.design import COLUMNS, JOB_LEVELS, JOB_ROLES, LEGACY, TESTS
+from lab.design import AI, COLUMNS, FEEDBACK_COLUMNS, JOB_LEVELS, JOB_ROLES, LEGACY, TESTS
 
 
-def simulate_panel(n=300, seed=42, id_prefix="BENCH", source="benchmark"):
-    """Return n participants x 6 tests in the same raw schema the app writes."""
-    np.random.seed(seed)
+def simulate_panel(n=300, seed=42, id_prefix="BENCH", source="benchmark", session="benchmark"):
+    """Return (submissions, feedback) dataframes for n simulated participants."""
+    rng = np.random.default_rng(seed)
+    L = JOB_LEVELS
+    level_mean_years = {L[0]: 3.5, L[1]: 9.5, L[2]: 17.5}
+    level_eff = {L[0]: -1.0, L[1]: 0.0, L[2]: 1.5}
+    sus = {L[0]: 0.6, L[1]: 1.0, L[2]: 1.6}
+    year_range = {L[0]: (0, 7), L[1]: (4, 15), L[2]: (10, 25)}
+    base_time = {1: 70, 2: 95, 3: 230, 4: 28, 5: 32, 6: 36}
+    time_sigma = {1: 0.3, 2: 0.3, 3: 0.65, 4: 0.3, 5: 0.3, 6: 0.3}
+    base_frust = {1: 4.5, 2: 5.0, 3: 7.2, 4: 2.6, 5: 2.5, 6: 2.8}
+    base_eff = {1: 4.8, 2: 4.4, 3: 2.8, 4: 7.4, 5: 7.6, 6: 7.2}
+    base_err = {1: 0.4, 2: 0.8, 3: 2.6, 4: 0.1, 5: 0.1, 6: 0.1}
 
-    # --- Participant-level attributes ------------------------------------
-    # Seniority is a pyramid, and years of experience are drawn from a band that
-    # overlaps neighbouring levels. That overlap is what lets the Simpson's
-    # paradox appear: experience and seniority are correlated but not identical.
-    levels = np.random.choice(JOB_LEVELS, n, p=[0.50, 0.32, 0.18])
-    year_ranges = {JOB_LEVELS[0]: (0, 7), JOB_LEVELS[1]: (4, 15), JOB_LEVELS[2]: (10, 25)}
-    years = np.array([np.random.randint(year_ranges[l][0], year_ranges[l][1] + 1) for l in levels])
-    roles = np.random.choice(JOB_ROLES, n, p=[0.35, 0.35, 0.20, 0.10])
-    primed_arm = np.random.binomial(1, 0.5, n)  # 50/50 randomisation, as in the live app
-    speed = np.random.lognormal(0, 0.18, n)     # some people are just faster at every task
-
-    # --- Effect-size knobs --------------------------------------------------
-    # level_eff_offset: seniors rate the system higher overall (the between-group
-    #   trend), while efficiency falls with years *within* a level (-0.12/yr below).
-    #   Together they produce the Simpson's paradox shown in Tab 5.
-    # prime_susceptibility: how far the banner moves frustration and efficiency.
-    #   Executives are the most suggestible, which drives Tab 4's job-level plot.
-    # base_time / time_sigma: chaos tests have a higher median and a much larger
-    #   lognormal sigma, which creates the long right tail Tab 2 is about.
-    level_mean_years = {JOB_LEVELS[0]: 3.5, JOB_LEVELS[1]: 9.5, JOB_LEVELS[2]: 17.5}
-    level_eff_offset = {JOB_LEVELS[0]: -1.3, JOB_LEVELS[1]: 0.0, JOB_LEVELS[2]: 1.9}
-    prime_susceptibility = {JOB_LEVELS[0]: 0.3, JOB_LEVELS[1]: 1.0, JOB_LEVELS[2]: 2.4}
-    base_time = {1: 45, 2: 60, 3: 50, 4: 55, 5: 150, 6: 240}
-    time_sigma = {1: 0.25, 2: 0.25, 3: 0.25, 4: 0.25, 5: 0.6, 6: 0.7}
-    base_frust = {1: 3.0, 2: 3.2, 3: 2.6, 4: 2.7, 5: 6.8, 6: 7.2}
-    base_eff = {1: 6.4, 2: 6.2, 3: 7.2, 4: 7.0, 5: 3.0, 6: 2.7}
-    base_errors = {1: 0.2, 2: 0.3, 3: 0.15, 4: 0.15, 5: 2.5, 6: 3.0}
-
-    rows = []
+    rows, feedback = [], []
     for i in range(n):
-        lvl, yrs = levels[i], years[i]
-        for t, meta in TESTS.items():
-            chaos = meta["chaos"]
-            legacy = meta["workflow"] == LEGACY
-            primed = int(primed_arm[i] and chaos)
-            # The banner names the legacy system, so it lands harder on Test 6.
-            prime_weight = 1.0 if legacy else 0.5
-
-            ct = base_time[t] * speed[i] * np.random.lognormal(0, time_sigma[t])
-            ct *= 1 - 0.008 * yrs if not chaos else 1.0
-            if t == 6 and lvl == JOB_LEVELS[2]:
-                ct *= 1.25  # executives are least practiced at hunting through KB articles
-
-            # Rage-quit follows a true logistic model, so Tab 5's regression can
-            # recover these coefficients: chaos raises the odds steeply, experience
-            # lowers them, and priming lowers them slightly (people persist when
-            # told the system is efficient). Baseline quit rate is about 1%.
-            logit = -4.2 + 3.0 * chaos + 0.5 * (t == 6) - 0.06 * yrs - 0.5 * primed
-            rage_quit = int(np.random.rand() < 1 / (1 + np.exp(-logit)))
-            if rage_quit:
-                ct *= np.random.uniform(0.4, 0.9)  # quitters stop the clock early
-
-            # Survey ratings are latent continuous scores, rounded and clipped to 1-10
-            # to match the slider scale participants actually use.
-
-            errors = np.random.poisson(base_errors[t])
-            frust = (
-                base_frust[t]
-                + 0.004 * (ct - base_time[t])
-                + 1.5 * rage_quit
-                + 0.25 * errors
-                - primed * prime_susceptibility[lvl] * prime_weight
-                + np.random.normal(0, 1.0)
-            )
-            eff = (
-                base_eff[t]
-                + level_eff_offset[lvl]
-                - 0.12 * (yrs - level_mean_years[lvl])
-                + primed * prime_susceptibility[lvl] * 1.2 * prime_weight
-                - 1.0 * rage_quit
-                + np.random.normal(0, 1.0)
-            )
+        lvl = rng.choice(L, p=[0.5, 0.32, 0.18])
+        yrs = int(rng.integers(year_range[lvl][0], year_range[lvl][1] + 1))
+        role = rng.choice(JOB_ROLES, p=[0.35, 0.35, 0.2, 0.1])
+        snow_p, ai_p = int(rng.random() < 0.5), int(rng.random() < 0.5)
+        ai_first = rng.random() < 0.5
+        order = [4, 5, 6, 1, 2, 3] if ai_first else [1, 2, 3, 4, 5, 6]
+        speed = rng.lognormal(0, 0.18)
+        pid = f"{id_prefix}-{i:03d}"
+        eff_sum = {LEGACY: 0, AI: 0}
+        ai_right = 0
+        for k, t in enumerate(order):
+            meta = TESTS[t]
+            is_ai = meta["workflow"] == AI
+            primed = ai_p if is_ai else snow_p
+            ct = base_time[t] * speed * (0.9 if k >= 3 else 1) * rng.lognormal(0, time_sigma[t]) * (1 - 0.006 * yrs)
+            errors = int(rng.poisson(base_err[t]))
+            ai_cat = ai_conf = ai_correct = None
+            if is_ai:
+                model_right = rng.random() < 0.87
+                confusable = [c for c in ("Access & Passwords", "Software", "Hardware", "Network & VPN") if c != meta["category"]]
+                ai_cat = meta["category"] if model_right else str(rng.choice(confusable))
+                ai_conf = float(np.clip(rng.normal(0.62 if model_right else 0.45, 0.15), 0.2, 0.99))
+                override_right = primed and rng.random() < 0.12
+                ai_correct = int(model_right and not override_right)
+                if not ai_correct:
+                    errors += 1
+                    ct += 12 * rng.lognormal(0, 0.3)
+                ai_right += ai_correct
+            logit = -4.4 + (3.2 if t == 3 else 0) + (-0.6 if is_ai else 0) - 0.05 * yrs
+            quit_ = int(rng.random() < 1 / (1 + np.exp(-logit)))
+            if quit_:
+                ct *= 0.4 + 0.5 * rng.random()
+            shift = primed * sus[lvl] * (-1.3 if is_ai else 1.0)
+            frust = base_frust[t] + 0.003 * (ct - base_time[t]) + 1.5 * quit_ + 0.3 * errors - 0.5 * shift + rng.normal(0, 1)
+            eff = (base_eff[t] + level_eff[lvl] - 0.1 * (yrs - level_mean_years[lvl]) + shift - quit_
+                   - 0.4 * (is_ai and not ai_correct) + rng.normal(0, 1))
+            eff_r = int(np.clip(round(eff), 1, 10))
+            eff_sum[meta["workflow"]] += eff_r
             rows.append(dict(
-                participant_id=f"{id_prefix}-{i:03d}",
-                source=source,
-                submitted_at=None,
-                years_experience=int(yrs),
-                job_level=lvl,
-                job_role=roles[i],
-                primed_arm=int(primed_arm[i]),
-                test_num=t,
-                test_name=meta["name"],
-                workflow=meta["workflow"],
-                workflow_chaos=chaos,
-                priming_exposed=primed,
-                completion_time=round(float(ct), 1),
-                error_count=int(errors),
-                rage_quit=rage_quit,
-                frustration=int(np.clip(round(frust), 1, 10)),
-                efficiency=int(np.clip(round(eff), 1, 10)),
+                participant_id=pid, source=source, submitted_at=None, session_label=session,
+                years_experience=yrs, job_level=lvl, job_role=role,
+                snow_primed=snow_p, ai_primed=ai_p, set_order="ai_first" if ai_first else "legacy_first",
+                test_num=t, position=k + 1, test_name=meta["name"], ticket_type=meta["type"], workflow=meta["workflow"], primed=primed,
+                completion_time=round(float(ct), 1), error_count=errors, rage_quit=quit_,
+                frustration=int(np.clip(round(frust), 1, 10)), efficiency=eff_r,
+                ticket_text=None, chosen_category=None if quit_ else meta["category"],
+                ai_category=ai_cat, ai_confidence=ai_conf, ai_correct=None if quit_ else ai_correct,
             ))
-    return pd.DataFrame(rows, columns=COLUMNS)
+        nps = int(np.clip(round(eff_sum[LEGACY] / 3 + snow_p * sus[lvl] * 0.8 + rng.normal(0, 1.8)), 0, 10))
+        trust = int(np.clip(round(3 + 1.8 * ai_right - ai_p * sus[lvl] * 1.2 + rng.normal(0, 1.2)), 1, 10))
+        feedback.append(dict(participant_id=pid, session_label=session, snow_primed=snow_p, ai_primed=ai_p, job_level=lvl,
+                             nps_servicenow=nps, ai_trust=trust, prefer_ai=int(0.35 * (eff_sum[AI] - eff_sum[LEGACY]) / 3 - 0.8 + rng.normal(0, 1) > 0), comment=None))
+    return pd.DataFrame(rows, columns=COLUMNS), pd.DataFrame(feedback, columns=FEEDBACK_COLUMNS)
