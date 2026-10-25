@@ -1,0 +1,7 @@
+ticket,platform,n,time_mean,time_median,time_sd,time_iqr,time_skew,efficiency_mean,frustration_mean,rage_quit_rate
+SN · Access,ServiceNow,65,67.426,63.7,27.322,30.0,1.292,4.877,4.538,0.0
+SN · Software,ServiceNow,65,89.766,84.1,35.765,38.8,1.047,4.508,4.877,0.0
+SN · Facilities,ServiceNow,65,305.085,202.6,248.253,262.4,1.758,2.769,8.215,0.169
+AI · Access,AI Agent,65,27.509,26.7,11.392,15.3,0.764,6.369,3.092,0.0
+AI · Software,AI Agent,65,31.9,31.7,10.634,14.4,0.279,6.369,2.769,0.015
+AI · Facilities,AI Agent,65,33.614,31.9,11.672,14.6,0.676,6.123,3.015,0.0

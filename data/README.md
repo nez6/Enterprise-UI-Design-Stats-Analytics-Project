@@ -4,44 +4,46 @@
 
 | File | What it is |
 |---|---|
-| `raw/simulated_pilot_raw.csv` | **Simulated** participants from `scripts/generate_simulated_data.py`. Includes deliberate mess (dropouts, a walk-away, duplicates, a dry run, missing demographics) to exercise the cleaning rules. Not real people. |
-| `raw/live_sessions.csv` | Real participants, written by `app.py` as they complete each test. Created on the first real session. |
-| `raw/excluded_ids.txt` | Participant ids to drop before analysis (researcher dry runs, withdrawals). |
-| `clean/analysis_ready.csv` | Cleaned long table: one row per participant × test, for completers only. |
-| `clean/participants.csv` | One row per participant: the unit of analysis for H1–H3. |
+| `raw/simulated_pilot_raw.csv`, `raw/simulated_pilot_feedback.csv` | **Simulated** participants from `scripts/generate_simulated_data.py`, with deliberate mess (dropouts, a walk-away, duplicates, a dry run, missing demographics) to exercise the cleaning rules. Not real people. |
+| `raw/live_sessions.csv`, `raw/live_feedback.csv` | Real participants, exported from Supabase by `scripts/export_supabase.py`. |
+| `raw/excluded_ids.txt` | Participant ids to drop before analysis (dry runs, withdrawals). |
+| `clean/analysis_ready.csv` | Cleaned tickets: one row per participant × ticket, completers only. |
+| `clean/feedback.csv` | Cleaned final surveys, one per participant. |
+| `clean/participants.csv` | One row per participant: the unit of analysis. |
 
-No names, emails or other identifiers are collected. Participant ids are random (`LIVE-xxxxxx`), and demographics are optional and coarse.
+No names or contact details are collected. Ids are random (`P-xxxxxx`), and demographics are optional and coarse. Ticket text is free-form, so participants are asked not to type personal information. Check it before publishing real data.
 
-## Raw / long-table columns (`lab/design.py: COLUMNS`)
-
-| Column | Type | Meaning |
-|---|---|---|
-| `participant_id` | str | Random id assigned at the start of a session |
-| `source` | str | `live` (real), `simulated` (pilot) or `benchmark` (teaching data) |
-| `submitted_at` | ISO-8601 UTC | When the survey for this test was submitted (blank for simulated rows) |
-| `years_experience` | int 0–25, optional | Years of work experience (25 = 25+) |
-| `job_level` | category, optional | `IC / Associate`, `Lead / Manager`, `Director / Executive` |
-| `job_role` | category, optional | `Project / Product Management`, `Engineering / Tech`, `Operations`, `Other` |
-| `primed_arm` | 0/1 | Randomised arm (1 = sees banners before Tests 5–6) |
-| `test_num` | 1–6 | Which task |
-| `test_name` | str | Task name |
-| `workflow` | category | `Legacy Ticketing` or `AI Bot` |
-| `workflow_chaos` | 0/1 | 1 for Tests 5–6 |
-| `priming_exposed` | 0/1 | `primed_arm × workflow_chaos`: was a banner shown before *this* test |
-| `completion_time` | float, seconds | From test page load to submission or abandonment |
-| `error_count` | int | Validation errors, wrong cart codes, fake bot errors |
-| `rage_quit` | 0/1 | Pressed "Abandon Ticket / I Give Up" |
-| `frustration` | int 1–10 | Post-test rating |
-| `efficiency` | int 1–10 | Post-test perceived system efficiency (**primary outcome on Test 6**) |
-
-## Participant table (`clean/participants.csv`)
+## Tickets (`submissions` table / `*_sessions.csv`)
 
 | Column | Meaning |
 |---|---|
-| `arm` | `Primed` / `Control` |
-| `baseline_time_gm`, `chaos_time_gm` | Geometric-mean completion time over Tests 1–4 and 5–6 (H2) |
-| `chaos_frustration`, `chaos_efficiency` | Mean rating over Tests 5–6 (H3) |
-| `t6_efficiency`, `t6_frustration`, `t6_time` | Test 6 values (H1) |
-| `rage_quits` | Number of abandoned tests |
+| `participant_id`, `session_label` | Random id; the `?session=` label from the link they used |
+| `source`, `submitted_at` | `live` / `simulated` / `benchmark`; UTC timestamp |
+| `years_experience`, `job_level`, `job_role` | Optional demographics |
+| `snow_primed` | 1 = saw the positive ServiceNow banner (coin flip 1) |
+| `ai_primed` | 1 = saw the AI hallucination warning (coin flip 2, independent) |
+| `set_order` | `legacy_first` or `ai_first` |
+| `test_num`, `position` | Ticket 1–6 (1–3 ServiceNow, 4–6 AI agent); order shown, 1–6 |
+| `test_name`, `ticket_type`, `workflow` | Ticket name; access / software / facilities; `ServiceNow` or `AI Agent` |
+| `primed` | Banner shown before *this* ticket's set |
+| `completion_time` | Seconds from opening the ticket to submitting or abandoning it |
+| `error_count` | Validation errors, wrong cart codes, corrections of the AI |
+| `rage_quit` | 1 = pressed "Abandon ticket / I give up" |
+| `frustration`, `efficiency` | 1–10 ratings after the ticket (`efficiency` is the primary outcome) |
+| `ticket_text` | What the participant typed (≤ 500 characters) |
+| `chosen_category` | Category finally submitted |
+| `ai_category`, `ai_confidence` | AI agent's guess and stated confidence (AI tickets only) |
+| `ai_correct` | 1 = participant kept the AI's category, 0 = changed it |
 
-The cleaning rules and their counts are in `../results/cleaning_log.md`.
+## Final survey (`feedback` table / `*_feedback.csv`)
+
+| Column | Meaning |
+|---|---|
+| `nps_servicenow` | 0–10, how likely to recommend the ServiceNow catalog |
+| `ai_trust` | 1–10, trust in the AI agent for the next ticket |
+| `prefer_ai` | 1 = would rather use the AI agent next time |
+| `comment` | Optional free text (≤ 400 characters) |
+
+## Participant table (`clean/participants.csv`)
+
+`sn_eff` / `ai_eff` and `sn_frust` / `ai_frust` are mean ratings per platform. `sn_time_gm` / `ai_time_gm` are geometric-mean seconds per ticket. `override_rate` is the share of AI tickets where the category was changed. The survey columns are merged in.

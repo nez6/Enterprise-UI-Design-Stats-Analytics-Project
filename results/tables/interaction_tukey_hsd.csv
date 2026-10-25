@@ -1,0 +1,7 @@
+group1,group2,meandiff,p-adj,lower,upper,reject
+AI Agent · Banner,AI Agent · No banner,1.5361,0.0,0.8513,2.2209,True
+AI Agent · Banner,ServiceNow · Banner,-1.247,0.0,-1.9195,-0.5746,True
+AI Agent · Banner,ServiceNow · No banner,-1.8273,0.0,-2.4837,-1.171,True
+AI Agent · No banner,ServiceNow · Banner,-2.7831,0.0,-3.4921,-2.0741,True
+AI Agent · No banner,ServiceNow · No banner,-3.3634,0.0,-4.0572,-2.6697,True
+ServiceNow · Banner,ServiceNow · No banner,-0.5803,0.1242,-1.2619,0.1012,False

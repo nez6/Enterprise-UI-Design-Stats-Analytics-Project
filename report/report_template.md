@@ -1,6 +1,6 @@
-# Selling the Single Pane of Glass: Does a One-Line Efficiency Claim Change How People Rate a Broken Ticketing Workflow?
+# Praise for the Incumbent, Warnings for the AI: How One Sentence Shifts Ratings of Enterprise Ticketing Tools
 
-**Authors:** [Your name] & [Partner name] · Module Project 2: Statistical Analysis · {{report_date}}
+**Author:** [Your name] · Module Project 2: Statistical Analysis · {{report_date}}
 
 {{data_banner}}
 
@@ -8,117 +8,97 @@
 
 ## 1. Abstract
 
-Enterprise software is often judged by how efficient its users *say* it is, and those judgments are made in an environment full of vendor messaging. We built a six-task IT-ticketing simulator and ran a randomised between-subjects experiment. Before two deliberately frustrating tasks (a malfunctioning AI assistant and a "documentation hunt" with a hidden submit button), half of participants saw a one-sentence efficiency claim: *"ServiceNow's single pane of glass is incredibly efficient."* The other half saw no banner. Our primary hypothesis (H1) was that the claim would raise perceived-efficiency ratings on the documentation-hunt task. With {{n_participants}} analysable participants ({{n_primed}} primed, {{n_control}} control), {{abstract_h1}} As secondary results, chaos tasks took {{h2_ratio}}× longer than baseline tasks within the same people (95% CI {{h2_ratio_ci}}; Holm-adjusted {{h2_p_holm_eq}}), and {{abstract_h3}} We discuss a floor effect in the efficiency scale, the limited power for anything smaller than a large effect, and what these findings imply for how organisations evaluate workflow and AI tools.
+Organisations decide whether to keep legacy tools or adopt AI largely from what users *report*, and those reports are collected amid strong messaging: vendors praise incumbent platforms, and public discussion warns that AI "hallucinates". We built a ServiceNow-style service portal in which every participant filed six realistic, noisy IT tickets, three through classic catalog forms and three with an AI agent embedded in the form, and rated each one. Two independent coin flips decided whether participants saw a **positive banner** before the ServiceNow set ("ServiceNow's single pane of glass is incredibly efficient") and a **negative banner** before the AI set ("AI agents are known to hallucinate…"). With {{n_participants}} analysable participants, {{abstract_h1}} {{abstract_h2}} Meanwhile, the AI agent was {{h3_speedup}}× faster per ticket (95% CI {{h3_speedup_ci}}). {{abstract_close}}
 
 ## 2. Background & Motivation
 
-IT service management (ITSM) platforms and, increasingly, AI assistants sit between employees and almost every operational request they make: password resets, licences, hardware, access. Buying decisions and post-rollout reviews for these tools lean heavily on **self-reported satisfaction and perceived efficiency**, collected in organisations where the same tools are actively promoted by vendors and internal champions.
+IT service management (ITSM) platforms such as ServiceNow, and the AI agents now being built into them, sit between employees and almost every operational request. Purchasing, renewal and rollout decisions lean heavily on **perceived efficiency and satisfaction**: survey ratings, NPS, and "would you use it again?". Those perceptions are formed in an environment saturated with framing. Incumbent vendors market efficiency ("single pane of glass"), while AI tools arrive wrapped in warnings about hallucination and error.
 
-Two strands of behavioural research suggest this may be a problem:
+Behavioural research suggests framing can shift judgments that should depend on experience. Anchoring and framing effects are well documented (Tversky & Kahneman, 1974; 1981), although some priming effects have not replicated (Doyen et al., 2012), so their size in applied settings needs testing directly. Usability research also separates **behavioural** measures (time on task, errors, abandonment) from **attitudinal** ones (ratings such as the SUS; Brooke, 1996), and the two can diverge.
 
-- **Priming and anchoring.** Brief exposure to a statement or number can shift later judgments, even when the judgment should depend on the person's own experience (Tversky & Kahneman, 1974). Some well-known social-priming effects have failed to replicate (Doyen et al., 2012), so the size, and even the existence, of such effects in applied settings is an empirical question worth testing directly.
-- **Perceived vs. measured usability.** Usability research separates behavioural measures (time on task, errors, abandonment) from attitudinal ones (ratings such as the SUS; Brooke, 1996). They can diverge, and when they do, it matters which one decision-makers look at.
-
-Our question sits where these meet: **if users are told a system is efficient right before they struggle with it, do they rate it as more efficient than people who struggled the same amount without the message?** If they do, satisfaction surveys collected after marketing exposure would overstate how well a tool works, and senior stakeholders, who are often the most exposed to that messaging, may be the most affected.
+This study asks whether framing pushes perception **against** performance in both directions: up for a slow incumbent, down for a fast AI. If it does, satisfaction surveys collected after vendor or media messaging would mis-rank tools, and AI programmes would be judged unfairly at exactly the moment adoption decisions are made.
 
 ## 3. Research Questions & Hypotheses
 
-**Primary research question.** Does a one-sentence efficiency claim increase perceived-efficiency ratings of a frustrating ticketing task?
-
-| | Null hypothesis (H₀) | Alternative hypothesis (H₁) | Role |
+| | Null hypothesis (H₀) | Alternative (H₁) | Role |
 |---|---|---|---|
-| **H1** | Test 6 perceived-efficiency ratings have the same distribution in the primed and control arms. | Primed participants' Test 6 ratings are stochastically **greater** (one-sided). | Primary, confirmatory |
-| **H2** | Within participants, completion time on chaos tasks (5–6) is not longer than on baseline tasks (1–4). | Chaos-task completion time is **longer** (one-sided). | Secondary (manipulation check) |
-| **H3** | Mean frustration on the chaos tasks has the same distribution in both arms. | Primed participants report **lower** frustration (one-sided). | Secondary |
-| **H4** | The priming effect on Test 6 efficiency does not depend on job level (no arm × level interaction). | The priming effect differs by job level. | Exploratory |
-| **H5** | Years of experience, arm and task do not predict abandoning a chaos task. | At least one of them does. | Exploratory |
+| **H1** | Mean ServiceNow efficiency ratings have the same distribution with and without the praise banner. | Praise-banner participants rate ServiceNow **higher** (one-sided). | Primary |
+| **H2** | Mean AI-agent efficiency ratings have the same distribution with and without the warning banner. | Warned participants rate the AI agent **lower** (one-sided). | Primary |
+| **H3** | Within participants, AI-agent tickets are not faster than ServiceNow tickets. | AI-agent tickets are **faster** (one-sided). | Performance check |
+| **H4** | Warned and unwarned participants override the AI agent's category at the same rate. | Warned participants override **more** (one-sided). | Secondary |
+| E | — | Platform × banner interaction; who chooses the AI next time; NPS and trust; effects by job level. | Exploratory |
 
-The directions for H1–H3 were fixed before data collection, which justifies the one-sided tests. H2 and H3 form a secondary family and are Holm-corrected (Holm, 1979). H4 and H5 are exploratory and are reported without confirmatory claims.
+The directions were fixed before data collection, which justifies the one-sided tests. H1 and H2 form the primary family and are **Holm-corrected** (Holm, 1979). The exploratory analyses carry no confirmatory claims.
 
 ## 4. Experimental Design
 
-**Instrument.** A Streamlit web app (`app.py`) simulates a Friday 4:45 PM scenario: the participant is a project lead who must log six urgent IT tickets before the end of the day.
+**Instrument.** A static web app hosted on GitHub Pages (`site/`) recreates a ServiceNow-style service portal. Participants are told it is 4:45 PM on a Friday and they have six urgent requests to log. For every ticket they describe the problem **in their own words** (so the ticket text is realistic and noisy), then rate it.
 
-| Test | Task | Workflow | Condition |
-|---|---|---|---|
-| 1 | Password reset | Legacy ticketing | Baseline (clean form) |
-| 2 | Software licence request | Legacy ticketing | Baseline |
-| 3 | VPN access | AI assistant | Baseline (assistant pre-fills the category) |
-| 4 | Laptop replacement | AI assistant | Baseline |
-| 5 | Production outage | AI assistant | **Chaos**: vague replies, hallucinated categories, random fake errors |
-| 6 | Conference-room AV | Legacy ticketing | **Chaos**: no submit button; a checkout code is buried in dense KB documentation |
+| Ticket | ServiceNow set (catalog forms) | AI agent set (AI fills the form) |
+|---|---|---|
+| Access | Password reset: four mandatory fields | MFA reset |
+| Software | Licence request: cost-centre format validation | Software install |
+| Facilities | Boardroom AV: **no submit button**; the checkout code is buried in a KB article | Meeting-room camera |
+
+In the AI set, the participant types a description and an AI agent (a naive Bayes text classifier) fills in the category, priority, assignment group and short description, showing its confidence. The participant reviews the ticket, can correct anything, and submits.
 
 **Independent variables.**
-- *Priming arm* (between subjects; primed vs control). Primed participants see a banner before Test 5 ("our AI Assistant resolves 94% of tickets on first contact") and before Test 6 ("ServiceNow's single pane of glass is incredibly efficient"). Control participants see no banner.
-- *Workflow condition* (within subjects): baseline (Tests 1–4) vs chaos (Tests 5–6).
-- *Job level* (measured, not manipulated; optional): IC/Associate, Lead/Manager, Director/Executive.
+- *Praise banner* (between subjects, 50%): shown before and during the ServiceNow set.
+- *Warning banner* (between subjects, 50%, **independent** of the praise banner): shown before and during the AI set.
+- *Platform* (within subjects): ServiceNow vs AI agent.
+- *Set order* (randomised 50/50): ServiceNow first or AI first, to balance learning and fatigue.
+- *Job level and experience* (measured, optional).
 
-**Dependent variables.**
-- Perceived efficiency (1–10 slider, after each test). This is the **primary outcome** on Test 6.
-- Frustration (1–10 slider, after each test).
-- Completion time in seconds, logged automatically from when the test page opens to submission or abandonment.
-- Error count: validation failures, wrong cart codes and fake bot errors.
-- Rage-quit: a prominent "Abandon Ticket / I Give Up" button on every test.
+**Dependent variables.** Perceived efficiency (1–10, primary), frustration (1–10), completion time (seconds, logged automatically), errors and corrections, abandonment ("I give up" button), whether the participant kept or overrode the AI's category, and a final survey: recommend-ServiceNow (0–10, NPS), trust in the AI agent (1–10), and which tool they would rather use next time.
 
-**Control condition.** The control arm completes identical tasks with no banner. All other content, ordering and timing logic is the same.
+**Controls and randomisation.** Each banner has a no-banner control. Because the two banners are independent coin flips, every participant contributes to **both** primary comparisons, and the 2 × 2 factorial lets us check that one banner does not alter the other's effect. Allocation happens in the participant's browser with a cryptographic random number generator, so the facilitator cannot influence it. Participants are debriefed about the banners at the end.
 
-**Randomisation.** Arms are allocated by **permuted blocks of four** (two primed, two control, in random order). This keeps the arms balanced at every multiple of four participants, which matters at class-sized samples. Allocation is automatic, so the facilitator cannot influence it. Participants are not told about the manipulation until the debrief at the end.
-
-**Fixed task order.** All participants complete the tests in the same order (1→6). This keeps the experience identical across arms, so arm is the only thing that differs. The cost is that order and fatigue effects are confounded with the baseline/chaos contrast in H2 (see Limitations).
-
-**Ethics.** Participants give consent on the start screen. No names or contact details are collected, demographics are optional, and everyone is debriefed about the priming manipulation at the end.
+**Ethics.** Participants consent on the start screen. No names or contact details are collected, demographics are optional, and participants are asked not to type personal information into tickets.
 
 ## 5. Power Analysis
 
 Power analysis was done before data collection with `statsmodels.stats.power` (`scripts/power_analysis.py`).
 
-**Assumptions for H1 (primary).**
-- Smallest effect of interest: **d = {{p_d}}** (a "large" effect; Cohen, 1988). We chose this because a class-run study can realistically recruit about 50–60 people. Effects smaller than this would need far more participants (see the sensitivity table below).
-- α = {{p_alpha}}, **one-sided** (direction pre-specified); target power = {{p_power}}.
-- A two-sample t-test needs **{{p_n_t}} per group**. Because the planned test is Mann–Whitney U, whose asymptotic relative efficiency versus the t-test is never below 0.864 (Hodges & Lehmann, 1956), we divided by 0.864: **{{p_n_mwu}} per group ({{p_analysable}} analysable participants)**.
-- Allowing for **{{p_attrition}} attrition** (dropouts, walk-aways, technical failures), and rounding up to an even number for block randomisation, the **recruitment target is {{p_recruit}} participants**.
+- **Primary tests (H1, H2):** smallest effect of interest **d = {{p_d}}** (Cohen's "large"; Cohen, 1988). This is realistic for a session-sized sample, and the sensitivity table shows the trade-off. Because Holm's first step tests at α/2, each test is planned at **one-sided α = {{p_alpha_each}}**, with target power {{p_power}}.
+- A two-sample t-test needs **{{p_n_t}} per banner group**. Dividing by Mann–Whitney's minimum asymptotic relative efficiency of 0.864 (Hodges & Lehmann, 1956) gives **{{p_n_mwu}} per group ({{p_analysable}} analysable participants)**. Every participant counts in both comparisons, so this one number serves H1 and H2.
+- Allowing **{{p_attrition}} attrition** gives a **recruitment target of {{p_recruit}}**.
+- **H3 (paired):** d_z = {{p_dz}} needs only {{p_h3}} pairs.
 
-**H2 (secondary, paired).** For a within-subject effect of d_z = {{p_dz}}, one-sided α = 0.05 and power 0.80, we need only {{p_h2_pairs}} pairs. H2 is therefore well powered at any realistic sample size.
-
-**Sensitivity.** The smallest effect detectable with 80% power (one-sided α = 0.05, t-test approximation) at different group sizes:
+**Sensitivity** (smallest d detectable with 80% power, one-sided α = {{p_alpha_each}}):
 
 {{sensitivity_table}}
 
-**Simulation check.** We also estimated power by Monte Carlo: {{p_mc_sims}} simulated studies of {{p_analysable}} participants each, run under our simulation model (`lab/simulate.py`) with the exact planned test. The simulated power was **{{p_mc_power}}**. The reason is that the simulation model implies a true effect of only d ≈ {{p_d_sim}} on Test 6, much of it hidden by participants who already rate the task at the bottom of the scale. Detecting an effect that size would need about {{p_n_sim}} per group. We report this openly rather than retuning the simulation: it shows how sensitive the conclusions are to the d = {{p_d}} assumption.
+**Simulation check.** Across {{p_mc_sims}} simulated studies of {{p_analysable}} participants under our simulation model (`lab/simulate.py`), the Holm-corrected tests rejected H1 in {{p_mc1}}, H2 in {{p_mc2}}, and both in {{p_mc_both}} of studies. The model implies effects of d ≈ {{p_dsim1}} (praise) and d ≈ {{p_dsim2}} (warning). The praise effect is the harder one to detect.
 
 {{fig_power}}
 
 ## 6. Data Collection & Cleaning
 
-**Collection.** Participants complete the study in the app, either on the facilitator's laptop or through a shared link. Each completed test is appended as one row to `data/raw/live_sessions.csv`, with participant id, timestamp, demographics, arm, test, time, errors, rage-quit and the two ratings. Researcher dry runs are listed in `data/raw/excluded_ids.txt`.
+**Collection.** Participants complete the study on the live site. Every rated ticket is inserted as one row in a Supabase (PostgreSQL) table, and every final survey as one row in a second table. Row-level security allows anonymous inserts and reads but no edits or deletions. `scripts/export_supabase.py` downloads both tables to `data/raw/`.
 
-**Cleaning rules** (`scripts/clean_data.py`). These were fixed before outcomes were examined:
+**Cleaning rules** (`scripts/clean_data.py`), fixed before outcomes were examined:
 
-1. Remove ids listed as dry runs or withdrawals.
-2. Remove double-submitted rows (same participant and test), keeping the first.
+1. Remove ids listed as dry runs or withdrawals (`data/raw/excluded_ids.txt`).
+2. Remove double-submitted rows (same participant and ticket), keeping the first.
 3. Remove rows with impossible values (ratings outside 1–10, non-positive times, invalid flags).
-4. Blank out-of-range demographics instead of dropping the participant (demographics are optional).
-5. Re-derive the design columns (workflow, chaos and priming exposure) from the design definition, and drop any participant whose arm changes between rows.
-6. Exclude participants with any single test longer than **30 minutes** (they walked away, so the time doesn't measure the task).
-7. Keep only participants who completed **all six tests**.
+4. Blank out-of-range demographics rather than dropping the participant.
+5. Re-derive the design columns from the design definition, and drop anyone whose banner assignment changes between rows.
+6. Exclude participants with any ticket longer than **30 minutes** (they walked away).
+7. Keep only participants who completed **all six tickets**.
 
-We did **not** trim long chaos-task times below the 30-minute threshold. The long right tail is part of the phenomenon, not noise.
-
-**Participant flow.**
+Long but genuine completion times under the 30-minute rule were **not** trimmed.
 
 {{cleaning_table}}
 
-Of the {{n_participants}} analysable participants, {{n_with_demo}} answered the optional job-level question.
+**Analysable sample:** {{n_participants}} participants ({{n_snow_banner}} saw the praise banner; {{n_ai_banner}} saw the warning). Banner cells: {{cells}}. {{n_with_demo}} gave a job level, and {{n_feedback}} completed the final survey.
 
-**Randomisation check.** Median years of experience: primed {{rand_years_p}}, control {{rand_years_c}} (Mann–Whitney {{rand_years_p_eq}}). Job-level distribution by arm: χ² {{rand_chi_p_eq}}. {{rand_verdict}}
+**Randomisation check.** {{rand_text}}
 
 ## 7. Statistical Analysis
 
-**Unit of analysis.** For H1 and H3 the unit is the **participant**, one value per person, so the independence assumption of two-sample tests holds. For H2 each participant contributes a **pair**: the geometric-mean time over baseline tests and over chaos tests.
+**Unit of analysis.** The participant. Each person's three ServiceNow ratings and three AI ratings are averaged, so two-sample tests compare independent people. **Software:** Python with pandas, SciPy (Virtanen et al., 2020) and statsmodels (Seabold & Perktold, 2010). The teaching site recomputes the same tests in the browser, and its implementation is checked against SciPy and statsmodels in `site/tests/`.
 
-**Software.** Python 3 with pandas, SciPy (Virtanen et al., 2020) and statsmodels (Seabold & Perktold, 2010). `scripts/analyze.py` produces every number in this section.
-
-### 7.1 Descriptive statistics (completion time by test)
+### 7.1 Descriptive statistics
 
 {{desc_table}}
 
@@ -126,76 +106,64 @@ Of the {{n_participants}} analysable participants, {{n_with_demo}} answered the 
 
 {{fig_times}}
 
-### 7.2 H1 (primary): priming and perceived efficiency on Test 6
+### 7.2 H1 and H2 (primary): do the banners move ratings?
 
-*Test choice.* Efficiency is a 1–10 rating, which is ordinal and bounded, so the pre-specified test is a **one-sided Mann–Whitney U** (Mann & Whitney, 1947). It doesn't require normality. Assumption checks support this choice: Shapiro–Wilk (Shapiro & Wilk, 1965) gives p = {{h1_sh_a}} (primed) and p = {{h1_sh_b}} (control), and Levene's test (Levene, 1960) gives p = {{h1_lev}}. We report a Welch t-test (Welch, 1947) as a sensitivity analysis.
+*Test choice.* The outcomes are averages of 1–10 ratings: bounded, ordinal-ish and often skewed. The pre-specified test is a **one-sided Mann–Whitney U** (Mann & Whitney, 1947), with Welch's t (Welch, 1947) as a sensitivity check. Normality was checked with Shapiro–Wilk (Shapiro & Wilk, 1965) and equal variances with Levene's test (Levene, 1960).
 
-| | Primed | Control |
+| | H1: ServiceNow, praise banner | H2: AI agent, warning banner |
 |---|---|---|
-| n | {{h1_n_a}} | {{h1_n_b}} |
-| Mean (SD) | {{h1_mean_a}} ({{h1_sd_a}}) | {{h1_mean_b}} ({{h1_sd_b}}) |
-| Median | {{h1_med_a}} | {{h1_med_b}} |
+| Banner group: n, mean (SD), median | {{h1_n_a}}, {{h1_mean_a}} ({{h1_sd_a}}), {{h1_med_a}} | {{h2_n_a}}, {{h2_mean_a}} ({{h2_sd_a}}), {{h2_med_a}} |
+| No banner: n, mean (SD), median | {{h1_n_b}}, {{h1_mean_b}} ({{h1_sd_b}}), {{h1_med_b}} | {{h2_n_b}}, {{h2_mean_b}} ({{h2_sd_b}}), {{h2_med_b}} |
+| Shapiro–Wilk p (banner / none) | {{h1_sh_a}} / {{h1_sh_b}} | {{h2_sh_a}} / {{h2_sh_b}} |
+| Levene p | {{h1_lev}} | {{h2_lev}} |
+| **Mann–Whitney U, one-sided p** | **U = {{h1_U}}, {{h1_p_eq}}** | **U = {{h2_U}}, {{h2_p_eq}}** |
+| **Holm-adjusted p** | **{{h1_p_holm}}** | **{{h2_p_holm}}** |
+| Rank-biserial r (95% bootstrap CI) | {{h1_r}} {{h1_r_ci}} | {{h2_r}} {{h2_r_ci}} |
+| Cohen's d (95% CI) | {{h1_d}} {{h1_d_ci}} | {{h2_d}} {{h2_d_ci}} |
+| Mean difference (Welch 95% CI) | {{h1_md}} {{h1_md_ci}} | {{h2_md}} {{h2_md_ci}} |
+| Welch t sensitivity | t({{h1_welch_df}}) = {{h1_welch_t}}, {{h1_welch_p_eq}} | t({{h2_welch_df}}) = {{h2_welch_t}}, {{h2_welch_p_eq}} |
 
-- **Mann–Whitney U = {{h1_U}}, one-sided {{h1_p_eq}}.**
-- Effect size: rank-biserial r = **{{h1_r}}** (95% bootstrap CI {{h1_r_ci}}); Cohen's d = {{h1_d}} (95% CI {{h1_d_ci}}).
-- Mean difference (primed − control) = {{h1_md}} points (Welch 95% CI {{h1_md_ci}}); median difference = {{h1_medd}} (bootstrap 95% CI {{h1_medd_ci}}).
-- Sensitivity: Welch t({{h1_welch_df}}) = {{h1_welch_t}}, one-sided {{h1_welch_p_eq}}.
+**Decision, H1:** {{h1_decision}}
+**Decision, H2:** {{h2_decision}}
 
-**Decision: {{h1_decision}}**
+{{fig_h1h2}}
 
-{{fig_h1}}
+### 7.3 H3 (performance check): is the AI agent actually faster?
 
-### 7.3 H2 (secondary): chaos vs baseline completion time (paired)
+Each participant used both platforms, so we use a **paired** test on the per-person difference in log geometric-mean time. On a log scale a multiplicative speed-up becomes an additive difference. The pre-specified test is the **one-sided Wilcoxon signed-rank test** (Wilcoxon, 1945); the paired-t interval on the log scale gives the estimate. Shapiro–Wilk on the log differences: p = {{h3_sh}}.
 
-*Test choice.* Each participant has both conditions, so we use a paired test on the per-person difference in log time. Log times turn a multiplicative slowdown into an additive difference. Shapiro–Wilk on those differences gives p = {{h2_sh}}. We pre-specified the **one-sided Wilcoxon signed-rank test** (Wilcoxon, 1945) for robustness, and report the paired-t interval on the log scale, converted back to a ratio, as the estimate.
+- Median participant: {{h3_sn}} s per ServiceNow ticket vs {{h3_ai}} s per AI-agent ticket; {{h3_share}} of participants were faster with the AI.
+- **Wilcoxon W = {{h3_W}}, {{h3_p_eq}}.** Speed-up **{{h3_speedup}}×** (95% CI {{h3_speedup_ci}}); d_z = {{h3_dz}}; matched-pairs rank-biserial r = {{h3_rmp}}.
 
-- Median participant: {{h2_base}} s per baseline test vs {{h2_chaos}} s per chaos test; {{h2_share}} of participants were slower on chaos tests.
-- **Wilcoxon W = {{h2_W}}, one-sided {{h2_p_eq}}; Holm-adjusted {{h2_p_holm_eq}}.**
-- Effect size: chaos tests took **{{h2_ratio}}× as long** (geometric-mean ratio; 95% CI {{h2_ratio_ci}}); d_z = {{h2_dz}}; matched-pairs rank-biserial r = {{h2_rmp}}.
+**Decision:** {{h3_decision}}
 
-**Decision: {{h2_decision}}**
+{{fig_h3}}
 
-{{fig_h2}}
+### 7.4 H4 (secondary): does the warning make people overrule the AI?
 
-### 7.4 H3 (secondary): priming and frustration on the chaos tests
+Each participant's override rate is the share of their AI tickets where they changed the AI's category. Warned: mean {{h4_mean_a}} (n = {{h4_n_a}}); unwarned: mean {{h4_mean_b}} (n = {{h4_n_b}}). **Mann–Whitney U = {{h4_U}}, one-sided {{h4_p_eq}}**, rank-biserial r = {{h4_r}} {{h4_r_ci}}. At ticket level the override rates were {{h4_t_warned}} vs {{h4_t_unwarned}} (χ² = {{h4_chi}}, {{h4_chi_p}}). Tickets from the same person are not independent, so the χ² is descriptive only.
 
-Same approach as H1, applied to each participant's mean frustration across Tests 5–6. One-sided (primed < control); Shapiro p = {{h3_sh_a}} / {{h3_sh_b}}; Levene p = {{h3_lev}}.
+**Decision:** {{h4_decision}}
 
-| | Primed | Control |
-|---|---|---|
-| Mean (SD) | {{h3_mean_a}} ({{h3_sd_a}}) | {{h3_mean_b}} ({{h3_sd_b}}) |
-| Median | {{h3_med_a}} | {{h3_med_b}} |
+### 7.5 Exploratory: the platform × banner interaction (two-way ANOVA, post hoc)
 
-- **Mann–Whitney U = {{h3_U}}, one-sided {{h3_p_eq}}; Holm-adjusted {{h3_p_holm_eq}}.**
-- Rank-biserial r = **{{h3_r}}** (95% CI {{h3_r_ci}}); Cohen's d = {{h3_d}} (95% CI {{h3_d_ci}}); mean difference = {{h3_md}} (95% CI {{h3_md_ci}}).
-
-**Decision: {{h3_decision}}**
-
-### 7.5 H4 (exploratory): does job level change the priming effect? Two-way ANOVA + post hoc
-
-Model: `{{h4_formula}}`, Type II sums of squares, on the {{h4_n}} participants who reported a job level.
+Each person contributes one mean rating per platform. A **linear mixed model** with a random intercept per participant, `{{int_formula}}`, is the formal test: the interaction coefficient was **{{int_coef}} ({{int_p}})**. For comparison with the course's two-way ANOVA, the Type II ANOVA on the same data (which ignores the pairing) gives:
 
 | Term | F | df | p | partial η² |
 |---|---|---|---|---|
-| Arm | {{h4_arm_F}} | {{h4_arm_df}} | {{h4_arm_p}} | {{h4_arm_eta}} |
-| Job level | {{h4_lvl_F}} | {{h4_lvl_df}} | {{h4_lvl_p}} | {{h4_lvl_eta}} |
-| Arm × job level | {{h4_int_F}} | {{h4_int_df}} | {{h4_int_p}} | {{h4_int_eta}} |
+| Platform | {{a_pl_F}} | {{a_pl_df}} | {{a_pl_p}} | {{a_pl_eta}} |
+| Banner | {{a_bn_F}} | {{a_bn_df}} | {{a_bn_p}} | {{a_bn_eta}} |
+| Platform × banner | {{a_in_F}} | {{a_in_df}} | {{a_in_p}} | {{a_in_eta}} |
 
-Assumptions: Shapiro–Wilk on residuals p = {{h4_res_sh}}; Levene across cells p = {{h4_lev}}. **Cell sizes are small** ({{h4_cells}}), so this analysis can only generate hypotheses.
+*Post hoc.* Tukey's HSD (Tukey, 1949) across the four platform × banner cells found {{tukey_sig}} of {{tukey_n}} pairwise differences significant at a family-wise α of 0.05 (`results/tables/interaction_tukey_hsd.csv`).
 
-Priming lift (primed − control mean efficiency) by level: {{h4_lift}}.
+{{fig_int}}
 
-*Post hoc.* Tukey's HSD (Tukey, 1949) across all six level × arm cells found {{h4_tukey_sig}} of {{h4_tukey_n}} pairwise differences significant at a family-wise α of 0.05 (`results/tables/h4_tukey_hsd.csv`).
+### 7.6 Exploratory: choice, NPS, trust, and who is most affected
 
-As a robustness check on the two-way design across *both* chaos tests, we fitted a linear mixed model `{{h4b_formula}}`. The workflow × arm interaction coefficient was {{h4b_coef}} ({{h4b_p_eq}}). {{h4b_note}}
+{{explore_text}}
 
-{{fig_h4}}
-
-### 7.6 H5 (exploratory): who rage-quits?
-
-{{h5_text}}
-
-{{fig_rq}}
+{{fig_pp}}
 
 ## 8. Interpretation of Results
 
@@ -203,23 +171,23 @@ As a robustness check on the two-way design across *both* chaos tests, we fitted
 
 ## 9. Limitations
 
-- **Simulated vs. real data.** {{limitation_data}}
-- **Power.** The study is powered for a *large* priming effect (d = {{p_d}}). The sensitivity analysis shows we would likely miss a medium effect, and our own simulation model implies one of about d ≈ {{p_d_sim}}. A non-significant H1 is therefore weak evidence of *no* effect; the confidence interval is the honest summary.
-- **Floor effect.** {{h1_floor}} of all Test 6 efficiency ratings were 1 or 2 out of 10. When almost everyone rates the task near the floor, a banner has little room to move the rating. A future version should use a multi-item scale (e.g. SUS) or a less brutal Test 6.
-- **Fixed task order.** Chaos tests always come last, so fatigue and time pressure are confounded with the chaos manipulation in H2. Counterbalancing was ruled out to keep the arms identical. The priming comparison (H1/H3) is unaffected because both arms share the same order.
-- **Sample and setting.** Participants are a convenience sample (classmates and their networks) using a simulation, not employees using their real ITSM tool under real deadlines. Job-level cells, especially directors, are small.
-- **Single-item outcomes and demand effects.** Single-slider ratings are noisy. Participants who suspect the banner is a manipulation may react against it.
-- **Multiple outcomes.** We guard against this with a single primary hypothesis, a Holm-corrected secondary family, and explicitly exploratory H4/H5.
+- **Data.** {{limitation_data}}
+- **Power and effect sizes.** The study is powered for large effects (d = {{p_d}}). The praise effect implied by our own simulation model is closer to d ≈ {{p_dsim1}}, so a non-significant H1 would be weak evidence of no effect.
+- **Floor effects.** {{t3_floor}} of documentation-hunt efficiency ratings were 1 or 2, which leaves little room for a banner to act on the worst ServiceNow ticket.
+- **The AI agent is simple.** A naive Bayes classifier is not a large language model, but it behaves like a real routing AI: usually right, sometimes confidently wrong, with a visible confidence score.
+- **Simulation, not the workplace.** Participants were not under real deadlines and were filing tickets about scenarios they were given, using a portal that only resembles ServiceNow (no affiliation).
+- **Convenience sample.** Participants were drawn from a teaching session. Job-level cells, especially directors, are small.
+- **Single-item ratings and demand effects.** Single sliders are noisy, and participants who spot a banner as a manipulation may react against it.
 
 ## 10. Conclusion & Recommendations
 
 {{conclusion}}
 
-**Recommendations.**
-1. **Measure behaviour alongside opinion.** Time on task, error counts and abandonment were large, consistent and unambiguous in this study. Ratings were noisy and bunched at the floor. Tool evaluations should report both.
-2. **Keep marketing out of evaluation surveys.** Collect satisfaction ratings without banners, vendor claims or "as a reminder" framing, and randomise any messaging you want to study.
-3. **Plan for realistic effect sizes.** A follow-up powered for d ≈ 0.5 needs roughly {{p_n_sim}} participants per group. That's feasible with a short online version of the simulator.
-4. **Design AI assistants to fail gracefully.** A hallucinating assistant drove up time, errors and abandonment. Clear escalation paths and an obvious human fallback should be launch requirements.
+**Recommendations for implementing AI in ServiceNow.**
+1. **Measure behaviour, not just opinion.** Time per ticket, completion, corrections and abandonment should sit next to every satisfaction score.
+2. **Run rollouts as experiments.** Randomise who gets the AI and what they are told, and size the pilot with a power analysis first.
+3. **Manage the narrative deliberately.** Warnings about AI shape ratings and overrides. Pair honest risk communication with evidence of performance, and keep evaluation surveys free of marketing.
+4. **Report uncertainty.** Effect sizes with confidence intervals, and posteriors for accuracy claims, not single numbers.
 
 ## 11. References
 
@@ -244,6 +212,8 @@ Shapiro, S. S., & Wilk, M. B. (1965). An analysis of variance test for normality
 Tukey, J. W. (1949). Comparing individual means in the analysis of variance. *Biometrics, 5*(2), 99–114.
 
 Tversky, A., & Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. *Science, 185*(4157), 1124–1131.
+
+Tversky, A., & Kahneman, D. (1981). The framing of decisions and the psychology of choice. *Science, 211*(4481), 453–458.
 
 Virtanen, P., Gommers, R., Oliphant, T. E., et al. (2020). SciPy 1.0: Fundamental algorithms for scientific computing in Python. *Nature Methods, 17*, 261–272.
 

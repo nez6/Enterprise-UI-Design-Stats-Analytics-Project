@@ -1,307 +1,391 @@
-participant_id,source,submitted_at,years_experience,job_level,job_role,primed_arm,test_num,test_name,workflow,workflow_chaos,priming_exposed,completion_time,error_count,rage_quit,frustration,efficiency
-SIM-000,simulated,,1.0,IC / Associate,Other,0,1,Password Reset,Legacy Ticketing,0,0,38.8,0,0,4,3
-SIM-000,simulated,,1.0,IC / Associate,Other,0,2,Software License Request,Legacy Ticketing,0,0,67.8,1,0,5,3
-SIM-000,simulated,,1.0,IC / Associate,Other,0,3,VPN Access (AI Assistant),AI Bot,0,0,47.9,1,0,2,6
-SIM-000,simulated,,1.0,IC / Associate,Other,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,62.7,0,0,3,6
-SIM-000,simulated,,1.0,IC / Associate,Other,0,5,The Chaos AI Bot,AI Bot,1,0,123.5,1,0,6,2
-SIM-000,simulated,,1.0,IC / Associate,Other,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,98.6,5,0,8,2
-SIM-001,simulated,,,,,0,1,Password Reset,Legacy Ticketing,0,0,46.1,0,0,4,6
-SIM-001,simulated,,,,,0,2,Software License Request,Legacy Ticketing,0,0,49.5,0,0,2,5
-SIM-001,simulated,,,,,0,3,VPN Access (AI Assistant),AI Bot,0,0,51.4,0,0,2,7
-SIM-001,simulated,,,,,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,55.8,0,0,3,5
-SIM-001,simulated,,,,,0,5,The Chaos AI Bot,AI Bot,1,0,361.2,6,0,9,3
-SIM-001,simulated,,,,,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,473.0,3,0,9,2
-SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,20.3,0,0,2,10
-SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,42.8,1,0,3,8
-SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,28.5,0,0,1,7
-SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,32.2,0,0,1,9
-SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,92.7,3,0,7,5
-SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,355.6,4,0,9,6
-SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,44.9,0,0,2,3
-SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,57.9,2,0,3,5
-SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,40.0,0,0,2,6
-SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,70.3,0,0,4,7
-SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,105.0,2,0,5,2
-SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,201.7,3,0,8,1
-SIM-005,simulated,,17.0,Director / Executive,Operations,0,1,Password Reset,Legacy Ticketing,0,0,29.3,0,0,3,8
-SIM-005,simulated,,17.0,Director / Executive,Operations,0,2,Software License Request,Legacy Ticketing,0,0,72.6,1,0,2,6
-SIM-005,simulated,,17.0,Director / Executive,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,31.1,1,0,4,10
-SIM-005,simulated,,17.0,Director / Executive,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,55.0,0,0,1,9
-SIM-005,simulated,,17.0,Director / Executive,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,360.5,2,0,9,5
-SIM-005,simulated,,17.0,Director / Executive,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,150.7,6,1,10,5
-SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,73.5,0,0,3,5
-SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,60.4,0,0,4,3
-SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,65.0,0,0,3,7
-SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,57.4,0,0,3,6
-SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,91.7,6,0,9,1
-SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,288.7,2,0,9,3
-SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,35.3,0,0,4,9
-SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,37.5,0,0,3,6
-SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,26.3,0,0,2,10
-SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,38.5,0,0,1,9
-SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,165.3,2,0,7,5
-SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,330.4,4,0,6,7
-SIM-008,simulated,,,,,0,1,Password Reset,Legacy Ticketing,0,0,38.4,0,0,4,6
-SIM-008,simulated,,,,,0,2,Software License Request,Legacy Ticketing,0,0,52.7,0,0,5,7
-SIM-008,simulated,,,,,0,3,VPN Access (AI Assistant),AI Bot,0,0,41.9,0,0,3,7
-SIM-008,simulated,,,,,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,75.4,0,0,4,7
-SIM-008,simulated,,,,,0,5,The Chaos AI Bot,AI Bot,1,0,170.4,1,0,8,3
-SIM-008,simulated,,,,,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,218.4,3,0,8,3
-SIM-009,simulated,,4.0,Lead / Manager,Operations,1,1,Password Reset,Legacy Ticketing,0,0,60.9,0,0,3,8
-SIM-009,simulated,,4.0,Lead / Manager,Operations,1,2,Software License Request,Legacy Ticketing,0,0,59.7,0,0,1,7
-SIM-009,simulated,,4.0,Lead / Manager,Operations,1,3,VPN Access (AI Assistant),AI Bot,0,0,58.6,0,0,3,7
-SIM-009,simulated,,4.0,Lead / Manager,Operations,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,49.5,0,0,3,7
-SIM-009,simulated,,4.0,Lead / Manager,Operations,1,5,The Chaos AI Bot,AI Bot,1,1,142.7,0,0,6,5
-SIM-009,simulated,,4.0,Lead / Manager,Operations,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,122.8,5,1,8,4
-SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,29.6,0,0,3,3
-SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,56.6,0,0,2,5
-SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,41.4,0,0,4,6
-SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,58.4,0,0,2,6
-SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,169.8,4,0,8,2
-SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,133.8,3,1,6,2
-SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,75.0,0,0,4,3
-SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,99.0,1,0,3,4
-SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,108.2,0,0,3,8
-SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,89.6,0,0,4,5
-SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,127.0,2,1,7,1
-SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,241.5,1,0,7,2
-SIM-012,simulated,,1.0,IC / Associate,Other,1,1,Password Reset,Legacy Ticketing,0,0,44.6,0,0,4,6
-SIM-012,simulated,,1.0,IC / Associate,Other,1,2,Software License Request,Legacy Ticketing,0,0,59.9,0,0,2,5
-SIM-012,simulated,,1.0,IC / Associate,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,31.4,0,0,4,5
-SIM-012,simulated,,1.0,IC / Associate,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,40.3,0,0,4,4
-SIM-012,simulated,,1.0,IC / Associate,Other,1,5,The Chaos AI Bot,AI Bot,1,1,345.6,4,0,8,2
-SIM-012,simulated,,1.0,IC / Associate,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,89.4,6,1,10,3
-SIM-013,simulated,,15.0,Director / Executive,Other,1,1,Password Reset,Legacy Ticketing,0,0,50.8,0,0,4,10
-SIM-013,simulated,,15.0,Director / Executive,Other,1,2,Software License Request,Legacy Ticketing,0,0,106.5,0,0,4,9
-SIM-013,simulated,,15.0,Director / Executive,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,58.9,0,0,3,10
-SIM-013,simulated,,15.0,Director / Executive,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,38.9,0,0,3,10
-SIM-013,simulated,,15.0,Director / Executive,Other,1,5,The Chaos AI Bot,AI Bot,1,1,88.7,4,0,6,6
-SIM-013,simulated,,15.0,Director / Executive,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,141.9,1,0,7,9
-SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,27.0,0,0,4,5
-SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,39.0,0,0,3,6
-SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,32.1,1,0,5,5
-SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,19.4,1,0,2,5
-SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,68.9,0,0,6,3
-SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,367.8,4,0,10,1
-SIM-015,simulated,,5.0,IC / Associate,Operations,1,1,Password Reset,Legacy Ticketing,0,0,31.2,0,0,3,6
-SIM-015,simulated,,5.0,IC / Associate,Operations,1,2,Software License Request,Legacy Ticketing,0,0,66.8,0,0,2,5
-SIM-015,simulated,,5.0,IC / Associate,Operations,1,3,VPN Access (AI Assistant),AI Bot,0,0,42.1,0,0,3,6
-SIM-015,simulated,,5.0,IC / Associate,Operations,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,39.5,0,0,2,4
-SIM-015,simulated,,5.0,IC / Associate,Operations,1,5,The Chaos AI Bot,AI Bot,1,1,198.5,4,0,9,1
-SIM-015,simulated,,5.0,IC / Associate,Operations,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,58.4,3,1,8,2
-SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,74.7,0,0,3,8
-SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,57.5,0,0,3,7
-SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,45.2,0,0,3,7
-SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,66.9,0,0,2,9
-SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,330.5,1,0,7,4
-SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,146.3,2,0,8,3
-SIM-017,simulated,,2.0,IC / Associate,Other,1,1,Password Reset,Legacy Ticketing,0,0,43.0,0,0,3,4
-SIM-017,simulated,,2.0,IC / Associate,Other,1,2,Software License Request,Legacy Ticketing,0,0,43.1,1,0,3,4
-SIM-017,simulated,,2.0,IC / Associate,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,75.3,0,0,3,6
-SIM-017,simulated,,2.0,IC / Associate,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.9,1,0,2,6
-SIM-017,simulated,,2.0,IC / Associate,Other,1,5,The Chaos AI Bot,AI Bot,1,1,63.1,2,0,7,2
-SIM-017,simulated,,2.0,IC / Associate,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,131.4,2,0,6,2
-SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,54.6,0,0,3,8
-SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,42.1,1,0,4,7
-SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,29.8,0,0,2,10
-SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,39.3,0,0,2,7
-SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,148.8,4,0,8,2
-SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,78.6,3,0,5,5
-SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,45.5,0,0,2,5
-SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,69.5,1,0,6,5
-SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,33.9,0,0,4,7
-SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,48.3,0,0,4,5
-SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,253.2,3,0,7,2
-SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,100.3,3,0,7,1
-SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,51.8,0,0,2,6
-SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,78.6,0,0,4,6
-SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,43.2,1,0,2,7
-SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,86.4,0,0,2,6
-SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,196.2,4,0,9,2
-SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,507.7,2,0,5,1
-SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,22.1,2,0,4,4
-SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,38.6,0,0,4,6
-SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,52.8,0,0,1,5
-SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,43.6,0,0,1,6
-SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,72.5,2,0,8,1
-SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,148.6,3,0,8,2
-SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,71.8,0,0,2,6
-SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,62.3,0,0,2,3
-SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,70.2,0,0,1,7
-SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,62.1,0,0,4,7
-SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,55.8,5,0,8,2
-SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,294.4,7,0,10,3
-SIM-024,simulated,,,,,0,1,Password Reset,Legacy Ticketing,0,0,41.5,0,0,2,6
-SIM-024,simulated,,,,,0,2,Software License Request,Legacy Ticketing,0,0,45.2,0,0,3,4
-SIM-024,simulated,,,,,0,3,VPN Access (AI Assistant),AI Bot,0,0,61.2,0,0,4,3
-SIM-024,simulated,,,,,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,36.3,0,0,4,5
-SIM-024,simulated,,,,,0,5,The Chaos AI Bot,AI Bot,1,0,149.4,1,0,8,4
-SIM-024,simulated,,,,,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,317.7,3,0,7,2
-SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,27.9,0,0,2,9
-SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,44.4,0,0,1,10
-SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,36.2,0,0,4,8
-SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,36.1,0,0,2,9
-SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,151.5,1,0,9,6
-SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,118.9,2,0,9,3
-SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,72.7,0,0,3,6
-SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,59.5,1,0,3,5
-SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,52.4,0,0,3,9
-SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,71.0,0,0,1,4
-SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,249.4,1,0,7,1
-SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,217.8,2,0,7,2
-SIM-027,simulated,,7.0,IC / Associate,Other,1,1,Password Reset,Legacy Ticketing,0,0,56.8,1,0,1,3
-SIM-027,simulated,,7.0,IC / Associate,Other,1,2,Software License Request,Legacy Ticketing,0,0,67.5,0,0,3,5
-SIM-027,simulated,,7.0,IC / Associate,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,46.5,0,0,3,5
-SIM-027,simulated,,7.0,IC / Associate,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,96.7,0,0,2,4
-SIM-027,simulated,,7.0,IC / Associate,Other,1,5,The Chaos AI Bot,AI Bot,1,1,142.4,1,0,7,2
-SIM-027,simulated,,7.0,IC / Associate,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,201.2,1,1,9,1
-SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,59.6,0,0,3,4
-SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,73.4,0,0,3,4
-SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,65.6,1,0,1,6
-SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,63.2,1,0,2,6
-SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,157.9,0,0,7,2
-SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,377.1,2,0,8,2
-SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,52.7,0,0,2,6
-SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,107.5,0,0,3,6
-SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,34.0,2,0,4,8
-SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,58.8,1,0,1,7
-SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,370.3,3,0,7,2
-SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,40.7,4,0,7,3
-SIM-030,simulated,,22.0,Director / Executive,Operations,0,1,Password Reset,Legacy Ticketing,0,0,37.3,0,0,2,9
-SIM-030,simulated,,22.0,Director / Executive,Operations,0,2,Software License Request,Legacy Ticketing,0,0,42.8,1,0,4,9
-SIM-030,simulated,,22.0,Director / Executive,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,32.8,0,0,2,8
-SIM-030,simulated,,22.0,Director / Executive,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,42.3,0,0,1,10
-SIM-030,simulated,,22.0,Director / Executive,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,174.3,4,0,8,3
-SIM-030,simulated,,22.0,Director / Executive,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,310.8,2,0,9,3
-SIM-031,simulated,,10.0,Lead / Manager,Other,1,1,Password Reset,Legacy Ticketing,0,0,65.1,0,0,4,6
-SIM-031,simulated,,10.0,Lead / Manager,Other,1,2,Software License Request,Legacy Ticketing,0,0,91.4,0,0,2,6
-SIM-031,simulated,,10.0,Lead / Manager,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,92.1,0,0,3,8
-SIM-031,simulated,,10.0,Lead / Manager,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,57.3,0,0,3,7
-SIM-031,simulated,,10.0,Lead / Manager,Other,1,5,The Chaos AI Bot,AI Bot,1,1,1498.3,3,0,10,4
-SIM-031,simulated,,10.0,Lead / Manager,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,331.9,1,0,7,3
-SIM-032,simulated,,,,,1,1,Password Reset,Legacy Ticketing,0,0,54.9,0,0,3,6
-SIM-032,simulated,,,,,1,2,Software License Request,Legacy Ticketing,0,0,99.4,1,0,1,5
-SIM-032,simulated,,,,,1,3,VPN Access (AI Assistant),AI Bot,0,0,55.7,1,0,2,9
-SIM-032,simulated,,,,,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,27.2,0,0,4,6
-SIM-032,simulated,,,,,1,5,The Chaos AI Bot,AI Bot,1,1,42.7,1,0,7,4
-SIM-032,simulated,,,,,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,216.7,5,0,8,2
-SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,48.8,0,0,4,5
-SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,63.8,0,0,1,7
-SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,43.7,0,0,4,6
-SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,37.4,0,0,2,6
-SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,90.7,3,1,8,3
-SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,128.8,2,0,7,3
-SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,53.7,0,0,4,5
-SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,74.1,2,0,5,6
-SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,65.5,1,0,3,6
-SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,110.2,0,0,3,6
-SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,276.7,2,0,8,2
-SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,499.8,0,0,8,2
-SIM-035,simulated,,10.0,Lead / Manager,Other,1,1,Password Reset,Legacy Ticketing,0,0,23.7,0,0,4,7
-SIM-035,simulated,,10.0,Lead / Manager,Other,1,2,Software License Request,Legacy Ticketing,0,0,37.0,0,0,4,7
-SIM-035,simulated,,10.0,Lead / Manager,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,24.1,0,0,2,9
-SIM-035,simulated,,10.0,Lead / Manager,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,25.2,0,0,2,7
-SIM-035,simulated,,10.0,Lead / Manager,Other,1,5,The Chaos AI Bot,AI Bot,1,1,163.7,2,0,7,2
-SIM-035,simulated,,10.0,Lead / Manager,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,91.6,2,0,5,2
-SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,30.6,1,0,4,7
-SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,75.4,0,0,2,6
-SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,84.3,0,0,3,7
-SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,67.0,0,0,1,8
-SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,204.2,3,0,9,6
-SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,573.9,2,0,8,2
-SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,53.0,0,0,4,5
-SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,66.5,1,0,4,5
-SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,82.1,1,0,4,7
-SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,59.9,1,0,4,5
-SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,134.4,2,0,8,2
-SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,1308.8,4,0,10,2
-SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,36.0,0,0,4,4
-SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,65.3,0,0,3,5
-SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,46.7,0,0,3,5
-SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,61.2,0,0,3,5
-SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,98.1,3,0,5,2
-SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,1038.6,6,0,10,1
-SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,53.9,1,0,3,5
-SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,54.3,0,0,2,5
-SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,44.9,0,0,1,7
-SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,69.2,1,0,3,6
-SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,96.7,1,0,6,3
-SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,204.1,6,0,7,2
-SIM-041,simulated,,1.0,IC / Associate,Operations,1,1,Password Reset,Legacy Ticketing,0,0,48.5,2,0,3,7
-SIM-041,simulated,,1.0,IC / Associate,Operations,1,2,Software License Request,Legacy Ticketing,0,0,109.5,1,0,3,4
-SIM-041,simulated,,1.0,IC / Associate,Operations,1,3,VPN Access (AI Assistant),AI Bot,0,0,73.7,0,0,5,4
-SIM-041,simulated,,1.0,IC / Associate,Operations,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.1,0,0,3,6
-SIM-041,simulated,,1.0,IC / Associate,Operations,1,5,The Chaos AI Bot,AI Bot,1,1,156.3,1,0,7,2
-SIM-041,simulated,,1.0,IC / Associate,Operations,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,346.5,5,0,8,1
-SIM-042,simulated,,6.0,IC / Associate,Operations,0,1,Password Reset,Legacy Ticketing,0,0,45.7,0,0,3,3
-SIM-042,simulated,,6.0,IC / Associate,Operations,0,2,Software License Request,Legacy Ticketing,0,0,30.4,0,0,4,5
-SIM-042,simulated,,6.0,IC / Associate,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,27.9,0,0,3,5
-SIM-042,simulated,,6.0,IC / Associate,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,36.6,0,0,5,7
-SIM-042,simulated,,6.0,IC / Associate,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,180.3,4,0,10,1
-SIM-042,simulated,,6.0,IC / Associate,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,567.6,4,0,9,1
-SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,34.5,2,0,4,6
-SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,31.2,0,0,2,7
-SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,31.7,0,0,2,6
-SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,69.8,0,0,2,5
-SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,115.9,4,0,8,1
-SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,556.5,2,0,9,1
-SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,29.3,0,0,2,7
-SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,86.5,0,0,3,5
-SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,87.6,0,0,4,6
-SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,60.8,1,0,4,6
-SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,256.3,3,0,8,2
-SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,265.6,3,0,9,3
-SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,82.1,0,0,3,6
-SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,39.7,0,0,4,5
-SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,41.7,0,0,2,8
-SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,83.4,0,0,3,6
-SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,130.2,2,0,7,1
-SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,70.9,7,0,7,2
-SIM-046,simulated,,8.0,Lead / Manager,Other,1,1,Password Reset,Legacy Ticketing,0,0,46.5,0,0,3,6
-SIM-046,simulated,,8.0,Lead / Manager,Other,1,2,Software License Request,Legacy Ticketing,0,0,71.5,2,0,5,7
-SIM-046,simulated,,8.0,Lead / Manager,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,39.7,0,0,3,6
-SIM-046,simulated,,8.0,Lead / Manager,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,59.8,0,0,3,7
-SIM-046,simulated,,8.0,Lead / Manager,Other,1,5,The Chaos AI Bot,AI Bot,1,1,158.7,1,0,5,3
-SIM-046,simulated,,8.0,Lead / Manager,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,120.0,3,1,7,5
-SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,41.8,1,0,3,5
-SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,57.4,0,0,3,6
-SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,54.4,0,0,2,6
-SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.8,0,0,1,5
-SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,133.6,2,0,7,2
-SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,741.0,1,0,10,4
-SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,26.1,0,0,4,9
-SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,52.1,0,0,4,8
-SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,20.8,0,0,3,10
-SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,37.0,1,0,2,9
-SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,27.1,3,0,8,5
-SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,270.3,3,0,8,4
-SIM-049,simulated,,5.0,IC / Associate,Operations,0,1,Password Reset,Legacy Ticketing,0,0,24.6,0,0,5,5
-SIM-049,simulated,,5.0,IC / Associate,Operations,0,2,Software License Request,Legacy Ticketing,0,0,60.1,0,0,3,4
-SIM-049,simulated,,5.0,IC / Associate,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,38.6,0,0,2,6
-SIM-049,simulated,,5.0,IC / Associate,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.3,0,0,2,5
-SIM-049,simulated,,5.0,IC / Associate,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,58.6,1,1,8,1
-SIM-049,simulated,,5.0,IC / Associate,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,172.4,1,0,8,2
-SIM-050,simulated,,4.0,IC / Associate,Operations,0,1,Password Reset,Legacy Ticketing,0,0,40.0,0,0,2,4
-SIM-050,simulated,,4.0,IC / Associate,Operations,0,2,Software License Request,Legacy Ticketing,0,0,74.8,0,0,2,5
-SIM-050,simulated,,4.0,IC / Associate,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,40.6,0,0,3,6
-SIM-050,simulated,,4.0,IC / Associate,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,80.8,0,0,4,6
-SIM-050,simulated,,4.0,IC / Associate,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,162.5,0,0,8,1
-SIM-050,simulated,,4.0,IC / Associate,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,94.6,1,1,8,1
-SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,55.8,0,0,3,9
-SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,44.7,1,0,3,8
-SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,52.6,0,0,4,7
-SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,75.2,0,0,2,9
-SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,143.4,9,0,7,5
-SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,418.6,4,0,6,5
-SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,62.1,0,0,3,3
-SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,52.9,0,0,3,6
-SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,48.0,0,0,2,5
-SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,55.6,0,0,2,5
-SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,173.6,1,0,8,1
-SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,276.4,5,0,8,1
-SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,60.8,0,0,3,5
-SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,65.1,2,0,2,4
-SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,48.0,0,0,2,4
-SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,80.0,0,0,4,5
-SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,173.7,6,0,8,2
-SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,400.9,3,0,10,1
+participant_id,source,submitted_at,session_label,years_experience,job_level,job_role,snow_primed,ai_primed,set_order,test_num,position,test_name,ticket_type,workflow,primed,completion_time,error_count,rage_quit,frustration,efficiency,ticket_text,chosen_category,ai_category,ai_confidence,ai_correct
+SIM-000,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,72.5,0,0,5,5,,Access & Passwords,,,
+SIM-000,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,88.1,1,0,5,5,,Software,,,
+SIM-000,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,199.8,2,0,7,3,,Facilities & AV,,,
+SIM-000,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,41.2,0,0,4,7,,Access & Passwords,Access & Passwords,0.43549808369902093,1.0
+SIM-000,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,38.3,0,0,4,6,,Software,Software,0.5421480005255754,1.0
+SIM-000,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,25.4,0,0,2,8,,Facilities & AV,Facilities & AV,0.7090918866068445,1.0
+SIM-001,simulated,,simulated-pilot,,,,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,101.3,0,0,4,5,,Access & Passwords,,,
+SIM-001,simulated,,simulated-pilot,,,,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,69.1,0,0,4,7,,Software,,,
+SIM-001,simulated,,simulated-pilot,,,,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,153.7,4,0,7,5,,Facilities & AV,,,
+SIM-001,simulated,,simulated-pilot,,,,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,47.4,1,0,4,6,,Access & Passwords,Access & Passwords,0.8130364097620174,0.0
+SIM-001,simulated,,simulated-pilot,,,,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,31.7,1,0,1,4,,Software,Software,0.49194510360136334,1.0
+SIM-001,simulated,,simulated-pilot,,,,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,21.7,0,0,2,4,,Facilities & AV,Facilities & AV,0.5626465324298127,1.0
+SIM-002,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,ai_first,1,4,Password Reset,access,ServiceNow,1,100.1,0,0,3,2,,Access & Passwords,,,
+SIM-002,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,ai_first,2,5,Software Licence Request,software,ServiceNow,1,113.8,0,0,5,3,,Software,,,
+SIM-002,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,479.8,2,0,7,2,,Facilities & AV,,,
+SIM-002,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,ai_first,4,1,MFA Reset,access,AI Agent,1,11.9,0,0,4,7,,Access & Passwords,Access & Passwords,0.6159234188951697,1.0
+SIM-002,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,ai_first,5,2,Software Install,software,AI Agent,1,31.0,0,0,4,6,,Software,Software,0.5177735442894733,1.0
+SIM-002,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,49.5,0,0,2,5,,Facilities & AV,Facilities & AV,0.3144366203725369,1.0
+SIM-003,simulated,,simulated-pilot,5.0,IC / Associate,Operations,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,182.2,0,0,7,3,,Access & Passwords,,,
+SIM-003,simulated,,simulated-pilot,5.0,IC / Associate,Operations,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,130.6,1,0,5,4,,Software,,,
+SIM-003,simulated,,simulated-pilot,5.0,IC / Associate,Operations,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,117.6,6,1,10,1,,,,,
+SIM-003,simulated,,simulated-pilot,5.0,IC / Associate,Operations,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,34.3,0,0,3,5,,Access & Passwords,Access & Passwords,0.58937980566726,1.0
+SIM-003,simulated,,simulated-pilot,5.0,IC / Associate,Operations,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,43.9,0,0,3,4,,Software,Software,0.5645669583302166,1.0
+SIM-003,simulated,,simulated-pilot,5.0,IC / Associate,Operations,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,36.3,1,0,4,5,,Facilities & AV,Software,0.36692334901848384,0.0
+SIM-004,simulated,,simulated-pilot,1.0,IC / Associate,Engineering / Tech,0,0,ai_first,1,4,Password Reset,access,ServiceNow,0,50.8,0,0,5,6,,Access & Passwords,,,
+SIM-004,simulated,,simulated-pilot,1.0,IC / Associate,Engineering / Tech,0,0,ai_first,2,5,Software Licence Request,software,ServiceNow,0,212.6,0,0,4,3,,Software,,,
+SIM-004,simulated,,simulated-pilot,1.0,IC / Associate,Engineering / Tech,0,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,378.9,4,0,9,2,,Facilities & AV,,,
+SIM-004,simulated,,simulated-pilot,1.0,IC / Associate,Engineering / Tech,0,0,ai_first,4,1,MFA Reset,access,AI Agent,0,33.5,2,0,2,5,,Access & Passwords,Hardware,0.35081975188219633,0.0
+SIM-004,simulated,,simulated-pilot,1.0,IC / Associate,Engineering / Tech,0,0,ai_first,5,2,Software Install,software,AI Agent,0,30.9,0,0,2,6,,Software,Software,0.6757764541546242,1.0
+SIM-004,simulated,,simulated-pilot,1.0,IC / Associate,Engineering / Tech,0,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,29.8,0,0,4,9,,Facilities & AV,Facilities & AV,0.8634437191632764,1.0
+SIM-006,simulated,,simulated-pilot,10.0,Lead / Manager,Engineering / Tech,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,23.6,0,0,5,5,,Access & Passwords,,,
+SIM-006,simulated,,simulated-pilot,10.0,Lead / Manager,Engineering / Tech,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,69.3,2,0,7,3,,Software,,,
+SIM-006,simulated,,simulated-pilot,10.0,Lead / Manager,Engineering / Tech,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,452.8,1,0,10,2,,Facilities & AV,,,
+SIM-006,simulated,,simulated-pilot,10.0,Lead / Manager,Engineering / Tech,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,42.6,1,0,3,5,,Access & Passwords,Software,0.34004576370306794,0.0
+SIM-006,simulated,,simulated-pilot,10.0,Lead / Manager,Engineering / Tech,0,1,ai_first,5,2,Software Install,software,AI Agent,1,36.1,1,0,3,7,,Software,Hardware,0.3998778341093784,0.0
+SIM-006,simulated,,simulated-pilot,10.0,Lead / Manager,Engineering / Tech,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,38.1,1,0,3,5,,Facilities & AV,Facilities & AV,0.4522951818919082,0.0
+SIM-007,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,33.2,2,0,5,4,,Access & Passwords,,,
+SIM-007,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,55.8,0,0,5,4,,Software,,,
+SIM-007,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,524.0,2,0,8,1,,Facilities & AV,,,
+SIM-007,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,39.7,1,0,4,5,,Access & Passwords,Hardware,0.3242647300188921,0.0
+SIM-007,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,25.9,0,0,1,6,,Software,Software,0.753681343440198,1.0
+SIM-007,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,31.9,0,0,5,3,,Facilities & AV,Facilities & AV,0.5851069580433986,1.0
+SIM-008,simulated,,simulated-pilot,0.0,IC / Associate,Project / Product Management,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,123.2,0,0,4,3,,Access & Passwords,,,
+SIM-008,simulated,,simulated-pilot,0.0,IC / Associate,Project / Product Management,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,99.2,0,0,5,4,,Software,,,
+SIM-008,simulated,,simulated-pilot,0.0,IC / Associate,Project / Product Management,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,202.6,3,0,7,3,,Facilities & AV,,,
+SIM-008,simulated,,simulated-pilot,0.0,IC / Associate,Project / Product Management,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,38.6,0,0,3,6,,Access & Passwords,Access & Passwords,0.7671488519277928,1.0
+SIM-008,simulated,,simulated-pilot,0.0,IC / Associate,Project / Product Management,1,0,ai_first,5,2,Software Install,software,AI Agent,0,36.2,0,0,3,6,,Software,Software,0.99,1.0
+SIM-008,simulated,,simulated-pilot,0.0,IC / Associate,Project / Product Management,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,44.4,0,0,2,5,,Facilities & AV,Facilities & AV,0.6393917832243053,1.0
+SIM-009,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,34.7,1,0,5,4,,Access & Passwords,,,
+SIM-009,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,130.0,2,0,4,4,,Software,,,
+SIM-009,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,49.3,2,1,8,3,,,,,
+SIM-009,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,20.0,0,0,3,2,,Access & Passwords,Access & Passwords,0.4916281700467202,1.0
+SIM-009,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,21.7,0,0,2,4,,Software,Software,0.8408844401128713,1.0
+SIM-009,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,37.3,1,0,3,5,,Facilities & AV,Software,0.5413867367374947,0.0
+SIM-010,simulated,,simulated-pilot,7.0,IC / Associate,Operations,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,102.2,1,0,4,3,,Access & Passwords,,,
+SIM-010,simulated,,simulated-pilot,7.0,IC / Associate,Operations,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,147.7,1,0,4,4,,Software,,,
+SIM-010,simulated,,simulated-pilot,7.0,IC / Associate,Operations,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,101.5,2,0,8,1,,Facilities & AV,,,
+SIM-010,simulated,,simulated-pilot,7.0,IC / Associate,Operations,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,15.0,0,0,4,7,,Access & Passwords,Access & Passwords,0.8786740599184341,1.0
+SIM-010,simulated,,simulated-pilot,7.0,IC / Associate,Operations,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,45.6,1,0,2,5,,Software,Network & VPN,0.2,0.0
+SIM-010,simulated,,simulated-pilot,7.0,IC / Associate,Operations,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,33.9,0,0,3,4,,Facilities & AV,Facilities & AV,0.62732075725819,1.0
+SIM-011,simulated,,simulated-pilot,,,,0,0,ai_first,1,4,Password Reset,access,ServiceNow,0,51.9,0,0,5,5,,Access & Passwords,,,
+SIM-011,simulated,,simulated-pilot,,,,0,0,ai_first,2,5,Software Licence Request,software,ServiceNow,0,76.5,1,0,6,2,,Software,,,
+SIM-011,simulated,,simulated-pilot,,,,0,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,178.1,7,0,9,2,,Facilities & AV,,,
+SIM-011,simulated,,simulated-pilot,,,,0,0,ai_first,4,1,MFA Reset,access,AI Agent,0,27.0,0,0,2,6,,Access & Passwords,Access & Passwords,0.6840551174684114,1.0
+SIM-011,simulated,,simulated-pilot,,,,0,0,ai_first,5,2,Software Install,software,AI Agent,0,33.7,0,0,1,6,,Software,Software,0.6044014368682507,1.0
+SIM-011,simulated,,simulated-pilot,,,,0,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,39.4,1,0,4,7,,Facilities & AV,Facilities & AV,0.514608719954862,1.0
+SIM-012,simulated,,simulated-pilot,7.0,Lead / Manager,Engineering / Tech,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,61.0,0,0,5,5,,Access & Passwords,,,
+SIM-012,simulated,,simulated-pilot,7.0,Lead / Manager,Engineering / Tech,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,73.5,2,0,5,6,,Software,,,
+SIM-012,simulated,,simulated-pilot,7.0,Lead / Manager,Engineering / Tech,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,322.8,0,0,8,2,,Facilities & AV,,,
+SIM-012,simulated,,simulated-pilot,7.0,Lead / Manager,Engineering / Tech,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,20.6,1,0,2,6,,Access & Passwords,Access & Passwords,0.41213511066607367,1.0
+SIM-012,simulated,,simulated-pilot,7.0,Lead / Manager,Engineering / Tech,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,24.3,0,0,2,7,,Software,Software,0.6600085220028923,1.0
+SIM-012,simulated,,simulated-pilot,7.0,Lead / Manager,Engineering / Tech,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,18.6,1,0,3,6,,Facilities & AV,Facilities & AV,0.6641505699143969,1.0
+SIM-013,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,51.3,0,0,5,3,,Access & Passwords,,,
+SIM-013,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,106.0,0,0,6,4,,Software,,,
+SIM-013,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,156.5,2,0,7,2,,Facilities & AV,,,
+SIM-013,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,46.7,1,0,4,5,,Access & Passwords,Access & Passwords,0.6154250006907886,0.0
+SIM-013,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,53.5,1,0,4,3,,Software,Software,0.7892245603185556,0.0
+SIM-013,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,46.1,1,0,1,4,,Facilities & AV,Software,0.6224820774177418,0.0
+SIM-014,simulated,,simulated-pilot,5.0,IC / Associate,Operations,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,73.8,0,0,6,3,,Access & Passwords,,,
+SIM-014,simulated,,simulated-pilot,5.0,IC / Associate,Operations,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,43.3,1,0,6,5,,Software,,,
+SIM-014,simulated,,simulated-pilot,5.0,IC / Associate,Operations,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,108.9,3,0,8,4,,Facilities & AV,,,
+SIM-014,simulated,,simulated-pilot,5.0,IC / Associate,Operations,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,24.8,0,0,2,5,,Access & Passwords,Access & Passwords,0.6808416234789443,1.0
+SIM-014,simulated,,simulated-pilot,5.0,IC / Associate,Operations,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,42.2,0,0,4,5,,Software,Software,0.5399980129701059,1.0
+SIM-014,simulated,,simulated-pilot,5.0,IC / Associate,Operations,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,29.5,0,0,2,7,,Facilities & AV,Facilities & AV,0.6864915341914936,1.0
+SIM-015,simulated,,simulated-pilot,15.0,Lead / Manager,Other,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,57.9,0,0,4,4,,Access & Passwords,,,
+SIM-015,simulated,,simulated-pilot,15.0,Lead / Manager,Other,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,104.6,0,0,5,4,,Software,,,
+SIM-015,simulated,,simulated-pilot,15.0,Lead / Manager,Other,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,78.0,4,0,9,2,,Facilities & AV,,,
+SIM-015,simulated,,simulated-pilot,15.0,Lead / Manager,Other,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,34.3,1,0,4,4,,Access & Passwords,Access & Passwords,0.7672209556434276,0.0
+SIM-015,simulated,,simulated-pilot,15.0,Lead / Manager,Other,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,19.3,0,0,1,5,,Software,Software,0.5885618862966645,1.0
+SIM-015,simulated,,simulated-pilot,15.0,Lead / Manager,Other,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,17.0,1,0,2,6,,Facilities & AV,Facilities & AV,0.2723616977830668,1.0
+SIM-016,simulated,,simulated-pilot,6.0,IC / Associate,Engineering / Tech,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,59.4,0,0,2,2,,Access & Passwords,,,
+SIM-016,simulated,,simulated-pilot,6.0,IC / Associate,Engineering / Tech,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,72.0,1,0,5,4,,Software,,,
+SIM-016,simulated,,simulated-pilot,6.0,IC / Associate,Engineering / Tech,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,518.3,4,0,8,3,,Facilities & AV,,,
+SIM-016,simulated,,simulated-pilot,6.0,IC / Associate,Engineering / Tech,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,39.1,0,0,2,6,,Access & Passwords,Access & Passwords,0.5167015272349688,1.0
+SIM-016,simulated,,simulated-pilot,6.0,IC / Associate,Engineering / Tech,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,14.3,0,0,3,7,,Software,Software,0.6499615491745387,1.0
+SIM-016,simulated,,simulated-pilot,6.0,IC / Associate,Engineering / Tech,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,34.9,2,0,4,5,,Facilities & AV,Hardware,0.8146535610399843,0.0
+SIM-017,simulated,,simulated-pilot,8.0,Lead / Manager,Operations,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,95.4,1,0,5,7,,Access & Passwords,,,
+SIM-017,simulated,,simulated-pilot,8.0,Lead / Manager,Operations,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,124.6,1,0,6,6,,Software,,,
+SIM-017,simulated,,simulated-pilot,8.0,Lead / Manager,Operations,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,500.0,3,0,10,4,,Facilities & AV,,,
+SIM-017,simulated,,simulated-pilot,8.0,Lead / Manager,Operations,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,19.5,0,0,3,6,,Access & Passwords,Access & Passwords,0.543301525202484,1.0
+SIM-017,simulated,,simulated-pilot,8.0,Lead / Manager,Operations,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,23.9,0,0,6,7,,Software,Software,0.7216886690652833,1.0
+SIM-017,simulated,,simulated-pilot,8.0,Lead / Manager,Operations,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,28.1,0,0,4,6,,Facilities & AV,Facilities & AV,0.5224739081910403,1.0
+SIM-018,simulated,,simulated-pilot,15.0,Lead / Manager,Project / Product Management,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,48.4,0,0,4,4,,Access & Passwords,,,
+SIM-018,simulated,,simulated-pilot,15.0,Lead / Manager,Project / Product Management,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,35.7,0,0,5,3,,Software,,,
+SIM-018,simulated,,simulated-pilot,15.0,Lead / Manager,Project / Product Management,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,288.1,5,0,9,2,,Facilities & AV,,,
+SIM-018,simulated,,simulated-pilot,15.0,Lead / Manager,Project / Product Management,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,30.2,0,0,4,4,,Access & Passwords,Access & Passwords,0.7354818718940934,1.0
+SIM-018,simulated,,simulated-pilot,15.0,Lead / Manager,Project / Product Management,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,27.2,0,0,3,6,,Software,Software,0.8311539025837156,1.0
+SIM-018,simulated,,simulated-pilot,15.0,Lead / Manager,Project / Product Management,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,30.3,0,0,2,4,,Facilities & AV,Facilities & AV,0.36901186556296695,1.0
+SIM-019,simulated,,simulated-pilot,13.0,Lead / Manager,Project / Product Management,0,0,ai_first,1,4,Password Reset,access,ServiceNow,0,71.5,0,0,4,5,,Access & Passwords,,,
+SIM-019,simulated,,simulated-pilot,13.0,Lead / Manager,Project / Product Management,0,0,ai_first,2,5,Software Licence Request,software,ServiceNow,0,133.2,3,0,5,5,,Software,,,
+SIM-019,simulated,,simulated-pilot,13.0,Lead / Manager,Project / Product Management,0,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,359.5,1,0,7,3,,Facilities & AV,,,
+SIM-019,simulated,,simulated-pilot,13.0,Lead / Manager,Project / Product Management,0,0,ai_first,4,1,MFA Reset,access,AI Agent,0,32.3,0,0,3,8,,Access & Passwords,Access & Passwords,0.6779069337990379,1.0
+SIM-019,simulated,,simulated-pilot,13.0,Lead / Manager,Project / Product Management,0,0,ai_first,5,2,Software Install,software,AI Agent,0,36.1,1,0,4,7,,Software,Software,0.6036095861263927,1.0
+SIM-019,simulated,,simulated-pilot,13.0,Lead / Manager,Project / Product Management,0,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,29.3,1,0,1,6,,Facilities & AV,Facilities & AV,0.36983155599072176,1.0
+SIM-020,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,49.2,0,0,4,4,,Access & Passwords,,,
+SIM-020,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,85.4,1,0,6,4,,Software,,,
+SIM-020,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,286.5,1,0,8,1,,Facilities & AV,,,
+SIM-020,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,30.1,1,0,4,5,,Access & Passwords,Software,0.47930360997059834,0.0
+SIM-020,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,24.3,0,0,3,5,,Software,Software,0.7406461678963594,1.0
+SIM-020,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,28.3,0,0,2,6,,Facilities & AV,Facilities & AV,0.5554487983158365,1.0
+SIM-021,simulated,,simulated-pilot,5.0,IC / Associate,Other,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,108.4,1,0,5,4,,Access & Passwords,,,
+SIM-021,simulated,,simulated-pilot,5.0,IC / Associate,Other,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,94.0,0,0,7,2,,Software,,,
+SIM-021,simulated,,simulated-pilot,5.0,IC / Associate,Other,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,206.4,3,0,6,3,,Facilities & AV,,,
+SIM-021,simulated,,simulated-pilot,5.0,IC / Associate,Other,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,17.6,0,0,3,7,,Access & Passwords,Access & Passwords,0.6632359727249139,1.0
+SIM-021,simulated,,simulated-pilot,5.0,IC / Associate,Other,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,24.8,0,0,2,5,,Software,Software,0.7236177982581665,1.0
+SIM-021,simulated,,simulated-pilot,5.0,IC / Associate,Other,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,22.1,0,0,3,7,,Facilities & AV,Facilities & AV,0.43158401326819595,1.0
+SIM-022,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,56.6,0,0,5,4,,Access & Passwords,,,
+SIM-022,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,64.0,0,0,4,3,,Software,,,
+SIM-022,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,118.0,1,0,7,1,,Facilities & AV,,,
+SIM-022,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,17.7,0,0,2,4,,Access & Passwords,Access & Passwords,0.6484551169814349,1.0
+SIM-022,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,31.4,0,0,3,5,,Software,Software,0.6561314228468781,1.0
+SIM-022,simulated,,simulated-pilot,6.0,IC / Associate,Project / Product Management,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,20.9,0,0,4,5,,Facilities & AV,Facilities & AV,0.605417739392417,1.0
+SIM-023,simulated,,simulated-pilot,12.0,Lead / Manager,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,46.3,0,0,4,6,,Access & Passwords,,,
+SIM-023,simulated,,simulated-pilot,12.0,Lead / Manager,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,105.9,0,0,5,5,,Software,,,
+SIM-023,simulated,,simulated-pilot,12.0,Lead / Manager,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,105.5,1,0,6,1,,Facilities & AV,,,
+SIM-023,simulated,,simulated-pilot,12.0,Lead / Manager,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,26.7,0,0,5,6,,Access & Passwords,Access & Passwords,0.6707677019694328,1.0
+SIM-023,simulated,,simulated-pilot,12.0,Lead / Manager,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,33.3,0,0,2,4,,Software,Software,0.9475883231215377,1.0
+SIM-023,simulated,,simulated-pilot,12.0,Lead / Manager,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,30.0,0,0,4,7,,Facilities & AV,Facilities & AV,0.6123165375624449,1.0
+SIM-025,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,45.0,0,0,5,1,,Access & Passwords,,,
+SIM-025,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,74.4,0,0,5,4,,Software,,,
+SIM-025,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,76.1,3,0,8,3,,Facilities & AV,,,
+SIM-025,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,13.0,0,0,3,7,,Access & Passwords,Access & Passwords,0.5725527466862556,1.0
+SIM-025,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,ai_first,5,2,Software Install,software,AI Agent,1,22.2,0,0,1,6,,Software,Software,0.7854051725349811,1.0
+SIM-025,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,17.9,0,0,3,4,,Facilities & AV,Facilities & AV,0.5611773865729869,1.0
+SIM-026,simulated,,simulated-pilot,17.0,Director / Executive,Operations,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,72.8,1,0,3,7,,Access & Passwords,,,
+SIM-026,simulated,,simulated-pilot,17.0,Director / Executive,Operations,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,70.1,0,0,3,6,,Software,,,
+SIM-026,simulated,,simulated-pilot,17.0,Director / Executive,Operations,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,678.5,0,0,8,5,,Facilities & AV,,,
+SIM-026,simulated,,simulated-pilot,17.0,Director / Executive,Operations,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,44.1,0,0,2,9,,Access & Passwords,Access & Passwords,0.6624887643526781,1.0
+SIM-026,simulated,,simulated-pilot,17.0,Director / Executive,Operations,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,32.5,2,0,3,9,,Software,Network & VPN,0.4189820578036509,0.0
+SIM-026,simulated,,simulated-pilot,17.0,Director / Executive,Operations,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,28.7,0,0,1,7,,Facilities & AV,Facilities & AV,0.510058441203707,1.0
+SIM-027,simulated,,simulated-pilot,14.0,Lead / Manager,Other,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,60.3,0,0,5,5,,Access & Passwords,,,
+SIM-027,simulated,,simulated-pilot,14.0,Lead / Manager,Other,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,30.2,1,0,5,5,,Software,,,
+SIM-027,simulated,,simulated-pilot,14.0,Lead / Manager,Other,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,155.5,2,1,9,2,,,,,
+SIM-027,simulated,,simulated-pilot,14.0,Lead / Manager,Other,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,15.9,0,0,1,8,,Access & Passwords,Access & Passwords,0.5654707452158447,1.0
+SIM-027,simulated,,simulated-pilot,14.0,Lead / Manager,Other,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,23.1,0,1,4,7,,,Software,0.5544732569208447,
+SIM-027,simulated,,simulated-pilot,14.0,Lead / Manager,Other,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,32.6,1,0,1,6,,Facilities & AV,Network & VPN,0.31198907431378076,0.0
+SIM-028,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,122.1,1,0,5,3,,Access & Passwords,,,
+SIM-028,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,87.9,0,0,4,1,,Software,,,
+SIM-028,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,937.9,1,0,9,3,,Facilities & AV,,,
+SIM-028,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,29.8,0,0,4,5,,Access & Passwords,Access & Passwords,0.5333129337517233,1.0
+SIM-028,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,47.5,2,0,2,5,,Software,Access & Passwords,0.38923115838978734,0.0
+SIM-028,simulated,,simulated-pilot,4.0,IC / Associate,Engineering / Tech,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,37.2,0,0,4,6,,Facilities & AV,Facilities & AV,0.7378421597585668,1.0
+SIM-029,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,70.8,0,0,5,4,,Access & Passwords,,,
+SIM-029,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,119.3,0,0,4,5,,Software,,,
+SIM-029,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,410.3,2,0,10,2,,Facilities & AV,,,
+SIM-029,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,37.6,0,0,2,6,,Access & Passwords,Access & Passwords,0.6090239367464105,1.0
+SIM-029,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,1,0,ai_first,5,2,Software Install,software,AI Agent,0,52.9,0,0,1,6,,Software,Software,0.3479385891291776,1.0
+SIM-029,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,36.8,0,0,2,6,,Facilities & AV,Facilities & AV,0.38847106282203236,1.0
+SIM-030,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,77.0,1,0,5,3,,Access & Passwords,,,
+SIM-030,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,52.0,0,0,5,3,,Software,,,
+SIM-030,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,53.0,1,0,8,2,,Facilities & AV,,,
+SIM-030,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,24.7,0,0,2,4,,Access & Passwords,Access & Passwords,0.4056667108704301,1.0
+SIM-030,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,1,0,ai_first,5,2,Software Install,software,AI Agent,0,31.6,0,0,3,7,,Software,Software,0.6039149040284066,1.0
+SIM-030,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,28.7,1,0,4,7,,Facilities & AV,Facilities & AV,0.6627024015459304,1.0
+SIM-031,simulated,,simulated-pilot,,,,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,70.7,0,0,3,5,,Access & Passwords,,,
+SIM-031,simulated,,simulated-pilot,,,,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,70.4,2,0,6,4,,Software,,,
+SIM-031,simulated,,simulated-pilot,,,,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,381.6,2,1,10,1,,,,,
+SIM-031,simulated,,simulated-pilot,,,,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,37.3,0,0,2,6,,Access & Passwords,Access & Passwords,0.6536415576076241,1.0
+SIM-031,simulated,,simulated-pilot,,,,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,30.1,1,0,3,9,,Software,Software,0.7414056298161054,1.0
+SIM-031,simulated,,simulated-pilot,,,,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,29.1,0,0,4,5,,Facilities & AV,Facilities & AV,0.7683271615921669,1.0
+SIM-032,simulated,,simulated-pilot,4.0,Lead / Manager,Engineering / Tech,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,43.1,0,0,7,6,,Access & Passwords,,,
+SIM-032,simulated,,simulated-pilot,4.0,Lead / Manager,Engineering / Tech,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,67.2,1,0,2,6,,Software,,,
+SIM-032,simulated,,simulated-pilot,4.0,Lead / Manager,Engineering / Tech,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,484.4,2,0,7,4,,Facilities & AV,,,
+SIM-032,simulated,,simulated-pilot,4.0,Lead / Manager,Engineering / Tech,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,30.5,0,0,4,7,,Access & Passwords,Access & Passwords,0.6267674075064104,1.0
+SIM-032,simulated,,simulated-pilot,4.0,Lead / Manager,Engineering / Tech,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,35.3,0,0,4,9,,Software,Software,0.6726488679769856,1.0
+SIM-032,simulated,,simulated-pilot,4.0,Lead / Manager,Engineering / Tech,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,29.0,0,0,4,6,,Facilities & AV,Facilities & AV,0.7200025579794377,1.0
+SIM-033,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,43.4,0,0,4,7,,Access & Passwords,,,
+SIM-033,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,70.2,0,0,4,4,,Software,,,
+SIM-033,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,82.0,3,1,10,1,,,,,
+SIM-033,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,7.6,0,0,3,6,,Access & Passwords,Access & Passwords,0.6300820445437821,1.0
+SIM-033,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,16.6,0,0,3,4,,Software,Software,0.9011632431973442,1.0
+SIM-033,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,58.4,1,0,4,5,,Facilities & AV,Network & VPN,0.4511330528079307,0.0
+SIM-034,simulated,,simulated-pilot,11.0,Lead / Manager,Project / Product Management,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,62.9,0,0,5,5,,Access & Passwords,,,
+SIM-034,simulated,,simulated-pilot,11.0,Lead / Manager,Project / Product Management,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,44.7,0,0,6,6,,Software,,,
+SIM-034,simulated,,simulated-pilot,11.0,Lead / Manager,Project / Product Management,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,75.5,3,0,7,2,,Facilities & AV,,,
+SIM-034,simulated,,simulated-pilot,11.0,Lead / Manager,Project / Product Management,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,9.4,0,0,1,6,,Access & Passwords,Access & Passwords,0.7433221725812205,1.0
+SIM-034,simulated,,simulated-pilot,11.0,Lead / Manager,Project / Product Management,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,17.4,0,0,2,8,,Software,Software,0.6940655169061882,1.0
+SIM-034,simulated,,simulated-pilot,11.0,Lead / Manager,Project / Product Management,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,19.0,0,0,4,7,,Facilities & AV,Facilities & AV,0.6150319651261559,1.0
+SIM-035,simulated,,simulated-pilot,11.0,Lead / Manager,Engineering / Tech,1,1,ai_first,1,4,Password Reset,access,ServiceNow,1,45.7,1,0,5,6,,Access & Passwords,,,
+SIM-035,simulated,,simulated-pilot,11.0,Lead / Manager,Engineering / Tech,1,1,ai_first,2,5,Software Licence Request,software,ServiceNow,1,83.8,1,0,5,6,,Software,,,
+SIM-035,simulated,,simulated-pilot,11.0,Lead / Manager,Engineering / Tech,1,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,103.4,3,0,7,5,,Facilities & AV,,,
+SIM-035,simulated,,simulated-pilot,11.0,Lead / Manager,Engineering / Tech,1,1,ai_first,4,1,MFA Reset,access,AI Agent,1,14.6,0,0,2,6,,Access & Passwords,Access & Passwords,0.48924982954217516,1.0
+SIM-035,simulated,,simulated-pilot,11.0,Lead / Manager,Engineering / Tech,1,1,ai_first,5,2,Software Install,software,AI Agent,1,34.9,0,0,4,4,,Software,Software,0.6076690836861046,1.0
+SIM-035,simulated,,simulated-pilot,11.0,Lead / Manager,Engineering / Tech,1,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,22.1,0,0,6,5,,Facilities & AV,Facilities & AV,0.6584359330075716,1.0
+SIM-036,simulated,,simulated-pilot,2.0,IC / Associate,Operations,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,63.7,0,0,6,4,,Access & Passwords,,,
+SIM-036,simulated,,simulated-pilot,2.0,IC / Associate,Operations,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,51.3,0,0,4,3,,Software,,,
+SIM-036,simulated,,simulated-pilot,2.0,IC / Associate,Operations,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,162.7,2,0,7,1,,Facilities & AV,,,
+SIM-036,simulated,,simulated-pilot,2.0,IC / Associate,Operations,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,25.8,0,0,4,5,,Access & Passwords,Access & Passwords,0.4514132247233022,1.0
+SIM-036,simulated,,simulated-pilot,2.0,IC / Associate,Operations,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,34.5,0,0,2,6,,Software,Software,0.6768270670208651,1.0
+SIM-036,simulated,,simulated-pilot,2.0,IC / Associate,Operations,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,24.8,1,0,3,4,,Facilities & AV,Facilities & AV,0.7206128878253831,1.0
+SIM-037,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,42.1,1,0,4,3,,Access & Passwords,,,
+SIM-037,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,88.3,1,0,5,2,,Software,,,
+SIM-037,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,157.9,4,1,10,1,,,,,
+SIM-037,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,30.9,0,0,3,4,,Access & Passwords,Access & Passwords,0.31484462742198016,1.0
+SIM-037,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,53.3,0,0,2,5,,Software,Software,0.3338653225422962,1.0
+SIM-037,simulated,,simulated-pilot,7.0,IC / Associate,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,41.7,0,0,4,6,,Facilities & AV,Facilities & AV,0.4169074706717511,1.0
+SIM-038,simulated,,simulated-pilot,14.0,Director / Executive,Other,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,42.2,0,0,2,9,,Access & Passwords,,,
+SIM-038,simulated,,simulated-pilot,14.0,Director / Executive,Other,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,47.1,1,0,4,8,,Software,,,
+SIM-038,simulated,,simulated-pilot,14.0,Director / Executive,Other,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,174.6,3,0,7,6,,Facilities & AV,,,
+SIM-038,simulated,,simulated-pilot,14.0,Director / Executive,Other,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,21.0,0,0,4,10,,Access & Passwords,Access & Passwords,0.4852206137619271,1.0
+SIM-038,simulated,,simulated-pilot,14.0,Director / Executive,Other,1,0,ai_first,5,2,Software Install,software,AI Agent,0,30.8,0,0,2,8,,Software,Software,0.6829884767340245,1.0
+SIM-038,simulated,,simulated-pilot,14.0,Director / Executive,Other,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,15.9,0,0,3,9,,Facilities & AV,Facilities & AV,0.5167417412773814,1.0
+SIM-039,simulated,,simulated-pilot,1.0,IC / Associate,Project / Product Management,1,1,ai_first,1,4,Password Reset,access,ServiceNow,1,59.8,0,0,4,5,,Access & Passwords,,,
+SIM-039,simulated,,simulated-pilot,1.0,IC / Associate,Project / Product Management,1,1,ai_first,2,5,Software Licence Request,software,ServiceNow,1,189.5,1,0,5,4,,Software,,,
+SIM-039,simulated,,simulated-pilot,1.0,IC / Associate,Project / Product Management,1,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,244.5,2,0,7,2,,Facilities & AV,,,
+SIM-039,simulated,,simulated-pilot,1.0,IC / Associate,Project / Product Management,1,1,ai_first,4,1,MFA Reset,access,AI Agent,1,61.8,0,0,3,5,,Access & Passwords,Access & Passwords,0.7749191741616291,1.0
+SIM-039,simulated,,simulated-pilot,1.0,IC / Associate,Project / Product Management,1,1,ai_first,5,2,Software Install,software,AI Agent,1,43.0,0,0,3,7,,Software,Software,0.5998652055567181,1.0
+SIM-039,simulated,,simulated-pilot,1.0,IC / Associate,Project / Product Management,1,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,54.1,0,0,4,7,,Facilities & AV,Facilities & AV,0.8506687292486897,1.0
+SIM-040,simulated,,simulated-pilot,2.0,IC / Associate,Operations,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,73.7,0,0,5,5,,Access & Passwords,,,
+SIM-040,simulated,,simulated-pilot,2.0,IC / Associate,Operations,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,112.3,1,0,5,4,,Software,,,
+SIM-040,simulated,,simulated-pilot,2.0,IC / Associate,Operations,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,354.1,0,1,8,1,,,,,
+SIM-040,simulated,,simulated-pilot,2.0,IC / Associate,Operations,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,25.2,1,0,2,9,,Access & Passwords,Access & Passwords,0.9544994640141348,1.0
+SIM-040,simulated,,simulated-pilot,2.0,IC / Associate,Operations,1,0,ai_first,5,2,Software Install,software,AI Agent,0,34.4,0,0,3,8,,Software,Software,0.7418307306989483,1.0
+SIM-040,simulated,,simulated-pilot,2.0,IC / Associate,Operations,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,44.7,1,0,4,5,,Facilities & AV,Software,0.21126330949367048,0.0
+SIM-041,simulated,,simulated-pilot,,,,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,71.1,0,0,3,5,,Access & Passwords,,,
+SIM-041,simulated,,simulated-pilot,,,,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,59.2,0,0,4,6,,Software,,,
+SIM-041,simulated,,simulated-pilot,,,,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,507.6,3,0,8,3,,Facilities & AV,,,
+SIM-041,simulated,,simulated-pilot,,,,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,16.9,0,0,4,4,,Access & Passwords,Access & Passwords,0.42954012253985974,1.0
+SIM-041,simulated,,simulated-pilot,,,,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,18.0,0,0,1,6,,Software,Software,0.6754729153241664,1.0
+SIM-041,simulated,,simulated-pilot,,,,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,38.3,1,0,3,6,,Facilities & AV,Facilities & AV,0.6968164179499557,0.0
+SIM-042,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,93.8,0,0,3,5,,Access & Passwords,,,
+SIM-042,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,73.3,1,0,4,4,,Software,,,
+SIM-042,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,794.4,3,0,10,2,,Facilities & AV,,,
+SIM-042,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,26.4,0,0,3,9,,Access & Passwords,Access & Passwords,0.5620163119024917,1.0
+SIM-042,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,55.4,0,0,1,5,,Software,Software,0.7030909382544466,1.0
+SIM-042,simulated,,simulated-pilot,0.0,IC / Associate,Engineering / Tech,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,56.3,0,0,3,6,,Facilities & AV,Facilities & AV,0.8682282674247546,1.0
+SIM-043,simulated,,simulated-pilot,13.0,Director / Executive,Engineering / Tech,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,86.6,1,0,5,9,,Access & Passwords,,,
+SIM-043,simulated,,simulated-pilot,13.0,Director / Executive,Engineering / Tech,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,57.6,0,0,3,5,,Software,,,
+SIM-043,simulated,,simulated-pilot,13.0,Director / Executive,Engineering / Tech,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,198.7,4,0,9,3,,Facilities & AV,,,
+SIM-043,simulated,,simulated-pilot,13.0,Director / Executive,Engineering / Tech,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,18.4,0,0,1,10,,Access & Passwords,Access & Passwords,0.668370833285924,1.0
+SIM-043,simulated,,simulated-pilot,13.0,Director / Executive,Engineering / Tech,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,14.2,0,0,2,9,,Software,Software,0.5980533477969384,1.0
+SIM-043,simulated,,simulated-pilot,13.0,Director / Executive,Engineering / Tech,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,27.5,0,0,2,9,,Facilities & AV,Facilities & AV,0.667476048201492,1.0
+SIM-044,simulated,,simulated-pilot,20.0,Director / Executive,Other,0,0,ai_first,1,4,Password Reset,access,ServiceNow,0,79.8,0,0,5,6,,Access & Passwords,,,
+SIM-044,simulated,,simulated-pilot,20.0,Director / Executive,Other,0,0,ai_first,2,5,Software Licence Request,software,ServiceNow,0,96.9,0,0,5,6,,Software,,,
+SIM-044,simulated,,simulated-pilot,20.0,Director / Executive,Other,0,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,260.0,3,0,8,3,,Facilities & AV,,,
+SIM-044,simulated,,simulated-pilot,20.0,Director / Executive,Other,0,0,ai_first,4,1,MFA Reset,access,AI Agent,0,30.7,0,0,1,9,,Access & Passwords,Access & Passwords,0.679571869369992,1.0
+SIM-044,simulated,,simulated-pilot,20.0,Director / Executive,Other,0,0,ai_first,5,2,Software Install,software,AI Agent,0,39.6,0,0,2,7,,Software,Software,0.8126779953356368,1.0
+SIM-044,simulated,,simulated-pilot,20.0,Director / Executive,Other,0,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,53.1,1,0,5,8,,Facilities & AV,Network & VPN,0.48276061251851093,0.0
+SIM-045,simulated,,simulated-pilot,6.0,Lead / Manager,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,70.0,1,0,6,5,,Access & Passwords,,,
+SIM-045,simulated,,simulated-pilot,6.0,Lead / Manager,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,51.8,1,0,6,5,,Software,,,
+SIM-045,simulated,,simulated-pilot,6.0,Lead / Manager,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,308.5,2,0,8,3,,Facilities & AV,,,
+SIM-045,simulated,,simulated-pilot,6.0,Lead / Manager,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,14.1,0,0,3,6,,Access & Passwords,Access & Passwords,0.43921350014500854,1.0
+SIM-045,simulated,,simulated-pilot,6.0,Lead / Manager,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,23.7,0,0,4,6,,Software,Software,0.46202748353110956,1.0
+SIM-045,simulated,,simulated-pilot,6.0,Lead / Manager,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,21.0,0,0,2,6,,Facilities & AV,Facilities & AV,0.8039368948557278,1.0
+SIM-046,simulated,,simulated-pilot,13.0,Lead / Manager,Other,1,1,ai_first,1,4,Password Reset,access,ServiceNow,1,40.0,0,0,4,5,,Access & Passwords,,,
+SIM-046,simulated,,simulated-pilot,13.0,Lead / Manager,Other,1,1,ai_first,2,5,Software Licence Request,software,ServiceNow,1,90.7,0,0,5,4,,Software,,,
+SIM-046,simulated,,simulated-pilot,13.0,Lead / Manager,Other,1,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,113.0,4,0,7,4,,Facilities & AV,,,
+SIM-046,simulated,,simulated-pilot,13.0,Lead / Manager,Other,1,1,ai_first,4,1,MFA Reset,access,AI Agent,1,14.0,0,0,3,5,,Access & Passwords,Access & Passwords,0.5975406140372285,1.0
+SIM-046,simulated,,simulated-pilot,13.0,Lead / Manager,Other,1,1,ai_first,5,2,Software Install,software,AI Agent,1,15.6,0,0,5,6,,Software,Software,0.49359076399516333,1.0
+SIM-046,simulated,,simulated-pilot,13.0,Lead / Manager,Other,1,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,50.1,1,0,4,5,,Facilities & AV,Facilities & AV,0.7862330708026908,0.0
+SIM-047,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,92.3,0,0,5,5,,Access & Passwords,,,
+SIM-047,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,129.9,0,0,3,5,,Software,,,
+SIM-047,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,402.1,2,0,9,4,,Facilities & AV,,,
+SIM-047,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,24.8,0,0,4,6,,Access & Passwords,Access & Passwords,0.371303703027245,1.0
+SIM-047,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,22.7,0,0,4,8,,Software,Software,0.4625299612930047,1.0
+SIM-047,simulated,,simulated-pilot,1.0,IC / Associate,Other,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,33.4,0,0,2,4,,Facilities & AV,Facilities & AV,0.5713047649695416,1.0
+SIM-048,simulated,,simulated-pilot,11.0,Director / Executive,Operations,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,27.3,0,0,4,6,,Access & Passwords,,,
+SIM-048,simulated,,simulated-pilot,11.0,Director / Executive,Operations,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,74.9,1,0,7,7,,Software,,,
+SIM-048,simulated,,simulated-pilot,11.0,Director / Executive,Operations,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,166.4,5,0,8,5,,Facilities & AV,,,
+SIM-048,simulated,,simulated-pilot,11.0,Director / Executive,Operations,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,11.7,0,0,4,9,,Access & Passwords,Access & Passwords,0.555249360390382,1.0
+SIM-048,simulated,,simulated-pilot,11.0,Director / Executive,Operations,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,24.3,0,0,4,8,,Software,Software,0.6832449814611441,1.0
+SIM-048,simulated,,simulated-pilot,11.0,Director / Executive,Operations,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,21.9,0,0,4,9,,Facilities & AV,Facilities & AV,0.5027688219366144,1.0
+SIM-049,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,58.7,0,0,4,6,,Access & Passwords,,,
+SIM-049,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,57.9,2,0,4,4,,Software,,,
+SIM-049,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,503.4,1,0,7,2,,Facilities & AV,,,
+SIM-049,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,16.7,0,0,1,8,,Access & Passwords,Access & Passwords,0.7592176972628814,1.0
+SIM-049,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,33.1,0,0,4,6,,Software,Software,0.7077482134376571,1.0
+SIM-049,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,35.2,1,0,3,6,,Facilities & AV,Access & Passwords,0.6705999203608813,0.0
+SIM-050,simulated,,simulated-pilot,6.0,Lead / Manager,Engineering / Tech,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,74.9,0,0,4,6,,Access & Passwords,,,
+SIM-050,simulated,,simulated-pilot,6.0,Lead / Manager,Engineering / Tech,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,57.9,0,0,5,5,,Software,,,
+SIM-050,simulated,,simulated-pilot,6.0,Lead / Manager,Engineering / Tech,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,64.7,2,1,9,3,,,,,
+SIM-050,simulated,,simulated-pilot,6.0,Lead / Manager,Engineering / Tech,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,33.7,0,0,1,6,,Access & Passwords,Access & Passwords,0.48346227842099815,1.0
+SIM-050,simulated,,simulated-pilot,6.0,Lead / Manager,Engineering / Tech,1,0,ai_first,5,2,Software Install,software,AI Agent,0,36.1,0,0,3,8,,Software,Software,0.49550207953625586,1.0
+SIM-050,simulated,,simulated-pilot,6.0,Lead / Manager,Engineering / Tech,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,41.3,0,0,1,8,,Facilities & AV,Facilities & AV,0.5330781004214684,1.0
+SIM-051,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,legacy_first,1,1,Password Reset,access,ServiceNow,1,77.0,0,0,4,3,,Access & Passwords,,,
+SIM-051,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,53.7,0,0,4,2,,Software,,,
+SIM-051,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,126.3,3,1,8,3,,,,,
+SIM-051,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,30.4,2,0,5,7,,Access & Passwords,Access & Passwords,0.6405959176092235,1.0
+SIM-051,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,legacy_first,5,5,Software Install,software,AI Agent,1,21.6,0,0,3,6,,Software,Software,0.6959988774049495,1.0
+SIM-051,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,38.5,0,0,4,6,,Facilities & AV,Facilities & AV,0.655536475382285,1.0
+SIM-053,simulated,,simulated-pilot,9.0,Lead / Manager,Project / Product Management,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,81.8,1,0,4,6,,Access & Passwords,,,
+SIM-053,simulated,,simulated-pilot,9.0,Lead / Manager,Project / Product Management,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,156.3,1,0,5,6,,Software,,,
+SIM-053,simulated,,simulated-pilot,9.0,Lead / Manager,Project / Product Management,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,841.4,1,0,9,3,,Facilities & AV,,,
+SIM-053,simulated,,simulated-pilot,9.0,Lead / Manager,Project / Product Management,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,32.6,0,0,4,6,,Access & Passwords,Access & Passwords,0.7954645160789349,1.0
+SIM-053,simulated,,simulated-pilot,9.0,Lead / Manager,Project / Product Management,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,24.0,0,0,3,9,,Software,Software,0.48357157416637936,1.0
+SIM-053,simulated,,simulated-pilot,9.0,Lead / Manager,Project / Product Management,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,32.6,1,0,3,7,,Facilities & AV,Facilities & AV,0.439116894860858,1.0
+SIM-054,simulated,,simulated-pilot,4.0,Lead / Manager,Operations,0,0,ai_first,1,4,Password Reset,access,ServiceNow,0,18.8,0,0,7,6,,Access & Passwords,,,
+SIM-054,simulated,,simulated-pilot,4.0,Lead / Manager,Operations,0,0,ai_first,2,5,Software Licence Request,software,ServiceNow,0,91.7,0,0,4,6,,Software,,,
+SIM-054,simulated,,simulated-pilot,4.0,Lead / Manager,Operations,0,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,292.5,3,0,7,4,,Facilities & AV,,,
+SIM-054,simulated,,simulated-pilot,4.0,Lead / Manager,Operations,0,0,ai_first,4,1,MFA Reset,access,AI Agent,0,26.9,0,0,3,9,,Access & Passwords,Access & Passwords,0.4507918959726804,1.0
+SIM-054,simulated,,simulated-pilot,4.0,Lead / Manager,Operations,0,0,ai_first,5,2,Software Install,software,AI Agent,0,28.6,1,0,3,8,,Software,Software,0.2996443811206388,1.0
+SIM-054,simulated,,simulated-pilot,4.0,Lead / Manager,Operations,0,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,39.4,0,0,3,8,,Facilities & AV,Facilities & AV,0.5615464710108842,1.0
+SIM-055,simulated,,simulated-pilot,7.0,Lead / Manager,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,78.6,0,0,3,6,,Access & Passwords,,,
+SIM-055,simulated,,simulated-pilot,7.0,Lead / Manager,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,140.3,1,0,8,3,,Software,,,
+SIM-055,simulated,,simulated-pilot,7.0,Lead / Manager,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,91.6,4,0,9,4,,Facilities & AV,,,
+SIM-055,simulated,,simulated-pilot,7.0,Lead / Manager,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,61.8,1,0,2,6,,Access & Passwords,Access & Passwords,0.6510250272795991,0.0
+SIM-055,simulated,,simulated-pilot,7.0,Lead / Manager,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,42.2,0,0,3,4,,Software,Software,0.4743619505577484,1.0
+SIM-055,simulated,,simulated-pilot,7.0,Lead / Manager,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,58.1,0,0,5,4,,Facilities & AV,Facilities & AV,0.8402805290798233,1.0
+SIM-056,simulated,,simulated-pilot,24.0,Director / Executive,Project / Product Management,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,41.4,0,0,3,3,,Access & Passwords,,,
+SIM-056,simulated,,simulated-pilot,24.0,Director / Executive,Project / Product Management,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,78.7,0,0,3,5,,Software,,,
+SIM-056,simulated,,simulated-pilot,24.0,Director / Executive,Project / Product Management,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,200.2,4,0,10,6,,Facilities & AV,,,
+SIM-056,simulated,,simulated-pilot,24.0,Director / Executive,Project / Product Management,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,21.1,0,0,4,8,,Access & Passwords,Access & Passwords,0.830802810033275,1.0
+SIM-056,simulated,,simulated-pilot,24.0,Director / Executive,Project / Product Management,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,27.2,0,0,3,5,,Software,Software,0.5858058077149092,1.0
+SIM-056,simulated,,simulated-pilot,24.0,Director / Executive,Project / Product Management,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,47.2,1,0,4,7,,Facilities & AV,Network & VPN,0.39945601343997955,0.0
+SIM-057,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,77.0,1,0,5,5,,Access & Passwords,,,
+SIM-057,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,135.9,2,0,5,3,,Software,,,
+SIM-057,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,215.9,1,0,7,3,,Facilities & AV,,,
+SIM-057,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,26.9,0,0,5,6,,Access & Passwords,Access & Passwords,0.7161931419744096,1.0
+SIM-057,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,10.4,0,0,3,6,,Software,Software,0.6977193813757355,1.0
+SIM-057,simulated,,simulated-pilot,5.0,IC / Associate,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,62.7,1,0,2,6,,Facilities & AV,Hardware,0.6504894774721811,0.0
+SIM-058,simulated,,simulated-pilot,5.0,Lead / Manager,Other,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,107.4,1,0,6,6,,Access & Passwords,,,
+SIM-058,simulated,,simulated-pilot,5.0,Lead / Manager,Other,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,70.9,0,0,5,4,,Software,,,
+SIM-058,simulated,,simulated-pilot,5.0,Lead / Manager,Other,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,147.9,1,0,6,2,,Facilities & AV,,,
+SIM-058,simulated,,simulated-pilot,5.0,Lead / Manager,Other,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,22.9,0,0,3,7,,Access & Passwords,Access & Passwords,0.7240483063283185,1.0
+SIM-058,simulated,,simulated-pilot,5.0,Lead / Manager,Other,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,41.4,1,0,3,8,,Software,Access & Passwords,0.6285668625975278,0.0
+SIM-058,simulated,,simulated-pilot,5.0,Lead / Manager,Other,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,33.9,0,0,2,8,,Facilities & AV,Facilities & AV,0.4718638754415874,1.0
+SIM-059,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,78.4,1,0,4,6,,Access & Passwords,,,
+SIM-059,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,142.6,0,0,4,5,,Software,,,
+SIM-059,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,1265.2,3,0,10,3,,Facilities & AV,,,
+SIM-059,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,25.7,0,0,5,6,,Access & Passwords,Access & Passwords,0.5920649623188353,1.0
+SIM-059,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,50.3,0,0,3,8,,Software,Software,0.7402591828480799,1.0
+SIM-059,simulated,,simulated-pilot,4.0,IC / Associate,Project / Product Management,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,27.3,0,0,2,5,,Facilities & AV,Facilities & AV,0.5245295803501145,1.0
+SIM-060,simulated,,simulated-pilot,9.0,Lead / Manager,Engineering / Tech,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,71.4,2,0,5,6,,Access & Passwords,,,
+SIM-060,simulated,,simulated-pilot,9.0,Lead / Manager,Engineering / Tech,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,84.1,0,0,4,5,,Software,,,
+SIM-060,simulated,,simulated-pilot,9.0,Lead / Manager,Engineering / Tech,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,186.9,2,1,10,4,,,,,
+SIM-060,simulated,,simulated-pilot,9.0,Lead / Manager,Engineering / Tech,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,17.6,0,0,2,8,,Access & Passwords,Access & Passwords,0.561269815840478,1.0
+SIM-060,simulated,,simulated-pilot,9.0,Lead / Manager,Engineering / Tech,1,0,ai_first,5,2,Software Install,software,AI Agent,0,32.9,0,0,1,9,,Software,Software,0.5416936150736921,1.0
+SIM-060,simulated,,simulated-pilot,9.0,Lead / Manager,Engineering / Tech,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,18.1,0,0,1,7,,Facilities & AV,Facilities & AV,0.530316010129448,1.0
+SIM-061,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,77.3,1,0,5,4,,Access & Passwords,,,
+SIM-061,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,97.0,0,0,6,2,,Software,,,
+SIM-061,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,185.2,2,0,8,3,,Facilities & AV,,,
+SIM-061,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,31.9,1,0,2,7,,Access & Passwords,Software,0.475822050787909,0.0
+SIM-061,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,23.6,0,0,3,6,,Software,Software,0.3731241539988253,1.0
+SIM-061,simulated,,simulated-pilot,3.0,IC / Associate,Project / Product Management,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,22.0,0,0,1,5,,Facilities & AV,Facilities & AV,0.5325380490223183,1.0
+SIM-062,simulated,,simulated-pilot,12.0,Lead / Manager,Other,1,0,ai_first,1,4,Password Reset,access,ServiceNow,1,49.5,0,0,4,4,,Access & Passwords,,,
+SIM-062,simulated,,simulated-pilot,12.0,Lead / Manager,Other,1,0,ai_first,2,5,Software Licence Request,software,ServiceNow,1,91.7,2,0,7,5,,Software,,,
+SIM-062,simulated,,simulated-pilot,12.0,Lead / Manager,Other,1,0,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,257.4,2,1,9,4,,,,,
+SIM-062,simulated,,simulated-pilot,12.0,Lead / Manager,Other,1,0,ai_first,4,1,MFA Reset,access,AI Agent,0,35.5,1,0,5,6,,Access & Passwords,Network & VPN,0.46560737258614765,0.0
+SIM-062,simulated,,simulated-pilot,12.0,Lead / Manager,Other,1,0,ai_first,5,2,Software Install,software,AI Agent,0,44.6,0,0,3,6,,Software,Software,0.6156038054086729,1.0
+SIM-062,simulated,,simulated-pilot,12.0,Lead / Manager,Other,1,0,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,0,26.6,0,0,3,9,,Facilities & AV,Facilities & AV,0.4844459658991387,1.0
+SIM-063,simulated,,simulated-pilot,10.0,Director / Executive,Project / Product Management,0,1,ai_first,1,4,Password Reset,access,ServiceNow,0,43.6,0,0,6,7,,Access & Passwords,,,
+SIM-063,simulated,,simulated-pilot,10.0,Director / Executive,Project / Product Management,0,1,ai_first,2,5,Software Licence Request,software,ServiceNow,0,104.6,1,0,4,8,,Software,,,
+SIM-063,simulated,,simulated-pilot,10.0,Director / Executive,Project / Product Management,0,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,998.4,4,0,10,4,,Facilities & AV,,,
+SIM-063,simulated,,simulated-pilot,10.0,Director / Executive,Project / Product Management,0,1,ai_first,4,1,MFA Reset,access,AI Agent,1,38.7,1,0,5,6,,Access & Passwords,Software,0.43824253410669356,0.0
+SIM-063,simulated,,simulated-pilot,10.0,Director / Executive,Project / Product Management,0,1,ai_first,5,2,Software Install,software,AI Agent,1,46.9,1,0,4,6,,Software,Software,0.7050288159270368,0.0
+SIM-063,simulated,,simulated-pilot,10.0,Director / Executive,Project / Product Management,0,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,34.9,0,0,4,8,,Facilities & AV,Facilities & AV,0.9171759407751437,1.0
+SIM-064,simulated,,simulated-pilot,22.0,Director / Executive,Engineering / Tech,1,1,ai_first,1,4,Password Reset,access,ServiceNow,1,55.2,0,0,4,7,,Access & Passwords,,,
+SIM-064,simulated,,simulated-pilot,22.0,Director / Executive,Engineering / Tech,1,1,ai_first,2,5,Software Licence Request,software,ServiceNow,1,80.4,2,0,6,8,,Software,,,
+SIM-064,simulated,,simulated-pilot,22.0,Director / Executive,Engineering / Tech,1,1,ai_first,3,6,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,555.4,2,0,8,4,,Facilities & AV,,,
+SIM-064,simulated,,simulated-pilot,22.0,Director / Executive,Engineering / Tech,1,1,ai_first,4,1,MFA Reset,access,AI Agent,1,21.3,0,0,5,8,,Access & Passwords,Access & Passwords,0.6026470308817196,1.0
+SIM-064,simulated,,simulated-pilot,22.0,Director / Executive,Engineering / Tech,1,1,ai_first,5,2,Software Install,software,AI Agent,1,34.0,0,0,4,7,,Software,Software,0.46710562846294607,1.0
+SIM-064,simulated,,simulated-pilot,22.0,Director / Executive,Engineering / Tech,1,1,ai_first,6,3,Meeting Room Camera,facilities,AI Agent,1,20.1,0,0,4,6,,Facilities & AV,Facilities & AV,0.7990709387277858,1.0
+SIM-065,simulated,,simulated-pilot,25.0,Director / Executive,Engineering / Tech,0,0,legacy_first,1,1,Password Reset,access,ServiceNow,0,37.6,0,0,5,5,,Access & Passwords,,,
+SIM-065,simulated,,simulated-pilot,25.0,Director / Executive,Engineering / Tech,0,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,57.8,0,0,5,6,,Software,,,
+SIM-065,simulated,,simulated-pilot,25.0,Director / Executive,Engineering / Tech,0,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,160.3,4,0,9,3,,Facilities & AV,,,
+SIM-065,simulated,,simulated-pilot,25.0,Director / Executive,Engineering / Tech,0,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,13.5,0,0,3,9,,Access & Passwords,Access & Passwords,0.340081823706967,1.0
+SIM-065,simulated,,simulated-pilot,25.0,Director / Executive,Engineering / Tech,0,0,legacy_first,5,5,Software Install,software,AI Agent,0,20.5,1,0,1,8,,Software,Software,0.7307975420920896,1.0
+SIM-065,simulated,,simulated-pilot,25.0,Director / Executive,Engineering / Tech,0,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,22.3,0,0,3,9,,Facilities & AV,Facilities & AV,0.532513838090702,1.0
+SIM-066,simulated,,simulated-pilot,10.0,Lead / Manager,Project / Product Management,0,1,legacy_first,1,1,Password Reset,access,ServiceNow,0,90.1,0,0,5,6,,Access & Passwords,,,
+SIM-066,simulated,,simulated-pilot,10.0,Lead / Manager,Project / Product Management,0,1,legacy_first,2,2,Software Licence Request,software,ServiceNow,0,87.1,0,0,5,5,,Software,,,
+SIM-066,simulated,,simulated-pilot,10.0,Lead / Manager,Project / Product Management,0,1,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,0,155.3,2,0,7,2,,Facilities & AV,,,
+SIM-066,simulated,,simulated-pilot,10.0,Lead / Manager,Project / Product Management,0,1,legacy_first,4,4,MFA Reset,access,AI Agent,1,24.2,0,0,4,6,,Access & Passwords,Access & Passwords,0.5852978807146093,1.0
+SIM-066,simulated,,simulated-pilot,10.0,Lead / Manager,Project / Product Management,0,1,legacy_first,5,5,Software Install,software,AI Agent,1,38.4,0,0,3,7,,Software,Software,0.6551784181483387,1.0
+SIM-066,simulated,,simulated-pilot,10.0,Lead / Manager,Project / Product Management,0,1,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,1,56.1,0,0,3,5,,Facilities & AV,Facilities & AV,0.6772559812277229,1.0
+SIM-067,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,1,1,Password Reset,access,ServiceNow,1,52.9,0,0,4,5,,Access & Passwords,,,
+SIM-067,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,2,2,Software Licence Request,software,ServiceNow,1,118.3,0,0,5,4,,Software,,,
+SIM-067,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,3,3,Boardroom AV (Documentation Hunt),facilities,ServiceNow,1,413.2,6,0,9,2,,Facilities & AV,,,
+SIM-067,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,4,4,MFA Reset,access,AI Agent,0,29.7,0,0,3,7,,Access & Passwords,Access & Passwords,0.7702596288215711,1.0
+SIM-067,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,5,5,Software Install,software,AI Agent,0,34.5,0,0,2,8,,Software,Software,0.45435139919129464,1.0
+SIM-067,simulated,,simulated-pilot,1.0,IC / Associate,Operations,1,0,legacy_first,6,6,Meeting Room Camera,facilities,AI Agent,0,23.5,0,0,2,7,,Facilities & AV,Facilities & AV,0.7071506740139178,1.0

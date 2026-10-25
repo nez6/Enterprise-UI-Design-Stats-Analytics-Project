@@ -1,4 +1,5 @@
 hypothesis,claim,test,p,p_holm,rank_biserial
-H1,Priming ↑ T6 efficiency,Mann–Whitney U (one-sided),0.6699,,-0.0679
-H2,Chaos ↑ completion time,Wilcoxon signed-rank (one-sided),0.0,0.0,1.0
-H3,Priming ↓ chaos frustration,Mann–Whitney U (one-sided),0.0001,0.0001,-0.5941
+H1,Praise banner ↑ ServiceNow rating,"Mann–Whitney U (one-sided), Holm",0.0239,0.0239,0.2856
+H2,Hallucination warning ↓ AI rating,"Mann–Whitney U (one-sided), Holm",0.0,0.0,-0.727
+H3,AI agent faster (paired),Wilcoxon signed-rank (one-sided),0.0,,-1.0
+H4,Warning ↑ overrides,Mann–Whitney U (one-sided),0.1307,,0.1427

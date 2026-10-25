@@ -1,407 +1,493 @@
 {
   "data_source": "simulated",
-  "n_participants": 51,
-  "n_rows": 306,
-  "n_primed": 27,
-  "n_control": 24,
-  "n_with_demographics": 47,
+  "n_participants": 65,
+  "n_tickets": 390,
+  "n_feedback": 65,
+  "n_snow_banner": 31,
+  "n_ai_banner": 36,
+  "n_with_demographics": 61,
   "cleaning": [
     {
       "rule": "Raw data loaded",
-      "rows_before": 329,
-      "rows_after": 329,
-      "participants_before": 55,
-      "participants_after": 55,
+      "rows_before": 411,
+      "rows_after": 411,
+      "participants_before": 69,
+      "participants_after": 69,
       "note": ""
     },
     {
       "rule": "Excluded ids removed (dry runs / withdrawals)",
-      "rows_before": 329,
-      "rows_after": 323,
-      "participants_before": 55,
-      "participants_after": 54,
+      "rows_before": 411,
+      "rows_after": 405,
+      "participants_before": 69,
+      "participants_after": 68,
       "note": ""
     },
     {
       "rule": "Double-submitted rows removed",
-      "rows_before": 323,
-      "rows_after": 320,
-      "participants_before": 54,
-      "participants_after": 54,
+      "rows_before": 405,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
       "note": ""
     },
     {
       "rule": "Rows with impossible values removed",
-      "rows_before": 320,
-      "rows_after": 320,
-      "participants_before": 54,
-      "participants_after": 54,
+      "rows_before": 402,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
       "note": ""
     },
     {
       "rule": "Demographics validated (blanked, not dropped)",
-      "rows_before": 320,
-      "rows_after": 320,
-      "participants_before": 54,
-      "participants_after": 54,
+      "rows_before": 402,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
       "note": "4 participant(s) have at least one missing/blank demographic"
     },
     {
-      "rule": "Participants with inconsistent arm removed",
-      "rows_before": 320,
-      "rows_after": 320,
-      "participants_before": 54,
-      "participants_after": 54,
+      "rule": "Participants with inconsistent banner assignment removed",
+      "rows_before": 402,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
       "note": ""
     },
     {
-      "rule": "Walk-aways removed (any test > 30 min)",
-      "rows_before": 320,
-      "rows_after": 314,
-      "participants_before": 54,
-      "participants_after": 53,
+      "rule": "Walk-aways removed (any ticket > 30 min)",
+      "rows_before": 402,
+      "rows_after": 396,
+      "participants_before": 68,
+      "participants_after": 67,
       "note": ""
     },
     {
-      "rule": "Incomplete participants removed (< 6 tests)",
-      "rows_before": 314,
-      "rows_after": 306,
-      "participants_before": 53,
-      "participants_after": 51,
+      "rule": "Incomplete participants removed (< 6 tickets)",
+      "rows_before": 396,
+      "rows_after": 390,
+      "participants_before": 67,
+      "participants_after": 65,
       "note": ""
     }
   ],
   "power": {
-    "alpha": 0.05,
+    "alpha_family": 0.05,
+    "alpha_each": 0.025,
     "target_power": 0.8,
     "attrition": 0.1,
-    "h1": {
+    "h1_h2": {
       "effect_size_d": 0.8,
-      "test": "one-sided Mann-Whitney U",
-      "n_per_group_ttest": 20.03275768840654,
+      "test": "one-sided Mann-Whitney U, Holm across H1/H2",
+      "n_per_group_ttest": 25.52463124782632,
       "are_correction": 0.864,
-      "n_per_group": 24,
-      "analysable_total": 48,
-      "recruit_total": 54,
-      "monte_carlo_power": 0.435,
-      "monte_carlo_sims": 400,
-      "simulation_model_d": 0.5738186761480066,
-      "n_per_group_for_simulation_d": 45
+      "n_per_group": 30,
+      "analysable_total": 60,
+      "recruit_total": 68,
+      "monte_carlo_sims": 300,
+      "monte_carlo_power_h1": 0.7766666666666666,
+      "monte_carlo_power_h2": 0.9933333333333333,
+      "monte_carlo_power_both": 0.7733333333333333,
+      "simulation_model_d_h1": 0.6683913318253878,
+      "simulation_model_d_h2": 1.2360469529211058
     },
-    "h2": {
+    "h3": {
       "effect_size_dz": 1.0,
       "test": "one-sided Wilcoxon signed-rank",
       "n_pairs_ttest": 7.7276179024108504,
       "n_pairs": 9
     },
     "sensitivity_min_d_by_n_per_group": {
-      "10": 1.156297269864038,
-      "15": 0.9307048198443334,
-      "20": 0.8006803749913616,
-      "25": 0.7134105913160863,
-      "30": 0.6496295651890053,
-      "40": 0.5608809212050552,
-      "50": 0.5007641052602384
+      "10": 1.3249488712539945,
+      "15": 1.0598008505678362,
+      "20": 0.9091288650947541,
+      "25": 0.8087090091359758,
+      "30": 0.7356230148278837,
+      "40": 0.6342992921939922,
+      "50": 0.5658844232401936
     }
   },
   "randomisation": {
-    "years_median_primed": 6.0,
-    "years_median_control": 4.0,
-    "years_mwu_p": 0.3024483017455587,
-    "job_level_table": {
-      "Control": {
-        "Director / Executive": 5,
-        "IC / Associate": 13,
-        "Lead / Manager": 3
-      },
-      "Primed": {
-        "Director / Executive": 3,
-        "IC / Associate": 16,
-        "Lead / Manager": 7
-      }
+    "servicenow_banner": {
+      "n_banner": 31,
+      "n_none": 34,
+      "years_median_banner": 4.5,
+      "years_median_none": 7.0,
+      "years_p": 0.03724625489410641,
+      "job_level_p": 0.5891636972463017,
+      "job_level_min_expected": 4.131147540983607,
+      "set_order_p": 1.0
     },
-    "job_level_chi2_p": 0.3867541519645667,
-    "min_expected_count": 3.574468085106383
+    "ai_banner": {
+      "n_banner": 36,
+      "n_none": 29,
+      "years_median_banner": 6.0,
+      "years_median_none": 6.0,
+      "years_p": 0.7541944073963912,
+      "job_level_p": 0.3270352818771322,
+      "job_level_min_expected": 3.9836065573770494,
+      "set_order_p": 0.9969073161275686
+    },
+    "cells": {
+      "servicenow_banner=0, ai_banner=0": 14,
+      "servicenow_banner=0, ai_banner=1": 20,
+      "servicenow_banner=1, ai_banner=0": 15,
+      "servicenow_banner=1, ai_banner=1": 16
+    }
   },
   "descriptives": [
     {
-      "test": "T1 Password",
-      "workflow": "Legacy Ticketing",
-      "n": 51,
-      "time_mean": 46.5725,
-      "time_median": 45.7,
-      "time_sd": 15.5958,
-      "time_iqr": 20.45,
-      "time_skew": 0.3206,
-      "frustration_mean": 3.1373,
-      "efficiency_mean": 5.8824,
+      "ticket": "SN \u00b7 Access",
+      "platform": "ServiceNow",
+      "n": 65,
+      "time_mean": 67.4262,
+      "time_median": 63.7,
+      "time_sd": 27.3217,
+      "time_iqr": 30.0,
+      "time_skew": 1.2923,
+      "efficiency_mean": 4.8769,
+      "frustration_mean": 4.5385,
       "rage_quit_rate": 0.0
     },
     {
-      "test": "T2 License",
-      "workflow": "Legacy Ticketing",
-      "n": 51,
-      "time_mean": 62.0353,
-      "time_median": 59.9,
-      "time_sd": 19.771,
-      "time_iqr": 27.1,
-      "time_skew": 0.7251,
-      "frustration_mean": 3.0392,
-      "efficiency_mean": 5.7059,
+      "ticket": "SN \u00b7 Software",
+      "platform": "ServiceNow",
+      "n": 65,
+      "time_mean": 89.7662,
+      "time_median": 84.1,
+      "time_sd": 35.7649,
+      "time_iqr": 38.8,
+      "time_skew": 1.0469,
+      "efficiency_mean": 4.5077,
+      "frustration_mean": 4.8769,
       "rage_quit_rate": 0.0
     },
     {
-      "test": "T3 VPN",
-      "workflow": "AI Bot",
-      "n": 51,
-      "time_mean": 49.5745,
-      "time_median": 45.2,
-      "time_sd": 19.0325,
-      "time_iqr": 23.65,
-      "time_skew": 1.0267,
-      "frustration_mean": 2.8039,
-      "efficiency_mean": 6.7843,
+      "ticket": "SN \u00b7 Facilities",
+      "platform": "ServiceNow",
+      "n": 65,
+      "time_mean": 305.0846,
+      "time_median": 202.6,
+      "time_sd": 248.2525,
+      "time_iqr": 262.4,
+      "time_skew": 1.7581,
+      "efficiency_mean": 2.7692,
+      "frustration_mean": 8.2154,
+      "rage_quit_rate": 0.1692
+    },
+    {
+      "ticket": "AI \u00b7 Access",
+      "platform": "AI Agent",
+      "n": 65,
+      "time_mean": 27.5092,
+      "time_median": 26.7,
+      "time_sd": 11.3919,
+      "time_iqr": 15.3,
+      "time_skew": 0.7637,
+      "efficiency_mean": 6.3692,
+      "frustration_mean": 3.0923,
       "rage_quit_rate": 0.0
     },
     {
-      "test": "T4 Laptop",
-      "workflow": "AI Bot",
-      "n": 51,
-      "time_mean": 56.8157,
-      "time_median": 57.3,
-      "time_sd": 18.9767,
-      "time_iqr": 28.2,
-      "time_skew": 0.4486,
-      "frustration_mean": 2.5882,
-      "efficiency_mean": 6.4118,
+      "ticket": "AI \u00b7 Software",
+      "platform": "AI Agent",
+      "n": 65,
+      "time_mean": 31.9,
+      "time_median": 31.7,
+      "time_sd": 10.6342,
+      "time_iqr": 14.4,
+      "time_skew": 0.2795,
+      "efficiency_mean": 6.3692,
+      "frustration_mean": 2.7692,
+      "rage_quit_rate": 0.0154
+    },
+    {
+      "ticket": "AI \u00b7 Facilities",
+      "platform": "AI Agent",
+      "n": 65,
+      "time_mean": 33.6138,
+      "time_median": 31.9,
+      "time_sd": 11.6721,
+      "time_iqr": 14.6,
+      "time_skew": 0.6758,
+      "efficiency_mean": 6.1231,
+      "frustration_mean": 3.0154,
       "rage_quit_rate": 0.0
-    },
-    {
-      "test": "T5 Chaos Bot",
-      "workflow": "AI Bot",
-      "n": 51,
-      "time_mean": 188.2843,
-      "time_median": 151.5,
-      "time_sd": 204.9342,
-      "time_iqr": 86.7,
-      "time_skew": 5.437,
-      "frustration_mean": 7.5294,
-      "efficiency_mean": 2.6667,
-      "rage_quit_rate": 0.0588
-    },
-    {
-      "test": "T6 Doc Hunt",
-      "workflow": "Legacy Ticketing",
-      "n": 51,
-      "time_mean": 293.3275,
-      "time_median": 218.4,
-      "time_sd": 241.1645,
-      "time_iqr": 231.6,
-      "time_skew": 2.2343,
-      "frustration_mean": 7.9412,
-      "efficiency_mean": 2.6471,
-      "rage_quit_rate": 0.1569
     }
   ],
   "h1": {
-    "n_a": 27,
-    "n_b": 24,
-    "mean_a": 2.740740740740741,
-    "mean_b": 2.5416666666666665,
-    "median_a": 2.0,
-    "median_b": 2.0,
-    "sd_a": 2.0113637278185283,
-    "sd_b": 1.2150922908825974,
-    "mean_diff": 0.1990740740740744,
+    "n_a": 31,
+    "n_b": 34,
+    "mean_a": 4.354838709677419,
+    "mean_b": 3.774509803921569,
+    "sd_a": 1.201651591432539,
+    "sd_b": 1.0690648175279434,
+    "median_a": 4.333333333333333,
+    "median_b": 3.6666666666666665,
+    "mean_diff": 0.58032890575585,
     "mean_diff_ci": [
-      -0.7277884148731959,
-      1.1259365630213447
+      0.013940415936751771,
+      1.1467173955749483
     ],
-    "median_diff": 0.0,
-    "median_diff_ci": [
-      -1.0,
-      1.0
-    ],
-    "mwu_U": 302.0,
-    "mwu_p": 0.6699133038311762,
-    "rank_biserial": -0.06790123456790123,
+    "mwu_U": 677.5,
+    "mwu_p": 0.023891275629319513,
+    "rank_biserial": 0.2855787476280835,
     "rank_biserial_ci": [
-      -0.37037037037037035,
-      0.23919753086419754
+      0.011385199240986717,
+      0.538899430740038
     ],
-    "welch_t": 0.43302031416599635,
-    "welch_df": 43.45241525570369,
-    "welch_p": 0.33357095928830954,
-    "cohens_d": 0.1181357258043973,
+    "welch_t": 2.0492859461822373,
+    "welch_df": 60.35056456305411,
+    "welch_p": 0.022394153711297406,
+    "cohens_d": 0.5116924508897533,
     "cohens_d_ci": [
-      -0.4322039613807099,
-      0.6684754129895045
+      0.017073335659335498,
+      1.0063115661201711
     ],
     "assumptions": {
-      "shapiro_p_a": 0.00014648940172802262,
-      "shapiro_p_b": 0.0032608167595105622,
-      "levene_p": 0.2454145818368135,
-      "normal": false,
-      "equal_var": true
+      "shapiro_p_a": 0.3981327943180712,
+      "shapiro_p_b": 0.0722826169150004,
+      "levene_p": 0.7580039641953642
     },
-    "reject": false
+    "p_holm": 0.023891275629319513,
+    "reject": true
   },
   "h2": {
-    "n_pairs": 51,
-    "baseline_gm_median": 53.00449136702703,
-    "chaos_gm_median": 175.12995175012176,
-    "share_slower_in_chaos": 1.0,
-    "wilcoxon_W": 1326.0,
-    "wilcoxon_p": 2.5726380258588273e-10,
-    "ratio": 3.6136618669702982,
-    "ratio_ci": [
-      3.169036498036477,
-      4.120669514815083
+    "n_a": 36,
+    "n_b": 29,
+    "mean_a": 5.601851851851851,
+    "mean_b": 7.137931034482759,
+    "sd_a": 0.8794639220135507,
+    "sd_b": 1.067251481719572,
+    "median_a": 5.666666666666667,
+    "median_b": 7.0,
+    "mean_diff": -1.5360791826309077,
+    "mean_diff_ci": [
+      -2.030265246872096,
+      -1.041893118389719
     ],
-    "dz": 2.7520960819339586,
-    "matched_rank_biserial": 1.0,
-    "shapiro_p_log_diff": 0.1422426933141236,
-    "p_holm": 5.145276051717655e-10,
+    "mwu_U": 142.5,
+    "mwu_p": 2.56218469968997e-07,
+    "rank_biserial": -0.7270114942528736,
+    "rank_biserial_ci": [
+      -0.8745210727969349,
+      -0.5421455938697318
+    ],
+    "welch_t": -6.231588805476017,
+    "welch_df": 54.06822249220194,
+    "welch_p": 3.601747933160284e-08,
+    "cohens_d": -1.5877842329201994,
+    "cohens_d_ci": [
+      -2.1478550343078364,
+      -1.0277134315325627
+    ],
+    "assumptions": {
+      "shapiro_p_a": 0.47917006310733407,
+      "shapiro_p_b": 0.48741481049455354,
+      "levene_p": 0.39327852283673503
+    },
+    "p_holm": 5.12436939937994e-07,
     "reject": true
   },
   "h3": {
-    "n_a": 27,
-    "n_b": 24,
-    "mean_a": 7.277777777777778,
-    "mean_b": 8.25,
-    "median_a": 7.0,
-    "median_b": 8.0,
-    "sd_a": 0.8807048459279792,
-    "sd_b": 0.7223151185146152,
-    "mean_diff": -0.9722222222222223,
-    "mean_diff_ci": [
-      -1.423737027668818,
-      -0.5207074167756267
+    "n_pairs": 65,
+    "sn_median": 105.324084392825,
+    "ai_median": 29.34918335322445,
+    "share_faster_with_ai": 1.0,
+    "wilcoxon_W": 0.0,
+    "wilcoxon_p": 1.2025525149230378e-12,
+    "speedup": 3.678689241574707,
+    "speedup_ci": [
+      3.374208909929549,
+      4.010645131145732
     ],
-    "median_diff": -1.0,
-    "median_diff_ci": [
-      -1.75,
-      -0.5
-    ],
-    "mwu_U": 131.5,
-    "mwu_p": 0.00012322724206284438,
-    "rank_biserial": -0.5941358024691358,
-    "rank_biserial_ci": [
-      -0.8194444444444444,
-      -0.3333333333333333
-    ],
-    "welch_t": -4.327764540661949,
-    "welch_df": 48.7082396308511,
-    "welch_p": 3.730587889461755e-05,
-    "cohens_d": -1.1999428279094766,
-    "cohens_d_ci": [
-      -1.797083794008385,
-      -0.6028018618105682
-    ],
-    "assumptions": {
-      "shapiro_p_a": 0.02663861881689035,
-      "shapiro_p_b": 0.16271969326068608,
-      "levene_p": 0.5134802730599849,
-      "normal": false,
-      "equal_var": true
-    },
-    "p_holm": 0.00012322724206284438,
+    "dz": -3.735811561300347,
+    "matched_rank_biserial": -1.0,
+    "shapiro_p_log_diff": 0.8129601935048552,
     "reject": true
   },
   "h4": {
-    "formula": "efficiency ~ C(arm) * C(job_level)",
-    "interaction_included": true,
-    "n": 47,
-    "cell_counts": {
-      "Director / Executive | Control": 5,
-      "Director / Executive | Primed": 3,
-      "IC / Associate | Control": 13,
-      "IC / Associate | Primed": 16,
-      "Lead / Manager | Control": 3,
-      "Lead / Manager | Primed": 7
+    "n_a": 36,
+    "n_b": 29,
+    "mean_a": 0.20370370370370372,
+    "mean_b": 0.12068965517241381,
+    "sd_a": 0.2675909906398288,
+    "sd_b": 0.17192047651837586,
+    "median_a": 0.0,
+    "median_b": 0.0,
+    "mean_diff": 0.08301404853128991,
+    "mean_diff_ci": [
+      -0.026686469173806765,
+      0.19271456623638658
+    ],
+    "mwu_U": 596.5,
+    "mwu_p": 0.1306910546344583,
+    "rank_biserial": 0.14272030651340997,
+    "rank_biserial_ci": [
+      -0.09961685823754789,
+      0.3831417624521073
+    ],
+    "welch_t": 1.5135498609705267,
+    "welch_df": 60.275643242249124,
+    "welch_p": 0.06768313447666542,
+    "cohens_d": 0.36087331221092406,
+    "cohens_d_ci": [
+      -0.13210585563752597,
+      0.8538524800593741
+    ],
+    "assumptions": {
+      "shapiro_p_a": 3.79359556689191e-07,
+      "shapiro_p_b": 4.1345608639244353e-07,
+      "levene_p": 0.15305944833374033
     },
-    "arm": {
-      "F": 2.433398509039477,
-      "df": 1.0,
-      "p": 0.12646170316133237,
-      "partial_eta_sq": 0.0560259752303986
+    "ticket_level": {
+      "override_rate_warned": 0.20370370370370372,
+      "override_rate_unwarned": 0.11627906976744184,
+      "chi2": 2.656602572282303,
+      "chi2_p": 0.10312078154503947,
+      "note": "tickets are not independent (3 per person); descriptive only"
     },
-    "job_level": {
-      "F": 49.414043783558206,
-      "df": 2.0,
-      "p": 1.1950429031772382e-11,
-      "partial_eta_sq": 0.7067828022726813
+    "reject": false
+  },
+  "interaction": {
+    "mixed": {
+      "formula": "efficiency ~ platform * banner + (1 | participant)",
+      "interaction_coef": -1.8063689369970355,
+      "interaction_p": 2.6201479448140094e-09,
+      "converged": true,
+      "warnings": []
     },
-    "interaction": {
-      "F": 9.067345805726964,
-      "df": 2.0,
-      "p": 0.0005486573084317295,
-      "partial_eta_sq": 0.30666756039937443
-    },
-    "residual_shapiro_p": 0.46106860695098734,
-    "levene_cells_p": 0.11643749425889925,
-    "tukey_significant_pairs": 9,
-    "tukey_pairs": 15,
-    "priming_lift_by_level": {
-      "IC / Associate": {
-        "n_primed": 16,
-        "n_control": 13,
-        "diff": -0.36057692307692313
+    "anova": {
+      "platform": {
+        "F": 150.13104403048052,
+        "df": 1.0,
+        "p": 3.262097089433018e-23,
+        "partial_eta_sq": 0.5436949132525223
       },
-      "Lead / Manager": {
-        "n_primed": 7,
-        "n_control": 3,
-        "diff": 1.047619047619048
+      "banner": {
+        "F": 6.494593980057339,
+        "df": 1.0,
+        "p": 0.012020943979050408,
+        "partial_eta_sq": 0.04901780355683708
       },
-      "Director / Executive": {
-        "n_primed": 3,
-        "n_control": 5,
-        "diff": 2.8
+      "interaction": {
+        "F": 32.528841483494794,
+        "df": 1.0,
+        "p": 7.925946330224976e-08,
+        "partial_eta_sq": 0.20519194601495608
+      },
+      "df_resid": 126.0,
+      "note": "two rows per person; the mixed model is the formal test"
+    },
+    "tukey_significant": 5,
+    "tukey_pairs": 6,
+    "cells": {
+      "AI Agent | Banner": {
+        "mean": 5.601851851851851,
+        "ci": 0.29756778011497503,
+        "n": 36
+      },
+      "AI Agent | No banner": {
+        "mean": 7.137931034482759,
+        "ci": 0.40596075246380575,
+        "n": 29
+      },
+      "ServiceNow | Banner": {
+        "mean": 4.354838709677419,
+        "ci": 0.44076936223030744,
+        "n": 31
+      },
+      "ServiceNow | No banner": {
+        "mean": 3.774509803921569,
+        "ci": 0.3730143490204855,
+        "n": 34
       }
     }
   },
-  "h4b": {
-    "formula": "frustration ~ C(workflow) * C(arm) + (1 | participant)",
-    "interaction_coef": -0.324074074074074,
-    "interaction_p": 0.48940949466887673,
-    "converged": true,
-    "warnings": [
-      "The MLE may be on the boundary of the parameter space"
-    ]
-  },
-  "h5": {
-    "formula": "rage_quit ~ years_experience + primed_arm + doc_hunt (Tests 5-6, clustered SEs)",
-    "n_rows": 94,
-    "n_rage_quits": 11,
-    "pseudo_r2": 0.06455430762105607,
-    "baseline_quit_rate": 0.0,
-    "chaos_quit_rate": 0.10784313725490197,
+  "preference": {
+    "n": 65,
+    "share_prefer_ai": 0.4,
+    "pseudo_r2": 0.06373260795989488,
     "terms": {
-      "years_experience": {
-        "odds_ratio": 0.9227126851943941,
+      "speedup_log": {
+        "odds_ratio": 1.5989686117030666,
         "or_ci": [
-          0.7914390654918797,
-          1.0757602657502185
+          0.37262873861818335,
+          6.861254530964595
         ],
-        "p": 0.3042799765563293
+        "p": 0.5276567870102444
       },
-      "primed_arm": {
-        "odds_ratio": 1.61933005291495,
+      "ai_primed": {
+        "odds_ratio": 0.8375607817429106,
         "or_ci": [
-          0.4090121565699107,
-          6.411129298122287
+          0.29336737882826514,
+          2.3912272247707977
         ],
-        "p": 0.49235780773548277
+        "p": 0.7405116579927347
       },
-      "doc_hunt": {
-        "odds_ratio": 3.064209025410194,
+      "snow_primed": {
+        "odds_ratio": 0.28522330150226294,
         "or_ci": [
-          0.6613656943142444,
-          14.196951901384798
+          0.0966267465894992,
+          0.8419235314364982
         ],
-        "p": 0.15230245350409055
+        "p": 0.02311496652772127
       }
+    }
+  },
+  "survey": {
+    "nps": {
+      "nps_banner": -70.96774193548387,
+      "nps_none": -94.11764705882352,
+      "mwu_p": 0.000581229105758576
     },
-    "warnings": []
-  }
+    "trust": {
+      "mean_warned": 6.277777777777778,
+      "mean_unwarned": 7.931034482758621,
+      "mwu_p": 0.001071388349732815
+    }
+  },
+  "by_level": {
+    "IC / Associate": {
+      "n": 31,
+      "servicenow_banner_shift": 0.6069444444444447,
+      "servicenow_banner_shift_n": [
+        16,
+        15
+      ],
+      "ai_warning_shift": -0.8391812865497075,
+      "ai_warning_shift_n": [
+        19,
+        12
+      ]
+    },
+    "Lead / Manager": {
+      "n": 21,
+      "servicenow_banner_shift": 0.8703703703703702,
+      "servicenow_banner_shift_n": [
+        9,
+        12
+      ],
+      "ai_warning_shift": -1.7407407407407414,
+      "ai_warning_shift_n": [
+        12,
+        9
+      ]
+    },
+    "Director / Executive": {
+      "n": 9,
+      "servicenow_banner_shift": 1.2777777777777777,
+      "servicenow_banner_shift_n": [
+        3,
+        6
+      ],
+      "ai_warning_shift": -1.8888888888888875,
+      "ai_warning_shift_n": [
+        3,
+        6
+      ]
+    }
+  },
+  "t3_floor_share": 0.4461538461538462
 }
