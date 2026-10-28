@@ -51,7 +51,7 @@ In the AI set, the participant types a description and an AI agent fills in the 
 - *Set order* (randomised 50/50): ServiceNow first or AI first, to balance learning and fatigue.
 - *Job level and experience* (measured, optional).
 
-**Dependent variables.** Perceived efficiency (1–10, primary), frustration with the ticket (1–10), whether a planted AI error was caught, completion time (seconds, logged automatically), errors and corrections, abandonment ("I give up" button), whether the participant kept or overrode the AI's category, and a final survey: recommend-ServiceNow (0–10, NPS), trust in the AI agent (1–10), and which tool they would rather use next time.
+**Dependent variables.** Perceived efficiency (1–10, primary), how frustrating the ticket was (1–10), whether a planted AI error was caught, completion time (seconds, logged automatically), errors and corrections, abandonment ("I give up" button), whether the participant kept or overrode the AI's category, and a final survey: recommend-ServiceNow (0–10, NPS), trust in the AI agent (1–10), and which tool they would rather use next time.
 
 **Controls and randomisation.** Each banner has a no-banner control. Because the two banners are independent coin flips, every participant contributes to **both** primary comparisons, and the 2 × 2 factorial lets us check that one banner does not alter the other's effect. Allocation happens in the participant's browser with a cryptographic random number generator, so the facilitator cannot influence it. Participants are debriefed about the banners at the end.
 

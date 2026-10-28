@@ -259,7 +259,7 @@ function complacency(root) {
     if (!injected.length || groups.length < 2) return emptyNote(box, 'Need meeting-room tickets from both teams.');
     const f = frame(box, { height: 320, margin: { top: 20, right: 30, bottom: 50, left: 56 } });
     const x = d3.scaleBand().domain(groups.map((g) => g[0])).range([0, f.w]).padding(0.45), y = d3.scaleLinear().domain([0, 10]).range([f.h, 0]);
-    axes(f, d3.scaleLinear().range([0, f.w]), y, { yLabel: 'frustration with this ticket (mean ± 95% CI)', xTicks: 0 });
+    axes(f, d3.scaleLinear().range([0, f.w]), y, { yLabel: 'how frustrating the ticket was (mean ± 95% CI)', xTicks: 0 });
     groups.forEach(([name, g, color]) => {
       const fr = g.map((r) => r.frustration), m = mean(fr), h = fr.length > 1 ? 1.96 * d3.deviation(fr) / Math.sqrt(fr.length) : 0;
       f.g.append('rect').attr('x', x(name)).attr('width', x.bandwidth()).attr('y', f.h).attr('height', 0).attr('fill', color).attr('rx', 4)

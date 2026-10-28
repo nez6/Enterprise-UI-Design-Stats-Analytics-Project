@@ -353,7 +353,7 @@ function drawTicketFeedback() {
       ${status}
       <h2>Quick pulse check</h2>
       <p class="muted">Two taps. Your honest reaction is the data.</p>
-      <div class="field"><label>How frustrated are you with this ticket?</label>${scaleHtml('frustration', 1, 10, '1 · not at all', '10 · extremely')}</div>
+      <div class="field"><label>How frustrating was this ticket?</label>${scaleHtml('frustration', 1, 10, '1 · not at all frustrating', '10 · extremely frustrating')}</div>
       <div class="field"><label>How efficient was ${meta.workflow === AI ? 'the AI agent' : 'ServiceNow'} for this request?</label>${scaleHtml('efficiency', 1, 10, '1 · useless', '10 · flawless')}</div>
       <div id="alerts"></div>
       <button class="btn primary" id="next">${P.idx === 5 ? 'Finish shift →' : 'Next ticket →'}</button>
