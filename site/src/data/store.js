@@ -1,10 +1,11 @@
-// Where tickets and feedback go.
+// Where tickets and feedback go. There is ONE study data store: the Supabase database.
 //
 // * Supabase mode (VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY set at build time): every
-//   participant writes to one shared database, and the lessons subscribe to inserts so the
-//   charts redraw live during a call.
-// * Demo mode (no keys): data stays in this browser (localStorage), and other tabs of the same
-//   browser update live via BroadcastChannel. Handy for rehearsing.
+//   participant inserts into the shared tables. The public key can only INSERT into the raw
+//   tables; the lessons read de-identified views that leave out free text, and re-poll every
+//   few seconds so the charts update live during a session.
+// * Demo mode (no keys): data stays in this browser (localStorage) and is NOT study data.
+//   The portal says so on screen, so a facilitator can't mistake a demo for a live session.
 
 import { createClient } from '@supabase/supabase-js';
 
@@ -14,7 +15,7 @@ const supabase = URL_ && KEY ? createClient(URL_, KEY) : null;
 
 export const MODE = supabase ? 'supabase' : 'demo';
 
-const LS = { rows: 'snowlab.submissions', fb: 'snowlab.feedback' };
+const LS = { rows: 'snowlab.submissions', fb: 'snowlab.feedback', wd: 'snowlab.withdrawals' };
 const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('snowlab') : null;
 const listeners = new Set();
 
@@ -27,33 +28,34 @@ function writeLocal(key, value) {
 const notify = (evt) => listeners.forEach((fn) => fn(evt));
 channel?.addEventListener('message', (e) => notify(e.data));
 
-export async function addSubmission(row) {
-  if (supabase) {
-    const { error } = await supabase.from('submissions').insert(row);
-    if (error) throw new Error(error.message);
-  } else {
-    writeLocal(LS.rows, [...readLocal(LS.rows), row]);
-    channel?.postMessage({ type: 'submission' });
-  }
-  notify({ type: 'submission' });
+// Remove obvious personal identifiers from free text before it leaves the browser.
+export function scrub(text) {
+  return String(text || '')
+    .replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g, '[email]')
+    .replace(/\+?\d[\d\s().-]{7,}\d/g, '[number]')
+    .replace(/\b\d{6,}\b/g, '[number]');
 }
 
-export async function addFeedback(row) {
+async function insert(table, row, localKey) {
   if (supabase) {
-    const { error } = await supabase.from('feedback').insert(row);
+    const { error } = await supabase.from(table).insert(row);
     if (error) throw new Error(error.message);
   } else {
-    writeLocal(LS.fb, [...readLocal(LS.fb), row]);
-    channel?.postMessage({ type: 'feedback' });
+    writeLocal(localKey, [...readLocal(localKey), row]);
+    channel?.postMessage({ type: table });
   }
-  notify({ type: 'feedback' });
+  notify({ type: table });
 }
 
-async function selectAll(table, session) {
+export const addSubmission = (row) => insert('submissions', { ...row, ticket_text: scrub(row.ticket_text) }, LS.rows);
+export const addFeedback = (row) => insert('feedback', { ...row, comment: row.comment ? scrub(row.comment) : null }, LS.fb);
+export const addWithdrawal = (participantId, sessionLabel) => insert('withdrawals', { participant_id: participantId, session_label: sessionLabel }, LS.wd);
+
+async function selectAll(view, session) {
   // Supabase caps a select at 1000 rows by default, so page through.
   const out = [];
   for (let from = 0; ; from += 1000) {
-    let q = supabase.from(table).select('*').order('id').range(from, from + 999);
+    let q = supabase.from(view).select('*').range(from, from + 999);
     if (session) q = q.eq('session_label', session);
     const { data, error } = await q;
     if (error) throw new Error(error.message);
@@ -63,36 +65,29 @@ async function selectAll(table, session) {
 }
 
 export async function loadLive(session) {
+  let rows, feedback, withdrawn;
   if (supabase) {
-    const [rows, feedback] = await Promise.all([selectAll('submissions', session), selectAll('feedback', session)]);
-    return { rows, feedback };
+    [rows, feedback, withdrawn] = await Promise.all([
+      selectAll('submissions_public', session), selectAll('feedback_public', session), selectAll('withdrawals_public', session),
+    ]);
+  } else {
+    const f = (r) => !session || r.session_label === session;
+    [rows, feedback, withdrawn] = [readLocal(LS.rows).filter(f), readLocal(LS.fb).filter(f), readLocal(LS.wd).filter(f)];
   }
-  const f = (r) => !session || r.session_label === session;
-  return { rows: readLocal(LS.rows).filter(f), feedback: readLocal(LS.fb).filter(f) };
+  // Withdrawn participants disappear from every chart immediately.
+  const gone = new Set(withdrawn.map((w) => w.participant_id));
+  return { rows: rows.filter((r) => !gone.has(r.participant_id)), feedback: feedback.filter((r) => !gone.has(r.participant_id)) };
 }
 
-export async function listSessions() {
-  if (supabase) {
-    const { data, error } = await supabase.from('session_counts').select('*');
-    if (error) return [];
-    return data.map((d) => d.session_label);
-  }
-  return [...new Set(readLocal(LS.rows).map((r) => r.session_label))];
-}
-
-let realtime = null;
+let poll = null;
 export function subscribe(fn) {
   listeners.add(fn);
-  if (supabase && !realtime) {
-    realtime = supabase.channel('snowlab-live')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'submissions' }, () => notify({ type: 'submission' }))
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'feedback' }, () => notify({ type: 'feedback' }))
-      .subscribe();
-  }
+  // The public key can't read the raw tables, so it can't receive realtime events; poll instead.
+  if (supabase && !poll) poll = setInterval(() => notify({ type: 'poll' }), 8000);
   return () => listeners.delete(fn);
 }
 
 export function clearLocal() {
-  writeLocal(LS.rows, []); writeLocal(LS.fb, []);
+  writeLocal(LS.rows, []); writeLocal(LS.fb, []); writeLocal(LS.wd, []);
   channel?.postMessage({ type: 'cleared' }); notify({ type: 'cleared' });
 }

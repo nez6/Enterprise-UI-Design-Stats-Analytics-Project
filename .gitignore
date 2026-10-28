@@ -11,3 +11,9 @@ site/.env.local
 # Streamlit app runtime data
 streamlit_app/data/
 site/public/streamlit/
+
+# Full live exports contain free text: keep them on the researcher's machine only.
+# Commit the *_deidentified.csv copies instead (see docs/IRB_REVIEW.md).
+data/raw/live_sessions.csv
+data/raw/live_feedback.csv
+data/raw/live_withdrawals.csv

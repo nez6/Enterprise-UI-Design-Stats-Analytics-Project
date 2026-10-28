@@ -228,10 +228,26 @@ def survey_outcomes(pp):
     return out
 
 
+def manipulation_checks(fb):
+    """Share of each group that correctly reports whether it saw each banner."""
+    out = {}
+    for col, mc in [("snow_primed", "mc_snow"), ("ai_primed", "mc_ai")]:
+        if mc not in fb or fb[mc].isna().all():
+            continue
+        d = fb.dropna(subset=[mc])
+        right = np.where(d[col] == 1, d[mc] == "yes", d[mc] == "no")
+        out[mc] = dict(pass_rate=float(right.mean()), pass_banner=float(right[d[col] == 1].mean()) if (d[col] == 1).any() else None,
+                       pass_none=float(right[d[col] == 0].mean()) if (d[col] == 0).any() else None, n=int(len(d)))
+    return out
+
+
 def by_level(pp):
     out = {}
     for lvl in JOB_LEVELS:
         s = pp[pp.job_level == lvl]
+        if len(s) < 5:            # privacy: never report a group of fewer than 5 people
+            out[lvl] = dict(n=int(len(s)), suppressed=True, servicenow_banner_shift=None, ai_warning_shift=None)
+            continue
         row = dict(n=int(len(s)))
         for col, eff, key in [("snow_primed", "sn_eff", "servicenow_banner_shift"), ("ai_primed", "ai_eff", "ai_warning_shift")]:
             a, b = s.loc[s[col] == 1, eff], s.loc[s[col] == 0, eff]
@@ -375,6 +391,8 @@ def main():
     R["preference"] = preference_logit(pp)
     R["survey"] = survey_outcomes(pp)
     R["by_level"] = by_level(pp)
+    fb = pd.read_csv(ROOT / "data" / "clean" / "feedback.csv")
+    R["manipulation_checks"] = manipulation_checks(fb)
     R["t3_floor_share"] = float((df.loc[df.test_num == 3, "efficiency"] <= 2).mean())
 
     pd.DataFrame([

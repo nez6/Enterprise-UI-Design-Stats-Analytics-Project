@@ -45,4 +45,4 @@ COLUMNS = [
     "ai_error_injected", "ai_error_caught",
 ]
 FEEDBACK_COLUMNS = ["participant_id", "session_label", "snow_primed", "ai_primed", "job_level",
-                    "nps_servicenow", "ai_trust", "prefer_ai", "comment"]
+                    "nps_servicenow", "ai_trust", "prefer_ai", "mc_snow", "mc_ai", "comment"]

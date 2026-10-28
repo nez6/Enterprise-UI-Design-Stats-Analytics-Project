@@ -13,7 +13,7 @@
 // After every ticket: frustration and efficiency ratings. At the end: NPS, trust, preference.
 
 import { AI, AI_ERROR_TESTS, AI_WRONG, ANSWERS, BANNERS, CATEGORIES, FIELDS, JOB_LEVELS, JOB_ROLES, LEGACY, TESTS } from '../data/design.js';
-import { addFeedback, addSubmission, MODE } from '../data/store.js';
+import { addFeedback, addSubmission, addWithdrawal, MODE } from '../data/store.js';
 import { SESSION, refresh } from '../data/context.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -57,6 +57,7 @@ function drawHome() {
       <p>Pathfinder Service Portal · it’s 4:45 PM on a Friday</p>
       <div class="p-search"><input aria-label="Search" placeholder="Search knowledge, catalog and tickets" disabled><span>⌕</span></div>
     </section>
+    ${MODE === 'demo' ? '<div class="alert error"><b>Demo mode.</b> This copy isn’t connected to the shared study database, so tickets stay in this browser and are <b>not</b> study data.</div>' : ''}
     <div class="p-grid">
       <div class="card">
         <h2>Your Friday-afternoon shift</h2>
@@ -74,10 +75,16 @@ function drawHome() {
           </div>
           <div class="field"><label for="role">Job role <span class="hint">(optional)</span></label>
             <select id="role"><option value="">Prefer not to say</option>${JOB_ROLES.map((l) => `<option>${l}</option>`).join('')}</select></div>
+          <div class="consent-box">
+            <b>About this study.</b> This is a teaching exercise run by Natalie Zachariah for a statistics course and the AI Pathfinders session.
+            It takes about 8–10 minutes. Taking part is <b>voluntary</b>: you can watch without taking part, skip any optional question, or stop at any time with no consequence.
+            We record your ticket timings, your ratings, what you type into tickets, and any optional demographics. We do <b>not</b> record your name, email or IP address in the study data.
+            Results are shown to the group only as charts, and small groups are hidden. Some details of the study will only be explained at the end.
+            You’ll then get a participant code and can withdraw your data. Please don’t type personal or confidential information.
+          </div>
           <label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:6px 0 16px">
             <input id="consent" type="checkbox" style="margin-top:4px">
-            <span>I agree to take part. My tickets, timings and ratings are recorded <b>anonymously</b> and shown to the group as class data.
-            I won’t type personal or confidential information, and I can stop at any time.</span>
+            <span>I’m 18 or older, I’ve read the above, and I agree to take part.</span>
           </label>
           <div id="start-err"></div>
           <button class="btn primary" type="submit">Start my shift →</button>
@@ -389,6 +396,10 @@ function drawFinalSurvey() {
       <div class="field"><label>How much would you trust the AI agent with your next ticket?</label>${scaleHtml('ai_trust', 1, 10, '1 · not at all', '10 · completely')}</div>
       <div class="field"><label>Next time, which would you rather use?</label>
         <div class="chips"><button class="chip" type="button" data-p="0">ServiceNow catalog</button><button class="chip" type="button" data-p="1">✨ AI agent</button></div></div>
+      <div class="field"><label>Before the ServiceNow tickets, did you see a message about ServiceNow?</label>
+        <div class="chips" data-mc="mc_snow"><button class="chip" type="button" data-v="yes">Yes</button><button class="chip" type="button" data-v="no">No</button><button class="chip" type="button" data-v="unsure">Not sure</button></div></div>
+      <div class="field"><label>Before the AI-agent tickets, did you see a message about AI?</label>
+        <div class="chips" data-mc="mc_ai"><button class="chip" type="button" data-v="yes">Yes</button><button class="chip" type="button" data-v="no">No</button><button class="chip" type="button" data-v="unsure">Not sure</button></div></div>
       <div class="field"><label for="comment">What should the platform team fix first? <span class="hint">(optional, no personal info)</span></label><textarea id="comment" maxlength="400"></textarea></div>
       <div id="alerts"></div>
       <button class="btn primary" id="send">Submit feedback</button>
@@ -397,12 +408,15 @@ function drawFinalSurvey() {
   root.querySelectorAll('[data-p]').forEach((b) => b.addEventListener('click', () => {
     root.querySelectorAll('[data-p]').forEach((x) => x.classList.remove('on')); b.classList.add('on'); values.prefer = Number(b.dataset.p);
   }));
+  root.querySelectorAll('[data-mc]').forEach((g) => g.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    g.querySelectorAll('button').forEach((x) => x.classList.remove('on')); b.classList.add('on'); values[g.dataset.mc] = b.dataset.v;
+  })));
   root.querySelector('#send').addEventListener('click', async (e) => {
-    if (values.nps === undefined || !values.ai_trust || values.prefer === undefined) return alertMsg('Please answer all three questions.');
+    if (values.nps === undefined || !values.ai_trust || values.prefer === undefined || !values.mc_snow || !values.mc_ai) return alertMsg('Please answer every question except the optional comment.');
     e.target.disabled = true;
     try {
       await addFeedback({ participant_id: P.id, session_label: SESSION, snow_primed: P.snowPrimed, ai_primed: P.aiPrimed, job_level: P.level,
-        nps_servicenow: values.nps, ai_trust: values.ai_trust, prefer_ai: values.prefer, comment: root.querySelector('#comment').value.trim().slice(0, 400) || null });
+        nps_servicenow: values.nps, ai_trust: values.ai_trust, prefer_ai: values.prefer, mc_snow: values.mc_snow, mc_ai: values.mc_ai, comment: root.querySelector('#comment').value.trim().slice(0, 400) || null });
     } catch (err) {
       e.target.disabled = false;
       return alertMsg(`Couldn’t save your feedback (${esc(err.message)}). Please try again.`);
@@ -430,7 +444,14 @@ function drawDone() {
           <div><b>${med(LEGACY) ?? '–'}s</b><span>your median ServiceNow ticket</span></div>
           <div><b>${med(AI) ?? '–'}s</b><span>your median AI-agent ticket</span></div>
         </div>
-        <p>Now head to <a href="#/noise"><b>page 2</b></a> and watch everyone’s tickets turn into statistics.</p>
+        <p class="muted">The email from “AV Operations” was fictional, and so were the room mix-up and the cart codes. Nobody was actually sent to the wrong room.</p>
+        <div class="consent-box">
+          <b>Your participant code: <span class="p-number" style="font-size:15px">${esc(P.id)}</span></b><br>
+          Now that you know what the study was about, you can withdraw. Your tickets and survey will be excluded from every chart and from the analysis.
+          You can also email Natalie later with this code to withdraw.
+          <div class="actions" style="margin-top:10px"><button class="btn danger" id="withdraw" type="button" ${P.withdrawn ? 'disabled' : ''}>${P.withdrawn ? 'Your data has been withdrawn' : 'Withdraw my data'}</button><span id="wd-msg" class="muted"></span></div>
+        </div>
+        <p>Otherwise, head to <a href="#/noise"><b>page 2</b></a> and watch everyone’s tickets turn into statistics.</p>
         <button class="btn secondary" id="again" type="button">Start a new participant on this device</button>
       </div>
       <aside class="card">
@@ -439,4 +460,12 @@ function drawDone() {
       </aside>
     </div>`;
   root.querySelector('#again').addEventListener('click', () => { P = null; task = null; sessionStorage.removeItem(KEY); draw(); });
+  root.querySelector('#withdraw').addEventListener('click', async (e) => {
+    if (!confirm('Withdraw all of your tickets and survey answers from this study?')) return;
+    e.target.disabled = true;
+    try { await addWithdrawal(P.id, SESSION); } catch (err) {
+      e.target.disabled = false; root.querySelector('#wd-msg').textContent = `Couldn’t withdraw (${err.message}). Please try again or email your code.`; return;
+    }
+    P.withdrawn = true; save(); refresh(); draw();
+  });
 }

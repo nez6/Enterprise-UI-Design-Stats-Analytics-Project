@@ -239,7 +239,7 @@ function simpson(root) {
     const f = frame(box, { height: 380 });
     const x = d3.scaleLinear().domain([0, 25]).range([0, f.w]), y = d3.scaleLinear().domain(d3.extent(pp, (p) => p.eff)).nice().range([f.h, 0]);
     axes(f, x, y, { xLabel: 'years of experience', yLabel: 'mean efficiency rating' });
-    const col = (p) => (split ? SERIES[JOB_LEVELS.indexOf(p.level)] : C.blue);
+    const col = (p) => (split ? (pp.filter((q) => q.level === p.level).length >= 5 ? SERIES[JOB_LEVELS.indexOf(p.level)] : C.muted) : C.blue);
     f.g.selectAll('circle').data(pp).join('circle').attr('cx', (p) => x(p.yrs)).attr('cy', (p) => y(p.eff)).attr('r', 4).attr('fill', col).attr('fill-opacity', 0.65);
     const fitLine = (set, color, width, dash) => {
       if (set.length < 3 || new Set(set.map((p) => p.yrs)).size < 2) return null;
@@ -249,7 +249,10 @@ function simpson(root) {
       return m.beta[1];
     };
     const slopes = [['Everyone', fitLine(pp, split ? C.ink2 : C.ink, split ? 2 : 4, split ? '6 5' : null)]];
-    if (split) JOB_LEVELS.forEach((l, i) => slopes.push([l, fitLine(pp.filter((p) => p.level === l), SERIES[i], 3.5)]));
+    // Privacy: never show a group of fewer than 5 people on its own.
+    const shown = JOB_LEVELS.filter((l) => pp.filter((p) => p.level === l).length >= 5);
+    if (split) JOB_LEVELS.forEach((l, i) => { if (shown.includes(l)) slopes.push([l, fitLine(pp.filter((p) => p.level === l), SERIES[i], 3.5)]); });
+    if (split && shown.length < JOB_LEVELS.length) box.appendChild(el('p', { class: 'empty' }, 'Job levels with fewer than 5 people are hidden to protect anonymity.'));
     if (split) box.appendChild(el('div', { class: 'legend' }, JOB_LEVELS.map((l, i) => `<span><i style="background:${SERIES[i]}"></i>${l}</span>`).join('') + `<span><i style="background:${C.ink2}"></i>Everyone (dashed)</span>`));
     statGrid(out, slopes.filter(([, b]) => b !== null).map(([n, b]) => [`${b > 0 ? '+' : ''}${b.toFixed(2)}`, `slope: ${n}`, b > 0 ? C.teal : C.red]));
   };

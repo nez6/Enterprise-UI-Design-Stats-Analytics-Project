@@ -1,5 +1,5 @@
 hypothesis,claim,test,p,p_holm,rank_biserial
-H1,Praise banner ↑ ServiceNow rating,"Mann–Whitney U (one-sided), Holm",0.2626,0.473,0.0924
-H2,Hallucination warning ↓ AI rating,"Mann–Whitney U (one-sided), Holm",0.2365,0.473,-0.1053
+H1,Praise banner ↑ ServiceNow rating,"Mann–Whitney U (one-sided), Holm",0.0014,0.0028,0.4334
+H2,Hallucination warning ↓ AI rating,"Mann–Whitney U (one-sided), Holm",0.1437,0.1437,-0.158
 H3,AI agent faster (paired),Wilcoxon signed-rank (one-sided),0.0,,-1.0
-H4,Warning ↑ overrides,Mann–Whitney U (one-sided),0.0002,,0.3684
+H4,Warning ↑ overrides,Mann–Whitney U (one-sided),0.0,,0.4

@@ -8,7 +8,8 @@ Output: data/clean/analysis_ready.csv   one row per participant x ticket
         results/cleaning_log.{json,md}  every rule applied, with counts
 
 Rules (fixed before looking at outcomes; report section 6):
-1. Drop ids listed in data/raw/excluded_ids.txt (dry runs, withdrawals).
+1. Drop ids listed in data/raw/excluded_ids.txt (dry runs) and every participant in
+   data/raw/live_withdrawals.csv (people who withdrew at the debrief).
 2. Drop double-submitted rows (same participant and ticket), keeping the first.
 3. Drop rows with impossible values (ratings outside 1-10, non-positive times...).
 4. Blank out-of-range demographics rather than dropping the participant.
@@ -102,6 +103,9 @@ def clean(raw, excluded_ids=()):
 def clean_feedback(fb, keep_ids):
     fb = fb[[c for c in FEEDBACK_COLUMNS if c in fb.columns]].copy()
     fb = fb[fb["participant_id"].isin(keep_ids)].drop_duplicates("participant_id", keep="first")
+    for col in ["mc_snow", "mc_ai"]:
+        if col in fb:
+            fb.loc[~fb[col].isin(["yes", "no", "unsure"]), col] = np.nan
     for col in ["nps_servicenow", "ai_trust", "prefer_ai"]:
         fb[col] = pd.to_numeric(fb[col], errors="coerce")
     fb.loc[~fb["nps_servicenow"].between(0, 10), "nps_servicenow"] = np.nan
@@ -159,14 +163,19 @@ def main(argv=None):
     sources = sorted(raw["source"].dropna().unique())
     data_source = "simulated" if sources == ["simulated"] else "live" if sources == ["live"] else "+".join(sources)
 
-    df, log = clean(raw, read_excluded(args.excluded))
+    excluded = read_excluded(args.excluded)
+    wd_path = raw_path.with_name("live_withdrawals.csv")
+    if wd_path.exists():
+        excluded |= set(pd.read_csv(wd_path)["participant_id"].dropna())
+    df, log = clean(raw, excluded)
     if df.empty:
         sys.exit("No participants survived cleaning. Check the raw file and the log.")
     fb = clean_feedback(fb_raw, set(df["participant_id"]))
     clean_dir = ROOT / "data" / "clean"
     clean_dir.mkdir(parents=True, exist_ok=True)
-    df.to_csv(clean_dir / "analysis_ready.csv", index=False)
-    fb.to_csv(clean_dir / "feedback.csv", index=False)
+    # Data minimisation: the analysis never uses free text, so it is not kept in the clean data.
+    df.drop(columns=["ticket_text"]).to_csv(clean_dir / "analysis_ready.csv", index=False)
+    fb.drop(columns=["comment"], errors="ignore").to_csv(clean_dir / "feedback.csv", index=False)
     participant_table(df, fb).to_csv(clean_dir / "participants.csv", index=False)
     rel = raw_path.resolve().relative_to(ROOT) if raw_path.resolve().is_relative_to(ROOT) else raw_path
     write_log(log, data_source, rel, len(fb))

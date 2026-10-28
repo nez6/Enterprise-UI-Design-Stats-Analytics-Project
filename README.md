@@ -4,7 +4,7 @@
 
 **Live:**
 - SNOW Stats Lab: https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/?session=pathfinders
-- Streamlit lab (runs in the browser): https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/streamlit/index.html
+- Statistics textbook (Streamlit, benchmark data only, no data collection): https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/streamlit/index.html
 
 Republish both after changes with `./scripts/deploy_pages.sh` (it builds `site/` and pushes the `gh-pages` branch).
 
@@ -68,6 +68,8 @@ Presenting: in any lesson, **→ / ↓ / Space** jump to the next scene and **�
 - `SUPABASE_URL` = the project URL
 - `SUPABASE_ANON_KEY` = the anon key (it's designed to be public; the security policies protect the data)
 
+**Ethics and data protection:** read [docs/IRB_REVIEW.md](docs/IRB_REVIEW.md) before running a session. The public key can only insert data; exports need the secret `SUPABASE_SERVICE_KEY`, and only de-identified exports go in the repository.
+
 **3. Turn on Pages:** go to **Settings → Pages → Source** and select **GitHub Actions**. Every push to `main` that touches `site/` builds and deploys via [.github/workflows/pages.yml](.github/workflows/pages.yml). Your URL will be `https://<user>.github.io/Enterprise-UI-Design-Stats-Analytics-Project/`.
 
 **4. On the call:** share `…/?session=pathfinders-nov` (any label you like) so each session's data stays separate. The pill at the top right shows how many people are live.
@@ -88,7 +90,7 @@ python scripts/run_pipeline.py           # simulated pilot, end to end
 After the live session:
 
 ```bash
-export SUPABASE_URL=… SUPABASE_ANON_KEY=…
+export SUPABASE_URL=… SUPABASE_SERVICE_KEY=…   # secret: never commit or put in the site
 python scripts/export_supabase.py --session pathfinders-nov    # → data/raw/live_sessions.csv + live_feedback.csv
 python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
 ```

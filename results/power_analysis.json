@@ -11,12 +11,12 @@
     "n_per_group": 30,
     "analysable_total": 60,
     "recruit_total": 68,
-    "monte_carlo_sims": 200,
-    "monte_carlo_power_h1": 0.785,
-    "monte_carlo_power_h2": 0.52,
-    "monte_carlo_power_both": 0.435,
-    "simulation_model_d_h1": 0.6995454632531176,
-    "simulation_model_d_h2": 0.5237146725430982
+    "monte_carlo_sims": 150,
+    "monte_carlo_power_h1": 0.7533333333333333,
+    "monte_carlo_power_h2": 0.5533333333333333,
+    "monte_carlo_power_both": 0.4533333333333333,
+    "simulation_model_d_h1": 0.6682259461703808,
+    "simulation_model_d_h2": 0.5375480158054099
   },
   "h3": {
     "effect_size_dz": 1.0,

@@ -90,6 +90,6 @@ export const SUBMISSION_COLUMNS = [
   'ticket_text', 'chosen_category', 'ai_category', 'ai_confidence', 'ai_correct',
   'ai_error_injected', 'ai_error_caught',
 ];
-export const FEEDBACK_COLUMNS = ['participant_id', 'session_label', 'snow_primed', 'ai_primed', 'job_level', 'nps_servicenow', 'ai_trust', 'prefer_ai', 'comment'];
+export const FEEDBACK_COLUMNS = ['participant_id', 'session_label', 'snow_primed', 'ai_primed', 'job_level', 'nps_servicenow', 'ai_trust', 'prefer_ai', 'mc_snow', 'mc_ai', 'comment'];
 
 export const isAI = (r) => r.workflow === AI;

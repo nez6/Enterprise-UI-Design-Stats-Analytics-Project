@@ -10,7 +10,7 @@
 
 ## 1. Abstract
 
-Organisations decide whether to keep legacy tools or adopt AI largely from what users *report*, and those reports are collected amid strong messaging: vendors praise incumbent platforms, and public discussion warns that AI "hallucinates". We built a ServiceNow-style service portal in which every participant filed six realistic, noisy IT tickets, three through classic catalog forms and three with an AI agent embedded in the form, and rated each one. Two independent coin flips decided whether participants saw a **positive banner** before the ServiceNow set ("ServiceNow's single pane of glass is incredibly efficient") and a **negative banner** before the AI set ("AI agents are known to hallucinate…"). With 65 analysable participants, the praise banner did not detectably shift ratings (Holm p = 0.473). The hallucination warning did not detectably shift ratings (Holm p = 0.473). Meanwhile, the AI agent was 3.3× faster per ticket (95% CI 3.1–3.6×). We discuss what the pattern means for how organisations evaluate legacy platforms and AI tools.
+Organisations decide whether to keep legacy tools or adopt AI largely from what users *report*, and those reports are collected amid strong messaging: vendors praise incumbent platforms, and public discussion warns that AI "hallucinates". We built a ServiceNow-style service portal in which every participant filed six realistic, noisy IT tickets, three through classic catalog forms and three with an AI agent embedded in the form, and rated each one. Two independent coin flips decided whether participants saw a **positive banner** before the ServiceNow set ("ServiceNow's single pane of glass is incredibly efficient") and a **negative banner** before the AI set ("AI agents are known to hallucinate…"). With 65 analysable participants, the praise banner shifted ratings by +1.03 points (Holm p = 0.003, r = 0.43). The hallucination warning did not detectably shift ratings (Holm p = 0.144). Meanwhile, the AI agent was 3.4× faster per ticket (95% CI 3.2–3.6×). We discuss what the pattern means for how organisations evaluate legacy platforms and AI tools.
 
 ## 2. Background & Motivation
 
@@ -80,7 +80,7 @@ Power analysis was done before data collection with `statsmodels.stats.power` (`
 | 40 | 0.63 |
 | 50 | 0.57 |
 
-**Simulation check.** Across 200 simulated studies of 60 participants under our simulation model (`lab/simulate.py`), the Holm-corrected tests rejected H1 in 78%, H2 in 52%, and both in 44% of studies. The model implies effects of d ≈ 0.70 (praise) and d ≈ 0.52 (warning). The praise effect is the harder one to detect.
+**Simulation check.** Across 150 simulated studies of 60 participants under our simulation model (`lab/simulate.py`), the Holm-corrected tests rejected H1 in 75%, H2 in 55%, and both in 45% of studies. The model implies effects of d ≈ 0.67 (praise) and d ≈ 0.54 (warning). The praise effect is the harder one to detect.
 
 ![Figure 1. Power for each primary hypothesis by group size.](../results/figures/fig5_power_curve.png)
 
@@ -113,9 +113,9 @@ Long but genuine completion times under the 30-minute rule were **not** trimmed.
 | Walk-aways removed (any ticket > 30 min) | 402 → 396 | 68 → 67 | – |
 | Incomplete participants removed (< 6 tickets) | 396 → 390 | 67 → 65 | – |
 
-**Analysable sample:** 65 participants (30 saw the praise banner; 38 saw the warning). Banner cells: praise=0, warning=0: 19; praise=0, warning=1: 16; praise=1, warning=0: 8; praise=1, warning=1: 22. 61 gave a job level, and 65 completed the final survey.
+**Analysable sample:** 65 participants (37 saw the praise banner; 25 saw the warning). Banner cells: praise=0, warning=0: 18; praise=0, warning=1: 10; praise=1, warning=0: 22; praise=1, warning=1: 15. 61 gave a job level, and 65 completed the final survey.
 
-**Randomisation check.** For the praise banner, median years of experience were 6 vs 6.5 (Mann–Whitney p = 0.376), job level p = 0.294 (χ²), set order p = 0.924 (χ²). For the warning banner, median years of experience were 5 vs 6 (Mann–Whitney p = 0.448), job level p = 0.921 (χ²), set order p = 0.231 (χ²). Some expected counts are below 5 (minimum 2.9), so the χ² checks are approximate. No check suggests the groups differ at baseline.
+**Randomisation check.** For the praise banner, median years of experience were 4.5 vs 5 (Mann–Whitney p = 0.977), job level p = 0.468 (χ²), set order p = 0.390 (χ²). For the warning banner, median years of experience were 4 vs 5 (Mann–Whitney p = 0.119), job level p = 0.172 (χ²), set order p = 1.000 (χ²). Some expected counts are below 5 (minimum 1.9), so the χ² checks are approximate. No check suggests the groups differ at baseline.
 
 ## 7. Statistical Analysis
 
@@ -125,14 +125,14 @@ Long but genuine completion times under the 30-minute rule were **not** trimmed.
 
 | Ticket | n | Mean (s) | Median (s) | SD | IQR | Skew | Efficiency | Abandoned |
 |---|---|---|---|---|---|---|---|---|
-| SN · Access | 65 | 108.0 | 101.0 | 47.6 | 49.9 | 1.12 | 4.11 | 0% |
-| SN · Software | 65 | 111.1 | 102.4 | 52.9 | 53.8 | 1.67 | 3.78 | 3% |
-| SN · Facilities | 65 | 117.2 | 107.7 | 47.2 | 68.0 | 0.59 | 3.65 | 2% |
-| AI · Access | 65 | 27.2 | 27.0 | 9.4 | 9.3 | 1.9 | 6.35 | 0% |
-| AI · Software | 65 | 32.0 | 31.0 | 10.7 | 14.1 | 0.88 | 6.68 | 0% |
-| AI · Facilities | 65 | 39.7 | 36.2 | 13.4 | 21.2 | 0.62 | 5.34 | 0% |
+| SN · Access | 65 | 105.4 | 91.7 | 54.9 | 64.7 | 0.91 | 4.12 | 2% |
+| SN · Software | 65 | 127.6 | 109.3 | 67.9 | 77.7 | 1.43 | 3.88 | 2% |
+| SN · Facilities | 65 | 119.7 | 113.0 | 48.3 | 71.0 | 0.69 | 3.69 | 2% |
+| AI · Access | 65 | 28.8 | 28.4 | 9.5 | 13.6 | 0.73 | 6.66 | 0% |
+| AI · Software | 65 | 31.5 | 30.3 | 12.9 | 13.9 | 1.4 | 6.74 | 0% |
+| AI · Facilities | 65 | 39.4 | 38.0 | 15.1 | 16.1 | 1.03 | 5.23 | 0% |
 
-Every ticket's completion time is right-skewed. The most extreme is **AI · Access** (skew 1.9, mean 27 s vs median 27 s), so medians, geometric means and rank-based tests describe the typical participant better than arithmetic means.
+Every ticket's completion time is right-skewed. The most extreme is **SN · Software** (skew 1.4, mean 128 s vs median 109 s), so medians, geometric means and rank-based tests describe the typical participant better than arithmetic means.
 
 ![Figure 2. Completion time by ticket (log scale). Diamonds are means; blue lines are medians.](../results/figures/fig2_completion_times.png)
 
@@ -144,19 +144,19 @@ Every ticket's completion time is right-skewed. The most extreme is **AI · Acce
 
 | | H1: ServiceNow, praise banner | H2: AI agent, warning banner |
 |---|---|---|
-| Banner group: n, mean (SD), median | 30, 4.04 (1.46), 3.67 | 38, 6.06 (0.97), 6.00 |
-| No banner: n, mean (SD), median | 35, 3.68 (0.99), 3.67 | 27, 6.21 (1.05), 6.33 |
-| Shapiro–Wilk p (banner / none) | 0.005 / 0.216 | 0.032 / 0.634 |
-| Levene p | 0.110 | 0.594 |
-| **Mann–Whitney U, one-sided p** | **U = 574, p = 0.263** | **U = 459, p = 0.236** |
-| **Holm-adjusted p** | **0.473** | **0.473** |
-| Rank-biserial r (95% bootstrap CI) | 0.09 [-0.20, 0.38] | -0.11 [-0.39, 0.19] |
-| Cohen's d (95% CI) | 0.30 [-0.19, 0.79] | -0.15 [-0.64, 0.35] |
-| Mean difference (Welch 95% CI) | +0.37 [-0.26, 1.00] | -0.15 [-0.66, 0.37] |
-| Welch t sensitivity | t(49.6) = 1.17, p = 0.124 | t(53.1) = -0.58, p = 0.283 |
+| Banner group: n, mean (SD), median | 37, 4.34 (1.38), 4.00 | 25, 5.95 (0.77), 6.00 |
+| No banner: n, mean (SD), median | 28, 3.31 (0.79), 3.33 | 40, 6.38 (1.24), 6.33 |
+| Shapiro–Wilk p (banner / none) | 0.010 / 0.382 | 0.565 / 0.090 |
+| Levene p | 0.005 | 0.004 |
+| **Mann–Whitney U, one-sided p** | **U = 742, p = 0.001** | **U = 421, p = 0.144** |
+| **Holm-adjusted p** | **0.003** | **0.144** |
+| Rank-biserial r (95% bootstrap CI) | 0.43 [0.18, 0.66] | -0.16 [-0.42, 0.12] |
+| Cohen's d (95% CI) | 0.89 [0.38, 1.40] | -0.39 [-0.90, 0.11] |
+| Mean difference (Welch 95% CI) | +1.03 [0.49, 1.57] | -0.43 [-0.93, 0.07] |
+| Welch t sensitivity | t(59.0) = 3.81, p < 0.001 | t(63.0) = -1.71, p = 0.046 |
 
-**Decision, H1:** fail to reject H₀ after Holm correction. The data are compatible with effects from r = -0.20 to 0.38.
-**Decision, H2:** fail to reject H₀ after Holm correction. The data are compatible with effects from r = -0.39 to 0.19.
+**Decision, H1:** reject H₀. Participants who saw the praise banner rated ServiceNow higher (r = 0.43, mean difference +1.03 points).
+**Decision, H2:** fail to reject H₀ after Holm correction. The data are compatible with effects from r = -0.42 to 0.12.
 
 ![Figure 3. Per-person mean efficiency ratings by banner. Each dot is one participant.](../results/figures/fig1_h1_h2_ratings.png)
 
@@ -164,10 +164,10 @@ Every ticket's completion time is right-skewed. The most extreme is **AI · Acce
 
 ### 7.3 H3 (performance check): is the AI agent actually faster?
 
-Each participant used both platforms, so we use a **paired** test on the per-person difference in log geometric-mean time. On a log scale a multiplicative speed-up becomes an additive difference. The pre-specified test is the **one-sided Wilcoxon signed-rank test** (Wilcoxon, 1945); the paired-t interval on the log scale gives the estimate. Shapiro–Wilk on the log differences: p = 0.258.
+Each participant used both platforms, so we use a **paired** test on the per-person difference in log geometric-mean time. On a log scale a multiplicative speed-up becomes an additive difference. The pre-specified test is the **one-sided Wilcoxon signed-rank test** (Wilcoxon, 1945); the paired-t interval on the log scale gives the estimate. Shapiro–Wilk on the log differences: p = 0.753.
 
-- Median participant: 98 s per ServiceNow ticket vs 31 s per AI-agent ticket; 100% of participants were faster with the AI.
-- **Wilcoxon W = 0, p < 0.001.** Speed-up **3.3×** (95% CI 3.1–3.6×); d_z = -3.72; matched-pairs rank-biserial r = -1.00.
+- Median participant: 102 s per ServiceNow ticket vs 32 s per AI-agent ticket; 100% of participants were faster with the AI.
+- **Wilcoxon W = 0, p < 0.001.** Speed-up **3.4×** (95% CI 3.2–3.6×); d_z = -4.18; matched-pairs rank-biserial r = -1.00.
 
 **Decision:** reject H₀. The AI agent was genuinely faster.
 
@@ -177,21 +177,21 @@ Each participant used both platforms, so we use a **paired** test on the per-per
 
 ### 7.4 H4 (secondary): does the warning make people overrule the AI?
 
-Each participant's override rate is the share of their AI tickets where they changed the AI's category. Warned: mean 14% (n = 38); unwarned: mean 0% (n = 27). **Mann–Whitney U = 702, one-sided p < 0.001**, rank-biserial r = 0.37 [0.21, 0.53]. At ticket level the override rates were 14% vs 0% (χ² = 12.38, p < 0.001). Tickets from the same person are not independent, so the χ² is descriptive only.
+Each participant's override rate is the share of their AI tickets where they changed the AI's category. Warned: mean 15% (n = 25); unwarned: mean 0% (n = 40). **Mann–Whitney U = 700, one-sided p < 0.001**, rank-biserial r = 0.40 [0.20, 0.60]. At ticket level the override rates were 15% vs 0% (χ² = 18.65, p < 0.001). Tickets from the same person are not independent, so the χ² is descriptive only.
 
 **Decision:** reject H₀. Warned participants overrode the AI more often.
 
 ### 7.5 Exploratory: the platform × banner interaction (two-way ANOVA, post hoc)
 
-Each person contributes one mean rating per platform. A **linear mixed model** with a random intercept per participant, `efficiency ~ platform * banner + (1 | participant)`, is the formal test: the interaction coefficient was **-0.70 (p = 0.030)**. For comparison with the course's two-way ANOVA, the Type II ANOVA on the same data (which ignores the pairing) gives:
+Each person contributes one mean rating per platform. A **linear mixed model** with a random intercept per participant, `efficiency ~ platform * banner + (1 | participant)`, is the formal test: the interaction coefficient was **-1.17 (p < 0.001)**. For comparison with the course's two-way ANOVA, the Type II ANOVA on the same data (which ignores the pairing) gives:
 
 | Term | F | df | p | partial η² |
 |---|---|---|---|---|
-| Platform | 130.31 | 1 | < 0.001 | 0.51 |
-| Banner | 0.32 | 1 | 0.571 | 0.00 |
-| Platform × banner | 1.69 | 1 | 0.195 | 0.01 |
+| Platform | 139.49 | 1 | < 0.001 | 0.53 |
+| Banner | 2.46 | 1 | 0.119 | 0.02 |
+| Platform × banner | 13.21 | 1 | < 0.001 | 0.09 |
 
-*Post hoc.* Tukey's HSD (Tukey, 1949) across the four platform × banner cells found 4 of 6 pairwise differences significant at a family-wise α of 0.05 (`results/tables/interaction_tukey_hsd.csv`).
+*Post hoc.* Tukey's HSD (Tukey, 1949) across the four platform × banner cells found 5 of 6 pairwise differences significant at a family-wise α of 0.05 (`results/tables/interaction_tukey_hsd.csv`).
 
 ![Figure 5. Mean efficiency by platform and banner (per-person means, ±95% CI).](../results/figures/fig4_interaction.png)
 
@@ -199,19 +199,19 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 
 ### 7.6 Exploratory: choice, NPS, trust, and who is most affected
 
-**Choosing the AI next time.** 62% would rather use the AI agent. Logistic regression `prefer_ai ~ speed-up + warned + praised` (n = 65, McFadden pseudo-R² = 0.03):
+**Choosing the AI next time.** 43% would rather use the AI agent. Logistic regression `prefer_ai ~ speed-up + warned + praised` (n = 65, McFadden pseudo-R² = 0.00):
 
 | Predictor | Odds ratio | 95% CI | p |
 |---|---|---|---|
-| speedup_log | 0.38 | [0.07, 2.16] | 0.273 |
-| ai_primed | 1.52 | [0.51, 4.55] | 0.455 |
-| snow_primed | 0.51 | [0.17, 1.53] | 0.231 |
+| speedup_log | 0.79 | [0.15, 4.31] | 0.788 |
+| ai_primed | 0.81 | [0.29, 2.27] | 0.693 |
+| snow_primed | 0.81 | [0.30, 2.25] | 0.692 |
 
-**ServiceNow NPS.** -70 with the praise banner vs -91 without (Mann–Whitney on the 0–10 scores, one-sided p = 0.017).
+**ServiceNow NPS.** -70 with the praise banner vs -96 without (Mann–Whitney on the 0–10 scores, one-sided p = 0.016).
 
-**Trust in the AI agent.** Mean 6.32 when warned vs 5.81 unwarned (one-sided p = 0.911).
+**Trust in the AI agent.** Mean 6.92 when warned vs 6.80 unwarned (one-sided p = 0.598).
 
-**By job level** (banner minus no-banner mean rating): IC: praise +0.23, warning +0.00 (n = 36); Lead: praise +1.06, warning -0.27 (n = 18); Director: praise +2.00, warning +0.17 (n = 7). Cells are small, so treat these as hypotheses for a follow-up.
+**By job level** (banner minus no-banner mean rating): IC: praise +0.46, warning +0.06 (n = 37); Lead: praise +0.82, warning -0.34 (n = 19). Cells are small, so treat these as hypotheses for a follow-up.
 
 ![Figure 6. Perception vs performance: each arrow is what a banner did to the same system.](../results/figures/fig6_perception_performance.png)
 
@@ -219,19 +219,19 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 
 ## 8. Interpretation of Results
 
-**Performance.** The AI agent was clearly faster (3.3× per ticket, 100% of people faster with it). Whatever the ratings say, the stopwatch favours the AI.
+**Performance.** The AI agent was clearly faster (3.4× per ticket, 100% of people faster with it). Whatever the ratings say, the stopwatch favours the AI.
 
-**Perception.** The praise banner did not detectably shift ratings (Holm p = 0.473). The hallucination warning did not detectably shift ratings (Holm p = 0.473). Where an effect was not detected, the confidence interval shows how large an effect remains plausible.
+**Perception.** The praise banner shifted ratings by +1.03 points (Holm p = 0.003, r = 0.43). The hallucination warning did not detectably shift ratings (Holm p = 0.144). Where an effect was not detected, the confidence interval shows how large an effect remains plausible.
 
 **Behaviour.** Warned participants also overrode the AI more often, so framing changed what people did, not just what they said.
 
-**Practical significance.** Mean shifts of 0.4 (praise) and 0.1 (warning) points on a ten-point scale, from a single sentence each, are the size of difference that can flip a vendor comparison or a pilot go/no-go decision.
+**Practical significance.** Mean shifts of 1.0 (praise) and 0.4 (warning) points on a ten-point scale, from a single sentence each, are the size of difference that can flip a vendor comparison or a pilot go/no-go decision.
 
 ## 9. Limitations
 
 - **Data.** Every number in this version comes from **simulated** participants generated by our own model (`lab/simulate.py`). It shows the pipeline works and what the report will say; it says nothing about real people. Regenerate the report from the live session export.
-- **Power and effect sizes.** The study is powered for large effects (d = 0.8). The praise effect implied by our own simulation model is closer to d ≈ 0.70, so a non-significant H1 would be weak evidence of no effect.
-- **Floor effects.** 23% of documentation-hunt efficiency ratings were 1 or 2, which leaves little room for a banner to act on the worst ServiceNow ticket.
+- **Power and effect sizes.** The study is powered for large effects (d = 0.8). The praise effect implied by our own simulation model is closer to d ≈ 0.67, so a non-significant H1 would be weak evidence of no effect.
+- **Floor effects.** 25% of documentation-hunt efficiency ratings were 1 or 2, which leaves little room for a banner to act on the worst ServiceNow ticket.
 - **The AI-team manipulation is a package.** The warning, the displayed confidence and the agent's accuracy all differ between the AI teams, so any difference cannot be attributed to the warning alone. The planted error also lowers the other team's AI ratings, which works against H2.
 - **The AI agent is simple.** A naive Bayes classifier is not a large language model, but it behaves like a real routing AI: usually right, sometimes confidently wrong, with a visible confidence score.
 - **Simulation, not the workplace.** Participants were not under real deadlines and were filing tickets about scenarios they were given, using a portal that only resembles ServiceNow (no affiliation).
@@ -240,7 +240,7 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 
 ## 10. Conclusion & Recommendations
 
-In this simulated pilot, the AI agent was 3.3× faster, yet one sentence of framing was enough to move at least some ratings. For anyone leading AI adoption, the lesson is that **user perception is an outcome you have to measure and manage, not a neutral readout of quality.** Pair every survey with behavioural metrics, run rollouts as randomised experiments, and communicate AI risks with evidence rather than slogans.
+In this simulated pilot, the AI agent was 3.4× faster, yet one sentence of framing was enough to move at least some ratings. For anyone leading AI adoption, the lesson is that **user perception is an outcome you have to measure and manage, not a neutral readout of quality.** Pair every survey with behavioural metrics, run rollouts as randomised experiments, and communicate AI risks with evidence rather than slogans.
 
 **Recommendations for implementing AI in ServiceNow.**
 1. **Measure behaviour, not just opinion.** Time per ticket, completion, corrections and abandonment should sit next to every satisfaction score.

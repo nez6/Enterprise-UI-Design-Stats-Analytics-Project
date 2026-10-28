@@ -13,6 +13,14 @@ import pandas as pd
 from lab.design import AI, COLUMNS, FEEDBACK_COLUMNS, JOB_LEVELS, JOB_ROLES, LEGACY, TESTS
 
 
+def _mc(rng, saw):
+    """Manipulation-check answer: most people who saw a banner say so; a few misremember."""
+    u = rng.random()
+    if saw:
+        return "yes" if u < 0.85 else "unsure" if u < 0.95 else "no"
+    return "no" if u < 0.8 else "unsure" if u < 0.95 else "yes"
+
+
 def simulate_panel(n=300, seed=42, id_prefix="BENCH", source="benchmark", session="benchmark"):
     """Return (submissions, feedback) dataframes for n simulated participants."""
     rng = np.random.default_rng(seed)
@@ -88,5 +96,6 @@ def simulate_panel(n=300, seed=42, id_prefix="BENCH", source="benchmark", sessio
         nps = int(np.clip(round(eff_sum[LEGACY] / 3 + snow_p * sus[lvl] * 0.8 + rng.normal(0, 1.8)), 0, 10))
         trust = int(np.clip(round(3 + 1.8 * ai_right - ai_p * sus[lvl] * 1.2 - 2.5 * burned + rng.normal(0, 1.2)), 1, 10))
         feedback.append(dict(participant_id=pid, session_label=session, snow_primed=snow_p, ai_primed=ai_p, job_level=lvl,
-                             nps_servicenow=nps, ai_trust=trust, prefer_ai=int(0.35 * (eff_sum[AI] - eff_sum[LEGACY]) / 3 - 0.8 + rng.normal(0, 1) > 0), comment=None))
+                             nps_servicenow=nps, ai_trust=trust, prefer_ai=int(0.35 * (eff_sum[AI] - eff_sum[LEGACY]) / 3 - 0.8 + rng.normal(0, 1) > 0),
+                             mc_snow=_mc(rng, snow_p), mc_ai=_mc(rng, ai_p), comment=None))
     return pd.DataFrame(rows, columns=COLUMNS), pd.DataFrame(feedback, columns=FEEDBACK_COLUMNS)

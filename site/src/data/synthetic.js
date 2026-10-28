@@ -43,6 +43,8 @@ export function simulateClass(n = 300, seed = 42, { session = 'benchmark' } = {}
   const baseEff = { 1: 4.1, 2: 3.9, 3: 3.8, 4: 7.4, 5: 7.6, 6: 7.2 };
   const baseErr = { 1: 1.0, 2: 1.1, 3: 1.2, 4: 0.1, 5: 0.1, 6: 0.1 };
   const rows = [], feedback = [];
+  // Manipulation-check answers: most people who saw a banner say so; a few misremember.
+  const mc = (saw) => { const u = r.random(); return saw ? (u < 0.85 ? 'yes' : u < 0.95 ? 'unsure' : 'no') : (u < 0.8 ? 'no' : u < 0.95 ? 'unsure' : 'yes'); };
 
   for (let i = 0; i < n; i++) {
     const lvl = r.weighted(L, [0.5, 0.32, 0.18]), [lo, hi] = yearRange[lvl], yrs = r.int(lo, hi);
@@ -99,7 +101,7 @@ export function simulateClass(n = 300, seed = 42, { session = 'benchmark' } = {}
     // Preference follows the rating gap, so warnings and the angry email both pull people away from the AI.
     const preferAI = 0.35 * (effSum[AI] - effSum[LEGACY]) / 3 - 0.8 + r.normal(0, 1) > 0 ? 1 : 0;
     feedback.push({ participant_id: pid, session_label: session, snow_primed: snowPrimed, ai_primed: aiPrimed, job_level: lvl,
-      nps_servicenow: nps, ai_trust: trust, prefer_ai: preferAI, comment: null });
+      nps_servicenow: nps, ai_trust: trust, prefer_ai: preferAI, mc_snow: mc(snowPrimed), mc_ai: mc(aiPrimed), comment: null });
   }
   return { rows, feedback };
 }
