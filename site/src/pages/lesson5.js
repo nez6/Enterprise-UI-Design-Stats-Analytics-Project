@@ -20,6 +20,7 @@ export function renderLesson5(root) {
   temperature(root);
   calibration(root);
   gap(root);
+  complacency(root);
   playbook(root);
   closing(root);
 }
@@ -147,7 +148,7 @@ function calibration(root) {
 function gap(root) {
   const s = scene(root, {
     title: 'The perception–performance gap',
-    story: 'Here’s the whole experiment on one chart. Left to right is <b>performance</b> (typical seconds per ticket, so faster is further left). Bottom to top is <b>perception</b> (mean efficiency rating). Each arrow shows what a banner did to the same system. If perception followed performance, the AI would sit in the top-left, and banners wouldn’t move anything.',
+    story: 'Here’s the whole experiment on one chart (for the AI team, “banner” means the warning <i>plus</i> a confidence score and an always-right agent). Left to right is <b>performance</b> (typical seconds per ticket, so faster is further left). Bottom to top is <b>perception</b> (mean efficiency rating). Each arrow shows what a banner did to the same system. If perception followed performance, the AI would sit in the top-left, and banners wouldn’t move anything.',
   });
   const box = s.appendChild(el('div', { class: 'viz' }));
   const out = el('div'); s.appendChild(out);
@@ -234,3 +235,43 @@ function closing(root) {
 }
 
 export { JOB_LEVELS };
+
+// ---------------------------------------------------------------------------
+// Scene: automation complacency (the angry email)
+// ---------------------------------------------------------------------------
+function complacency(root) {
+  const s = scene(root, {
+    title: 'Automation complacency: who checked the AI’s work?',
+    story: 'On the meeting-room ticket, half of you (no warning, no confidence score) got an agent that quietly filled in the <b>wrong room and cart code</b>. The ticket submitted anyway. Some caught it; the rest got an angry email from AV. The other half, the <b>AI team</b>, were warned and shown confidence scores, and their agent was right every time.',
+    formula: String.raw`\text{catch rate} = \frac{\#\,\text{errors fixed before submitting}}{\#\,\text{errors shown}}`,
+  });
+  const box = s.appendChild(el('div', { class: 'viz' }));
+  const out = el('div'); s.appendChild(out);
+  onData(({ rows, feedback }) => {
+    box.innerHTML = '';
+    const av = rows.filter((r) => r.workflow === AI && r.ticket_type === 'facilities' && !r.rage_quit);
+    const groups = [
+      ['AI team (agent right)', av.filter((r) => r.ai_primed), C.blue],
+      ['Caught the mistake', av.filter((r) => r.ai_error_injected === 1 && r.ai_error_caught === 1), C.teal],
+      ['Got the angry email', av.filter((r) => r.ai_error_injected === 1 && r.ai_error_caught === 0), C.red],
+    ].filter(([, g]) => g.length);
+    const injected = av.filter((r) => r.ai_error_injected === 1);
+    if (!injected.length || groups.length < 2) return emptyNote(box, 'Need meeting-room tickets from both teams.');
+    const f = frame(box, { height: 320, margin: { top: 20, right: 30, bottom: 50, left: 56 } });
+    const x = d3.scaleBand().domain(groups.map((g) => g[0])).range([0, f.w]).padding(0.45), y = d3.scaleLinear().domain([0, 10]).range([f.h, 0]);
+    axes(f, d3.scaleLinear().range([0, f.w]), y, { yLabel: 'frustration with this ticket (mean ± 95% CI)', xTicks: 0 });
+    groups.forEach(([name, g, color]) => {
+      const fr = g.map((r) => r.frustration), m = mean(fr), h = fr.length > 1 ? 1.96 * d3.deviation(fr) / Math.sqrt(fr.length) : 0;
+      f.g.append('rect').attr('x', x(name)).attr('width', x.bandwidth()).attr('y', f.h).attr('height', 0).attr('fill', color).attr('rx', 4)
+        .transition().duration(700).attr('y', y(m)).attr('height', f.h - y(m));
+      f.g.append('line').attr('x1', x(name) + x.bandwidth() / 2).attr('x2', x(name) + x.bandwidth() / 2).attr('y1', y(m - h)).attr('y2', y(m + h)).attr('stroke', C.ink).attr('stroke-width', 2);
+      f.g.append('text').attr('class', 'lbl').attr('x', x(name) + x.bandwidth() / 2).attr('y', f.h + 20).attr('text-anchor', 'middle').text(`${name} (n = ${g.length})`);
+    });
+    const caughtRate = mean(injected.filter((r) => r.ai_error_caught !== null).map((r) => r.ai_error_caught));
+    const burnedIds = new Set(injected.filter((r) => r.ai_error_caught === 0).map((r) => r.participant_id));
+    const trust = (pred) => { const v = feedback.filter(pred).map((q) => q.ai_trust).filter(Number.isFinite); return v.length ? mean(v).toFixed(1) : '–'; };
+    statGrid(out, [[pct(caughtRate), 'caught the AI’s mistake', C.teal], [pct(1 - caughtRate), 'submitted it unchecked', C.red],
+      [trust((q) => burnedIds.has(q.participant_id)), 'AI trust after the email (1–10)', C.red], [trust((q) => q.ai_primed), 'AI trust, AI team (1–10)', C.blue]]);
+  });
+  callout(s, 'This is <b>automation complacency</b>: when a system usually looks right, people stop checking it. A fluent AI that fills every field makes it worse, because nothing looks missing. For an AI rollout, design the review step on purpose: highlight what the AI changed, flag low-confidence fields, require confirmation of the details that are expensive to get wrong (like the room), and measure the catch rate, not just the speed.', 'ai');
+}

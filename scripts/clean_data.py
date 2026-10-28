@@ -35,7 +35,8 @@ from lab.design import AI, COLUMNS, FEEDBACK_COLUMNS, JOB_LEVELS, JOB_ROLES, LEG
 
 WALKAWAY_SECONDS = 30 * 60
 NUMERIC = ["years_experience", "snow_primed", "ai_primed", "test_num", "position", "primed", "completion_time",
-           "error_count", "rage_quit", "frustration", "efficiency", "ai_confidence", "ai_correct"]
+           "error_count", "rage_quit", "frustration", "efficiency", "ai_confidence", "ai_correct",
+           "ai_error_injected", "ai_error_caught"]
 
 
 def read_excluded(path):

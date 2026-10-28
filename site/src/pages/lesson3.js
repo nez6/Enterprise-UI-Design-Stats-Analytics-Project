@@ -9,8 +9,8 @@ import { C, axes, callout, controls, el, emptyNote, f2, fmtP, frame, hero, pct, 
 
 const METRICS = {
   sn_eff: { label: 'H1 · ServiceNow efficiency rating: positive banner vs none', group: 'snow_primed', alt: 'greater' },
-  ai_eff: { label: 'H2 · AI agent efficiency rating: hallucination warning vs none', group: 'ai_primed', alt: 'less' },
-  ai_frust: { label: 'AI agent frustration: warning vs none', group: 'ai_primed', alt: 'greater' },
+  ai_eff: { label: 'H2 · AI agent efficiency rating: AI team (warning + confidence) vs other team', group: 'ai_primed', alt: 'less' },
+  ai_frust: { label: 'AI agent frustration: AI team vs other team', group: 'ai_primed', alt: 'greater' },
   sn_frust: { label: 'ServiceNow frustration: positive banner vs none', group: 'snow_primed', alt: 'less' },
 };
 
@@ -304,7 +304,7 @@ function anova(root) {
 // ---------------------------------------------------------------------------
 function chiSquare(root) {
   const s = scene(root, {
-    title: 'Chi-square: do warned users overrule the AI more?',
+    title: 'Chi-square: does the AI team overrule the AI more?',
     story: 'Counts, not averages. On every AI ticket you either <b>kept</b> the agent’s category or <b>changed</b> it. If the warning made no difference, each cell would hold its <b style="color:var(--blue)">expected</b> count. Chi-square adds up how far the <b style="color:var(--yellow)">observed</b> counts stray from that.',
     formula: String.raw`\chi^2 = \sum_{\text{cells}} \frac{(O-E)^2}{E}, \qquad E_{ij} = \frac{\text{row}_i \times \text{col}_j}{N}`,
   });
@@ -313,7 +313,7 @@ function chiSquare(root) {
   onData(({ rows }) => {
     box.innerHTML = '';
     const d = rows.filter((r) => r.workflow === AI && (r.ai_correct === 0 || r.ai_correct === 1));
-    const groups = [['Saw warning', d.filter((r) => r.ai_primed)], ['No warning', d.filter((r) => !r.ai_primed)]];
+    const groups = [['AI team', d.filter((r) => r.ai_primed)], ['Other team', d.filter((r) => !r.ai_primed)]];
     if (groups.some(([, g]) => g.length < 3)) return emptyNote(box, 'Need AI-agent tickets from people with and without the warning.');
     const table = groups.map(([, g]) => [g.filter((r) => r.ai_correct === 1).length, g.filter((r) => r.ai_correct === 0).length]);
     const res = chiSquareIndependence(table), N = d3.sum(table.flat()), rowT = table.map((r) => d3.sum(r)), colT = [0, 1].map((j) => d3.sum(table, (r) => r[j]));
@@ -330,7 +330,7 @@ function chiSquare(root) {
     f.g.selectAll('.cl').data(cellsData).join('text').attr('class', 'lbl muted').attr('text-anchor', 'middle').attr('x', (c) => x0(`${c.name}|${c.lab}`) + bw).attr('y', f.h + 18).text((c) => `${c.name}: ${c.lab}`);
     box.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.yellow}"></i>Observed</span><span><i style="background:${C.blue}"></i>Expected if the warning made no difference</span>`));
     statGrid(out, [[f2(res.chi2), `χ² (df = ${res.df})`], [fmtP(res.p), 'p-value'], [f2(res.cramersV), 'Cramér’s V (effect size)'],
-      [pct(table[0][1] / rowT[0]), 'override rate, warned', C.yellow], [pct(table[1][1] / rowT[1]), 'override rate, not warned', C.blue]]);
+      [pct(table[0][1] / rowT[0]), 'override rate, AI team', C.yellow], [pct(table[1][1] / rowT[1]), 'override rate, other team', C.blue]]);
   });
   callout(s, 'Overrides aren’t free: every unnecessary correction costs time and teaches the model nothing. The same test answers fairness questions too. Swap “saw the warning” for department, region or language, and a chi-square on override counts is a basic <b>AI adoption and fairness audit</b>.', 'ai');
 }

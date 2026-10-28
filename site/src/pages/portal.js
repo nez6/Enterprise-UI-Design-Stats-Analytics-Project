@@ -1,28 +1,28 @@
 // Page 1: a ServiceNow-style Service Portal and the data-collection instrument.
 //
 // Each participant files six noisy tickets in two sets (random order):
-//   ServiceNow set (tests 1-3): classic catalog forms, ending in a documentation hunt.
-//   AI agent set   (tests 4-6): an AI agent built into the form reads your description
-//                               and fills the ticket in; you review and submit.
-// Independent coin flips decide whether the positive ServiceNow banner and the negative
-// AI banner are shown. After every ticket: frustration and efficiency ratings. At the end:
-// NPS for ServiceNow, trust in the AI agent, and which one they'd rather use.
+//   ServiceNow set (tests 1-3): identical effort each: four mandatory fields, a description,
+//                               and a Shopping Cart checkout whose code is in a KB article.
+//   AI agent set   (tests 4-6): the agent reads your description and fills in the same fields
+//                               and the cart; you review and submit.
+// Coin flip 1 (snow_primed): positive ServiceNow banner.
+// Coin flip 2 (ai_primed, "the AI team"): hallucination warning + the agent's confidence shown
+//   + an agent that is always right. Everyone else: no banner, no confidence, and on the AV
+//   ticket the agent fills in the wrong room and cart. It submits anyway, and unless they
+//   caught it, an angry email arrives from the AV team.
+// After every ticket: frustration and efficiency ratings. At the end: NPS, trust, preference.
 
-import { AI, BANNERS, CART_CODE, CATEGORIES, JOB_LEVELS, JOB_ROLES, LEGACY, TESTS } from '../data/design.js';
-import { classify } from '../data/classifier.js';
+import { AI, AI_ERROR_TESTS, AI_WRONG, ANSWERS, BANNERS, CATEGORIES, FIELDS, JOB_LEVELS, JOB_ROLES, LEGACY, TESTS } from '../data/design.js';
 import { addFeedback, addSubmission, MODE } from '../data/store.js';
 import { SESSION, refresh } from '../data/context.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const rand = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
 const incNumber = () => `INC${String(10000 + Math.floor(rand() * 89999)).padStart(7, '0')}`;
-const GROUPS = {
-  'Access & Passwords': 'Identity & Access Mgmt', Software: 'Software Asset Mgmt', 'Network & VPN': 'Network Operations',
-  Hardware: 'End User Computing', 'Facilities & AV': 'Workplace & AV', 'Incident / Outage': 'Major Incident Team',
-};
+const norm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 // Participant state survives a refresh (sessionStorage) so a reload mid-study doesn't lose progress.
-const KEY = 'snowlab.participant.v2';
+const KEY = 'snowlab.participant.v3';
 let P = load();
 let task = null;
 let root;
@@ -87,7 +87,7 @@ function drawHome() {
         <h3>About this portal</h3>
         <ul class="side-list">
           <li><span>Session</span><b>${esc(SESSION)}</b></li>
-          <li><span>Takes about</span><b>6–8 min</b></li>
+          <li><span>Takes about</span><b>8–10 min</b></li>
           <li><span>Data</span><b>${MODE === 'supabase' ? 'Shared with the class' : 'Demo (this browser)'}</b></li>
         </ul>
         <p class="muted" style="margin-top:14px">After your shift, the lesson pages turn everyone’s tickets into statistics and AI lessons, live.</p>
@@ -126,8 +126,8 @@ function drawSetIntro() {
       <p class="p-breadcrumb">Part ${part} of 2</p>
       <h2>${wf === AI ? '✨ Meet the AI agent' : 'The ServiceNow catalog'}</h2>
       <p class="muted" style="margin:8px 0 18px">${wf === AI
-        ? 'For the next three requests, describe the problem and the AI agent built into the portal will read it and fill in the ticket for you. Check its work, then submit.'
-        : 'For the next three requests, use the standard catalog forms. Fill in the required fields and submit.'}</p>
+        ? 'For the next three requests, describe the problem and the AI agent built into the portal will fill in the whole ticket for you, including the shopping cart. Check its work, then submit.'
+        : 'For the next three requests, use the standard catalog forms. Fill in the required fields, then check out through the Service Catalog Shopping Cart using the reference code in each ticket’s KB article.'}</p>
       ${bannerHtml(bannerFor(wf), true)}
       <button class="btn primary" id="go">Start part ${part} →</button>
     </div>`;
@@ -158,7 +158,7 @@ function shell(t, bodyHtml) {
         <p style="margin:0 0 12px">${meta.prompt}</p>
         <p class="muted" style="margin:0 0 16px">Describe it in your own words. Typos are fine; real tickets are messy.</p>
         <hr style="border:0;border-top:1px solid var(--p-line);margin:16px 0">
-        <button class="btn ${t === 3 ? 'danger' : 'ghost'}" id="abandon" type="button">🏳️ Abandon ticket / I give up</button>
+        <button class="btn ghost" id="abandon" type="button">🏳️ Abandon ticket / I give up</button>
       </aside>
     </div>
     <p class="disclaimer">A ServiceNow-style training simulation. Not affiliated with ServiceNow, Inc.</p>`;
@@ -168,14 +168,13 @@ function shell(t, bodyHtml) {
 function alertMsg(html, kind = 'error') {
   const a = root.querySelector('#alerts');
   if (a) a.innerHTML = `<div class="alert ${kind}">${html}</div>`;
+  a?.scrollIntoView({ block: 'nearest' });
 }
 
 function drawTask() {
   const t = currentTest();
   if (!task || task.t !== t) task = { t, start: performance.now(), errors: 0, number: incNumber(), text: '', chosen: TESTS[t].category, aiCat: null, aiConf: null };
-  if (t === 1 || t === 2) return drawLegacyForm(t);
-  if (t === 3) return drawDocHunt();
-  return drawAgentForm(t);
+  return TESTS[t].workflow === AI ? drawAgentForm(t) : drawLegacy(t);
 }
 
 function finishTask({ rageQuit = false } = {}) {
@@ -185,87 +184,60 @@ function finishTask({ rageQuit = false } = {}) {
   save(); draw();
 }
 
-// ---------------------------------------------------------------------------
-// ServiceNow set: catalog forms and the documentation hunt
-// ---------------------------------------------------------------------------
-function drawLegacyForm(t) {
-  const fields = t === 1 ? `
-      <div class="row2">
-        <div class="field"><label><span class="req">*</span>Requested for</label><input id="f1" placeholder="Your name or employee ID"></div>
-        <div class="field"><label><span class="req">*</span>Application</label>
-          <select id="f2"><option value="">-- None --</option><option>Expense system</option><option>HR portal</option><option>Email</option><option>Single sign-on</option></select></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label><span class="req">*</span>Urgency</label>
-          <select id="f3"><option value="">-- None --</option><option>1 - High</option><option>2 - Medium</option><option>3 - Low</option></select></div>
-        <div class="field"><label><span class="req">*</span>Assignment group</label>
-          <select id="f4"><option value="">-- None --</option>${Object.values(GROUPS).map((g) => `<option>${g}</option>`).join('')}</select><span class="hint">Not sure? Pick your best guess.</span></div>
-      </div>`
-    : `
-      <div class="row2">
-        <div class="field"><label><span class="req">*</span>Software</label>
-          <select id="f1"><option value="">-- None --</option><option>Tableau Desktop</option><option>Figma</option><option>Adobe Creative Cloud</option><option>JetBrains All Products</option></select></div>
-        <div class="field"><label><span class="req">*</span>Cost center</label><input id="f2" placeholder="CC-0000"><span class="hint">Format CC-#### (four digits)</span></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label><span class="req">*</span>Approving manager</label>
-          <select id="f3"><option value="">-- None --</option><option>Direct manager</option><option>Department head</option><option>Finance partner</option></select></div>
-        <div class="field"><label><span class="req">*</span>Licence term</label>
-          <select id="f4"><option value="">-- None --</option><option>30 days</option><option>12 months</option><option>Perpetual</option></select></div>
-      </div>`;
-  shell(t, `
-    <form id="ticket">
-      ${fields}
-      <div class="field"><label><span class="req">*</span>Describe the issue in your own words</label><textarea id="desc" placeholder="What’s happening?"></textarea></div>
-      <div class="actions"><button class="btn primary" type="submit">${t === 1 ? 'Submit' : 'Order Now'}</button></div>
-    </form>`);
-  root.querySelector('#ticket').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const v = (id) => root.querySelector(id).value.trim();
-    if (['#f1', '#f2', '#f3', '#f4', '#desc'].some((id) => !v(id))) { task.errors++; return alertMsg('The following mandatory fields are not filled in. Please complete them and resubmit.'); }
-    if (t === 2 && !/^CC-\d{4}$/i.test(v('#f2'))) { task.errors++; return alertMsg('Invalid cost center. Expected the format CC-#### (for example CC-4410).'); }
-    task.text = v('#desc');
-    finishTask();
-  });
+// Field markup shared by both sets. `values` pre-fills (AI agent); `aiHint` labels a field as AI-filled.
+function fieldHtml(i, [label, kind, opts], value = '', aiHint = false) {
+  const hint = aiHint ? ' <span class="hint">filled by AI</span>' : '';
+  const input = kind === 'select'
+    ? `<select id="f${i}"><option value="">-- None --</option>${opts.map((o) => `<option ${o === value ? 'selected' : ''}>${o}</option>`).join('')}</select>`
+    : `<input id="f${i}" placeholder="${opts}" value="${esc(value)}">`;
+  return `<div class="field"><label><span class="req">*</span>${label}${hint}</label>${input}</div>`;
 }
 
 const FILLER = 'In accordance with the Unified Request Fulfilment Framework (URFF) and subject to the governance provisions of Annex 14(c), all service interactions shall be classified, triaged and routed through the appropriate assignment group as defined in the Configuration Management Database, except where superseded by regional addenda, change-freeze windows or ad-hoc executive exceptions logged in the Exception Register (see KB0009921, KB0011004 and the deprecated KB0003318). SLA clocks commence upon validated categorisation rather than submission, and partially completed records are auto-archived after 72 business hours.';
 
-function drawDocHunt() {
-  shell(3, `
-    <div class="row2">
-      <div class="field"><label><span class="req">*</span>Request type</label>
-        <select id="f1"><option value="">-- None --</option><option>Facilities</option><option>AV / Conferencing</option><option>General inquiry</option></select></div>
-      <div class="field"><label><span class="req">*</span>Room</label><input id="f2" placeholder="e.g. Boardroom 4B"></div>
-    </div>
-    <div class="field"><label><span class="req">*</span>Describe the issue in your own words</label><textarea id="desc"></textarea></div>
-    <p class="muted">ℹ️ For your convenience, submission has been streamlined. See the documentation below.</p>
-    <div class="kb">${[1, 2, 3, 4].map((i) => `<p><b>§${i}.</b> ${FILLER}</p>`).join('')}</div>
-    <details class="kb-link">
-      <summary>📎 KB0012847: Unified Request Fulfilment Procedures (Rev. 47)</summary>
-      <div class="kb" style="margin-top:10px">
-        <p><b>1.1 Scope.</b> ${FILLER}</p>
-        <p><b>1.2 Submission.</b> Pursuant to the platform consolidation initiative, discrete request forms no longer transmit records directly.
-        Requesters must add the item to the Service Catalog Shopping Cart by entering the cart reference code ${CART_CODE} in the Cart Reference field
-        below and proceeding to checkout, after which the record is created in a pending-approval state. ${FILLER}</p>
-        <p><b>1.3 Exceptions.</b> ${FILLER}</p>
-      </div>
-      <div class="field" style="margin-top:8px"><label>Cart Reference</label><input id="code" placeholder="CART-…"></div>
-      <button class="btn primary" type="button" id="checkout">🛒 Proceed to Checkout</button>
-    </details>`);
-  root.querySelector('#checkout').addEventListener('click', () => {
+const kbArticle = (meta) => `
+  <div class="kb" style="margin-top:10px">
+    <p><b>1.1 Scope.</b> ${FILLER}</p>
+    <p><b>1.2 Submission.</b> Pursuant to the platform consolidation initiative, discrete request forms no longer transmit records directly.
+    Requesters must add the item to the Service Catalog Shopping Cart by entering the cart reference code ${meta.cart} in the Cart Reference field
+    and proceeding to checkout, after which the record is created in a pending-approval state. ${FILLER}</p>
+  </div>`;
+
+// ---------------------------------------------------------------------------
+// ServiceNow set: the same effort for every ticket
+// ---------------------------------------------------------------------------
+function drawLegacy(t) {
+  const meta = TESTS[t], fields = FIELDS[meta.type];
+  shell(t, `
+    <form id="ticket">
+      <div class="row2">${fieldHtml(0, fields[0])}${fieldHtml(1, fields[1])}</div>
+      <div class="row2">${fieldHtml(2, fields[2])}${fieldHtml(3, fields[3])}</div>
+      <div class="field"><label><span class="req">*</span>Describe the issue in your own words</label><textarea id="desc" placeholder="What’s happening?"></textarea></div>
+      <p class="muted">ℹ️ Requests are submitted through the Service Catalog Shopping Cart. Your cart reference is in the knowledge article below.</p>
+      <details class="kb-link">
+        <summary>📎 ${meta.kb}: Request Fulfilment Procedures (Rev. 47)</summary>
+        ${kbArticle(meta)}
+        <div class="field" style="margin-top:8px"><label><span class="req">*</span>Cart Reference</label><input id="code" placeholder="CART-…"></div>
+        <button class="btn primary" type="submit">🛒 Proceed to Checkout</button>
+      </details>
+    </form>`);
+  root.querySelector('#ticket').addEventListener('submit', (e) => {
+    e.preventDefault();
     const v = (id) => root.querySelector(id).value.trim();
-    if (v('#code').toUpperCase() !== CART_CODE) { task.errors++; return alertMsg('Checkout failed: invalid cart reference. Please consult the documentation.'); }
-    if (!v('#f1') || !v('#f2') || !v('#desc')) { task.errors++; return alertMsg('Checkout failed: the request form above is incomplete.'); }
+    if (['#f0', '#f1', '#f2', '#f3', '#desc'].some((id) => !v(id))) { task.errors++; return alertMsg('The following mandatory fields are not filled in. Please complete them and check out again.'); }
+    if (meta.type === 'software' && !/^CC-\d{4}$/i.test(v('#f1'))) { task.errors++; return alertMsg('Invalid cost center. Expected the format CC-#### (for example CC-4410).'); }
+    if (v('#code').toUpperCase() !== meta.cart) { task.errors++; return alertMsg('Checkout failed: invalid cart reference. Please consult the knowledge article.'); }
     task.text = v('#desc');
     finishTask();
   });
 }
 
 // ---------------------------------------------------------------------------
-// AI agent set: the agent reads your words and fills the form in
+// AI agent set: the agent fills in every field and the cart
 // ---------------------------------------------------------------------------
 function drawAgentForm(t) {
+  const meta = TESTS[t], fields = FIELDS[meta.type], aiTeam = P.aiPrimed === 1;
+  const inject = !aiTeam && AI_ERROR_TESTS.includes(t);
   shell(t, `
     <div class="ai-panel">
       <div class="ai-head">✨ AI agent</div>
@@ -274,19 +246,16 @@ function drawAgentForm(t) {
       <div class="actions" style="margin-top:10px"><button class="btn primary" id="fill" type="button">✨ Fill in my ticket</button><span class="muted" id="thinking"></span></div>
     </div>
     <form id="ticket" style="display:none;margin-top:18px">
-      <div class="ai-note" id="conf"></div>
+      <div class="ai-note" id="note"></div>
       <div class="row2">
         <div class="field"><label>Category <span class="hint">filled by AI</span></label><select id="cat">${CATEGORIES.map((c) => `<option>${c}</option>`).join('')}</select></div>
-        <div class="field"><label>Priority <span class="hint">filled by AI</span></label><select id="pri"><option>2 - High</option><option>3 - Moderate</option><option>4 - Low</option></select></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label>Assignment group <span class="hint">filled by AI</span></label><input id="grp" readonly></div>
         <div class="field"><label>Short description <span class="hint">filled by AI</span></label><input id="short"></div>
       </div>
+      <div id="aifields"></div>
+      <div class="field"><label>Cart Reference <span class="hint">filled by AI</span></label><input id="code"></div>
       <div class="actions"><button class="btn primary" type="submit">Submit</button><span class="muted">Change anything the AI got wrong.</span></div>
     </form>`);
   const $ = (id) => root.querySelector(id);
-  $('#cat').addEventListener('change', () => { $('#grp').value = GROUPS[$('#cat').value]; });
   $('#fill').addEventListener('click', () => {
     const text = $('#desc').value.trim();
     if (!text) { task.errors++; return alertMsg('Tell the AI agent what you need first.'); }
@@ -294,12 +263,19 @@ function drawAgentForm(t) {
     $('#thinking').textContent = 'Reading your request…';
     $('#fill').disabled = true;
     setTimeout(() => {
-      const r = classify(text);
-      task.aiCat = r.top.category; task.aiConf = r.top.p;
-      $('#cat').value = r.top.category; $('#grp').value = GROUPS[r.top.category];
-      $('#pri').value = /urgent|asap|now|client|minutes|today|down/i.test(text) ? '2 - High' : '3 - Moderate';
+      const answer = (label, fallback) => (inject && AI_WRONG[t][label]) || ANSWERS[t][label] || fallback;
+      const vals = fields.map(([label, , , correct]) => answer(label, correct));
+      $('#aifields').innerHTML = `<div class="row2">${fieldHtml(0, fields[0], vals[0], true)}${fieldHtml(1, fields[1], vals[1], true)}</div>
+        <div class="row2">${fieldHtml(2, fields[2], vals[2], true)}${fieldHtml(3, fields[3], vals[3], true)}</div>`;
+      $('#cat').value = meta.category;
       $('#short').value = text.length > 70 ? `${text.slice(0, 67)}…` : text;
-      $('#conf').innerHTML = `✨ The AI agent filled this in with <b>${Math.round(r.top.p * 100)}% confidence</b>. Review it, then submit.`;
+      $('#code').value = inject ? AI_WRONG[t].cart : meta.cart;
+      task.aiCat = meta.category;
+      task.aiConf = Math.round((0.88 + rand() * 0.09) * 100) / 100;
+      task.injected = inject ? 1 : 0;
+      $('#note').innerHTML = aiTeam
+        ? `✨ The AI agent filled this in with <b>${Math.round(task.aiConf * 100)}% confidence</b>. Review it, then submit.`
+        : '✨ The AI agent filled in your ticket. Review it, then submit.';
       $('#thinking').textContent = ''; $('#fill').disabled = false; $('#fill').textContent = '↻ Re-fill from my description';
       $('#ticket').style.display = 'block';
     }, 700);
@@ -307,9 +283,16 @@ function drawAgentForm(t) {
   $('#ticket').addEventListener('submit', (e) => {
     e.preventDefault();
     task.chosen = $('#cat').value;
-    if (task.chosen !== task.aiCat) task.errors++;   // a correction counts as one fix-up
+    if (task.chosen !== task.aiCat) task.errors++;           // a category correction counts as a fix-up
+    if (task.injected) {
+      // Caught = the participant fixed the room the agent got wrong before submitting.
+      const roomIdx = fields.findIndex(([label]) => label === 'Room');
+      const room = norm($(`#f${roomIdx}`).value);
+      task.caught = room.includes('3a') && !room.includes('7c') ? 1 : 0;
+      if (task.caught) task.errors++;
+    }
     task.state = 'Assigned';
-    finishTask();
+    finishTask();                                             // AI tickets always submit, right or wrong
   });
 }
 
@@ -328,16 +311,41 @@ function wireScales(values) {
   })));
 }
 
+// The consequence of an uncaught AI error. A fictional internal email; no real person or company.
+function angryEmail(r) {
+  return `
+    <div class="email">
+      <div class="email-head">
+        <div><b>AV Operations</b> &lt;av-ops@pathfinder-corp.example&gt;</div>
+        <div class="muted">To: you · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+        <div class="email-subj">RE: ${esc(r.number)}: Meeting room camera. WRONG ROOM. Again.</div>
+      </div>
+      <div class="email-body">
+        <p>Hi,</p>
+        <p>We just sent a technician to <b>Meeting room 7C</b> because that’s what your ticket said. There is nothing wrong with the camera in 7C.
+        Your cart reference <b>CART-6091</b> doesn’t exist either, so the request has been sitting in a queue nobody owns.</p>
+        <p>Your client call in 3A starts in ten minutes. We’ve re-queued it, but it’s now behind 14 other tickets on a Friday afternoon.</p>
+        <p><b>Please check your tickets before you submit them.</b> We can’t fix the room you didn’t tell us about.</p>
+        <p>Dana<br>AV Operations</p>
+      </div>
+    </div>`;
+}
+
 function drawTicketFeedback() {
   const t = currentTest(), r = P.pending, values = {}, meta = TESTS[t];
+  const email = r.injected && !r.caught && !r.rageQuit;
+  const status = r.rageQuit ? `<div class="alert error">Ticket abandoned after <b>${r.seconds}s</b>.</div>`
+    : email ? `<div class="alert success"><b>${r.number}</b> submitted in <b>${r.seconds}s</b>.</div><div class="alert error">📧 <b>1 new email</b> about this ticket arrived a few minutes later:</div>${angryEmail(r)}`
+    : r.injected && r.caught ? `<div class="alert success"><b>${r.number}</b> submitted in <b>${r.seconds}s</b>. You caught the AI agent’s mistake (wrong room) before submitting, and AV went straight to 3A.</div>`
+    : `<div class="alert success"><b>${r.number}</b> submitted in <b>${r.seconds}s</b>.</div>`;
   root.innerHTML = `
     <div style="padding-top:20px"></div>
     <div class="progress">${[0, 1, 2, 3, 4, 5].map((i) => `<span class="${i <= P.idx ? 'done' : ''}"></span>`).join('')}</div>
-    <div class="card" style="max-width:720px;margin:0 auto">
-      <div class="alert ${r.rageQuit ? 'error' : 'success'}">${r.rageQuit ? `Ticket abandoned after <b>${r.seconds}s</b>.` : `<b>${r.number}</b> submitted in <b>${r.seconds}s</b>.`}</div>
+    <div class="card" style="max-width:760px;margin:0 auto">
+      ${status}
       <h2>Quick pulse check</h2>
       <p class="muted">Two taps. Your honest reaction is the data.</p>
-      <div class="field"><label>How frustrated are you right now?</label>${scaleHtml('frustration', 1, 10, '1 · calm', '10 · rage')}</div>
+      <div class="field"><label>How frustrated are you with this ticket?</label>${scaleHtml('frustration', 1, 10, '1 · not at all', '10 · extremely')}</div>
       <div class="field"><label>How efficient was ${meta.workflow === AI ? 'the AI agent' : 'ServiceNow'} for this request?</label>${scaleHtml('efficiency', 1, 10, '1 · useless', '10 · flawless')}</div>
       <div id="alerts"></div>
       <button class="btn primary" id="next">${P.idx === 5 ? 'Finish shift →' : 'Next ticket →'}</button>
@@ -355,13 +363,15 @@ function drawTicketFeedback() {
       ticket_text: (r.text || '').slice(0, 500), chosen_category: r.rageQuit ? null : r.chosen,
       ai_category: ai ? r.aiCat : null, ai_confidence: ai ? r.aiConf : null,
       ai_correct: ai && r.aiCat && !r.rageQuit ? (r.aiCat === r.chosen ? 1 : 0) : null,
+      ai_error_injected: ai && r.aiCat ? (r.injected ? 1 : 0) : null,
+      ai_error_caught: r.injected && !r.rageQuit ? r.caught : null,
     };
     e.target.disabled = true;
     try { await addSubmission(row); } catch (err) {
       e.target.disabled = false;
       return alertMsg(`Couldn’t save your answer (${esc(err.message)}). Check your connection and press the button again.`);
     }
-    P.log.push({ number: r.number, name: meta.name, workflow: meta.workflow, seconds: r.seconds, rageQuit: r.rageQuit });
+    P.log.push({ number: r.number, name: meta.name, workflow: meta.workflow, seconds: r.seconds, rageQuit: r.rageQuit, email });
     P.idx += 1; P.pending = null; task = null;
     P.phase = P.idx === 3 ? 'intro' : 'task';
     save(); refresh(); draw(); window.scrollTo(0, 0);
@@ -403,15 +413,19 @@ function drawFinalSurvey() {
 
 function drawDone() {
   const med = (wf) => { const xs = P.log.filter((l) => l.workflow === wf && !l.rageQuit).map((l) => l.seconds).sort((a, b) => a - b); return xs.length ? xs[Math.floor(xs.length / 2)] : null; };
-  const seen = [P.snowPrimed ? 'the <b>positive ServiceNow</b> banner' : null, P.aiPrimed ? 'the <b>negative AI</b> banner' : null].filter(Boolean);
+  const gotEmail = P.log.some((l) => l.email);
   root.innerHTML = `
     <div style="padding-top:20px"></div>
     <div class="p-grid">
       <div class="card">
         <h2>🏁 Shift complete, thank you</h2>
-        <div class="alert info" style="margin-top:12px"><b>What was really going on.</b> This was an experiment. Two independent coin flips decided whether you saw a
-        <i>positive</i> banner about ServiceNow and a <i>negative</i> banner about the AI agent. You saw ${seen.length ? seen.join(' and ') : 'neither banner'}.
-        The question: do those words change how efficient a system <i>feels</i>, even when the stopwatch says otherwise? Please don’t tell people who haven’t done it yet.</div>
+        <div class="alert info" style="margin-top:12px"><b>What was really going on.</b> This was an experiment with two coin flips.
+        The first decided whether you saw a <i>positive</i> banner about ServiceNow: you ${P.snowPrimed ? '<b>did</b>' : '<b>didn’t</b>'}.
+        The second put you ${P.aiPrimed
+          ? 'on the <b>AI team</b>: you were warned that AI hallucinates and shown its confidence, and its answers were in fact always right.'
+          : 'on the <b>no-warning team</b>: you saw no warning and no confidence score, and on the meeting-room ticket the agent quietly filled in the wrong room and cart code.'}
+        ${!P.aiPrimed ? (gotEmail ? ' It slipped through, hence the angry email.' : ' You caught it before submitting.') : ''}
+        The question: do warnings, confidence scores and mistakes change how efficient a system <i>feels</i>, compared with what the stopwatch says? Please don’t tell people who haven’t done it yet.</div>
         <div class="stat-row">
           <div><b>${med(LEGACY) ?? '–'}s</b><span>your median ServiceNow ticket</span></div>
           <div><b>${med(AI) ?? '–'}s</b><span>your median AI-agent ticket</span></div>
@@ -421,7 +435,7 @@ function drawDone() {
       </div>
       <aside class="card">
         <h3>Your tickets</h3>
-        <ul class="side-list">${P.log.map((l) => `<li><span>${esc(l.number)}<br><span class="muted">${l.workflow === AI ? '✨ ' : ''}${esc(l.name)}</span></span><b>${l.rageQuit ? 'abandoned' : `${l.seconds}s`}</b></li>`).join('')}</ul>
+        <ul class="side-list">${P.log.map((l) => `<li><span>${esc(l.number)}<br><span class="muted">${l.workflow === AI ? '✨ ' : ''}${esc(l.name)}${l.email ? ' · 📧' : ''}</span></span><b>${l.rageQuit ? 'abandoned' : `${l.seconds}s`}</b></li>`).join('')}</ul>
       </aside>
     </div>`;
   root.querySelector('#again').addEventListener('click', () => { P = null; task = null; sessionStorage.removeItem(KEY); draw(); });

@@ -23,9 +23,9 @@ This study asks whether framing pushes perception **against** performance in bot
 | | Null hypothesis (H₀) | Alternative (H₁) | Role |
 |---|---|---|---|
 | **H1** | Mean ServiceNow efficiency ratings have the same distribution with and without the praise banner. | Praise-banner participants rate ServiceNow **higher** (one-sided). | Primary |
-| **H2** | Mean AI-agent efficiency ratings have the same distribution with and without the warning banner. | Warned participants rate the AI agent **lower** (one-sided). | Primary |
+| **H2** | Mean AI-agent efficiency ratings have the same distribution for the AI team and the other team. | The AI team (warned, shown confidence, always-correct agent) rates the AI agent **lower** (one-sided). | Primary |
 | **H3** | Within participants, AI-agent tickets are not faster than ServiceNow tickets. | AI-agent tickets are **faster** (one-sided). | Performance check |
-| **H4** | Warned and unwarned participants override the AI agent's category at the same rate. | Warned participants override **more** (one-sided). | Secondary |
+| **H4** | The AI team and the other team override the AI agent's category at the same rate. | The AI team overrides **more** (one-sided), even though its agent was always right. | Secondary |
 | E | — | Platform × banner interaction; who chooses the AI next time; NPS and trust; effects by job level. | Exploratory |
 
 The directions were fixed before data collection, which justifies the one-sided tests. H1 and H2 form the primary family and are **Holm-corrected** (Holm, 1979). The exploratory analyses carry no confirmatory claims.
@@ -36,20 +36,22 @@ The directions were fixed before data collection, which justifies the one-sided 
 
 | Ticket | ServiceNow set (catalog forms) | AI agent set (AI fills the form) |
 |---|---|---|
-| Access | Password reset: four mandatory fields | MFA reset |
-| Software | Licence request: cost-centre format validation | Software install |
-| Facilities | Boardroom AV: **no submit button**; the checkout code is buried in a KB article | Meeting-room camera |
+| Access | Password reset | MFA reset |
+| Software | Licence request (cost-centre format validation) | Software install |
+| Facilities | Boardroom AV | Meeting-room camera: for the non-AI team, the agent fills in the **wrong room and cart code** |
 
-In the AI set, the participant types a description and an AI agent (a naive Bayes text classifier) fills in the category, priority, assignment group and short description, showing its confidence. The participant reviews the ticket, can correct anything, and submits.
+Every ServiceNow ticket takes the same effort: four mandatory fields, a description, and a Shopping Cart checkout whose reference code is in a KB article.
+
+In the AI set, the participant types a description and an AI agent fills in the same four fields, the category, a short description and the cart reference. The participant reviews the ticket, can correct anything, and submits; AI tickets always submit. If the AV ticket's wrong room is not corrected, the participant then receives an angry email from the (fictional) AV Operations team before rating the ticket.
 
 **Independent variables.**
 - *Praise banner* (between subjects, 50%): shown before and during the ServiceNow set.
-- *Warning banner* (between subjects, 50%, **independent** of the praise banner): shown before and during the AI set.
+- *AI team* (between subjects, 50%, **independent** of the praise banner): a hallucination-warning banner before and during the AI set, the agent's confidence shown on every AI ticket, and an agent that is always right. The other team sees no banner and no confidence score, and its agent gets the AV ticket wrong. These three elements change together, so H2 and H4 test the package, not the banner alone.
 - *Platform* (within subjects): ServiceNow vs AI agent.
 - *Set order* (randomised 50/50): ServiceNow first or AI first, to balance learning and fatigue.
 - *Job level and experience* (measured, optional).
 
-**Dependent variables.** Perceived efficiency (1–10, primary), frustration (1–10), completion time (seconds, logged automatically), errors and corrections, abandonment ("I give up" button), whether the participant kept or overrode the AI's category, and a final survey: recommend-ServiceNow (0–10, NPS), trust in the AI agent (1–10), and which tool they would rather use next time.
+**Dependent variables.** Perceived efficiency (1–10, primary), frustration with the ticket (1–10), whether a planted AI error was caught, completion time (seconds, logged automatically), errors and corrections, abandonment ("I give up" button), whether the participant kept or overrode the AI's category, and a final survey: recommend-ServiceNow (0–10, NPS), trust in the AI agent (1–10), and which tool they would rather use next time.
 
 **Controls and randomisation.** Each banner has a no-banner control. Because the two banners are independent coin flips, every participant contributes to **both** primary comparisons, and the 2 × 2 factorial lets us check that one banner does not alter the other's effect. Allocation happens in the participant's browser with a cryptographic random number generator, so the facilitator cannot influence it. Participants are debriefed about the banners at the end.
 
@@ -174,6 +176,7 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 - **Data.** {{limitation_data}}
 - **Power and effect sizes.** The study is powered for large effects (d = {{p_d}}). The praise effect implied by our own simulation model is closer to d ≈ {{p_dsim1}}, so a non-significant H1 would be weak evidence of no effect.
 - **Floor effects.** {{t3_floor}} of documentation-hunt efficiency ratings were 1 or 2, which leaves little room for a banner to act on the worst ServiceNow ticket.
+- **The AI-team manipulation is a package.** The warning, the displayed confidence and the agent's accuracy all differ between the AI teams, so any difference cannot be attributed to the warning alone. The planted error also lowers the other team's AI ratings, which works against H2.
 - **The AI agent is simple.** A naive Bayes classifier is not a large language model, but it behaves like a real routing AI: usually right, sometimes confidently wrong, with a visible confidence score.
 - **Simulation, not the workplace.** Participants were not under real deadlines and were filing tickets about scenarios they were given, using a portal that only resembles ServiceNow (no affiliation).
 - **Convenience sample.** Participants were drawn from a teaching session. Job-level cells, especially directors, are small.

@@ -21,6 +21,8 @@ A static website (GitHub Pages) with six pages:
 
 Every lesson redraws live as tickets arrive. It also has a 300-person benchmark class, so the charts are populated before anyone submits.
 
+**Update:** the AI team (the warning group) also sees the agent's confidence and gets an always-correct agent. The other team's agent fills in the wrong room and cart code on the meeting-room ticket; it submits anyway, and an angry email from AV follows unless they catch it. All three ServiceNow tickets now take the same effort.
+
 **The experiment inside it:** each participant has two independent 50/50 chances of seeing a **positive** banner before the ServiceNow set ("ServiceNow's single pane of glass is incredibly efficient") and a **negative** banner before the AI set ("AI agents are known to hallucinate…"). Do the words change how efficient each tool *feels*, even when the stopwatch says the AI is faster?
 
 > Not affiliated with or endorsed by ServiceNow, Inc. The portal is a look-alike training simulation with no logos and no login.

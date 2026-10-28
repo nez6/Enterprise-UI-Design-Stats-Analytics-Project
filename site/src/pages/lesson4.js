@@ -349,17 +349,23 @@ function balancing(root) {
 function rocScene(root) {
   const s = scene(root, {
     title: 'ROC and AUC: judging a model across every threshold',
-    story: 'A threshold picks one point on a trade-off. The <b>ROC curve</b> shows them all: for every possible threshold, how many real positives you catch (true-positive rate) against how many negatives you wrongly flag (false-positive rate). Here the “model” is the AI agent’s own <b>confidence</b>, predicting whether people kept its category. The area under the curve (<b>AUC</b>) is the chance that a random kept ticket had higher confidence than a random corrected one: 0.5 is a coin flip, 1.0 is perfect.',
+    story: 'A threshold picks one point on a trade-off. The <b>ROC curve</b> shows them all: for every possible threshold, how many real positives you catch (true-positive rate) against how many negatives you wrongly flag (false-positive rate). The area under the curve (<b>AUC</b>) is the chance a random positive scores higher than a random negative: <b>0.5 is a coin flip, 1.0 is perfect</b>. Compare the incident detector with the AI agent’s displayed confidence.',
     formula: String.raw`\text{AUC} = P(\text{score}_{+} > \text{score}_{-}) = \frac{U}{n_{+}\,n_{-}}`,
   });
-  const ctl = controls(s, `<label>Confidence threshold <input type="range" id="th" min="0" max="1" step="0.01" value="0.5"><b id="thv"></b></label>`);
+  const ctl = controls(s, `<label>Model <select id="rocsrc"><option value="incident">Incident detector: urgency score → real incident</option><option value="agent">AI agent: displayed confidence → its category was kept</option></select></label>
+    <label>Threshold <input type="range" id="th" min="0" max="1" step="0.01" value="0.5"><b id="thv"></b></label>`);
   const box = s.appendChild(el('div', { class: 'viz' }));
   const out = el('div'); s.appendChild(out);
-  let res = null, data = [];
+  const r = rng(31);
+  const incident = Array.from({ length: 1400 }, () => { const y = r.random() < 0.05 ? 1 : 0; return { s: 1 / (1 + Math.exp(-r.normal(y ? 1.7 : 0, 1))), y }; });
+  let agent = [];
   const draw = () => {
+    const src = ctl.querySelector('#rocsrc').value, data = src === 'incident' ? incident : agent;
     const th = +ctl.querySelector('#th').value; ctl.querySelector('#thv').textContent = pct(th);
     box.innerHTML = '';
-    if (!res) return emptyNote(box, 'Need AI-agent tickets where people both kept and corrected the AI.');
+    const ok = data.length > 5 && new Set(data.map((d) => d.y)).size === 2;
+    if (!ok) return emptyNote(box, 'Need tickets where people both kept and changed the AI’s category.');
+    const res = roc(data.map((d) => d.s), data.map((d) => d.y));
     const f = frame(box, { width: 560, height: 420, margin: { top: 20, right: 30, bottom: 46, left: 56 } });
     const x = d3.scaleLinear().domain([0, 1]).range([0, f.w]), y = d3.scaleLinear().domain([0, 1]).range([f.h, 0]);
     axes(f, x, y, { xLabel: 'false-positive rate', yLabel: 'true-positive rate', xFormat: d3.format('.0%'), yFormat: d3.format('.0%') });
@@ -369,13 +375,12 @@ function rocScene(root) {
     const P = data.filter((d) => d.y).length, N = data.length - P;
     const tpr = data.filter((d) => d.y && d.s >= th).length / P, fpr = data.filter((d) => !d.y && d.s >= th).length / N;
     f.g.append('circle').attr('cx', x(fpr)).attr('cy', y(tpr)).attr('r', 9).attr('fill', C.yellow).attr('stroke', C.surface).attr('stroke-width', 2);
-    statGrid(out, [[f2(res.auc), 'AUC', C.teal], [pct(tpr), 'kept tickets above threshold (TPR)'], [pct(fpr), 'corrected tickets above threshold (FPR)', C.red]]);
+    statGrid(out, [[f2(res.auc), 'AUC', res.auc > 0.65 ? C.teal : C.red], [pct(tpr), 'true-positive rate at threshold'], [pct(fpr), 'false-positive rate at threshold', C.red]]);
   };
-  ctl.querySelector('#th').addEventListener('input', draw);
+  ctl.querySelectorAll('select, input').forEach((i) => i.addEventListener('input', draw));
   onData(({ rows }) => {
-    data = rows.filter((r) => r.workflow === AI && Number.isFinite(r.ai_confidence) && (r.ai_correct === 0 || r.ai_correct === 1)).map((r) => ({ s: r.ai_confidence, y: r.ai_correct }));
-    res = data.length > 5 && new Set(data.map((d) => d.y)).size === 2 ? roc(data.map((d) => d.s), data.map((d) => d.y)) : null;
+    agent = rows.filter((q) => q.workflow === AI && Number.isFinite(q.ai_confidence) && (q.ai_correct === 0 || q.ai_correct === 1)).map((q) => ({ s: q.ai_confidence, y: q.ai_correct }));
     draw();
   });
-  callout(s, 'Use AUC to compare models independently of any threshold, then pick the threshold from the costs: a missed major incident costs far more than a false alarm. Accuracy alone hides that choice.', 'ai');
+  callout(s, 'The incident detector’s score carries real information, so its curve bows towards the top-left. The agent’s displayed confidence was always 88–97% whether or not people kept its answer, so its AUC sits near 0.5: <b>a confidence number that predicts nothing</b>. Before you show users an AI confidence score, check its AUC and calibration.', 'ai');
 }

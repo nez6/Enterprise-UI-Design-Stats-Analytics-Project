@@ -34,7 +34,9 @@ create table if not exists public.submissions (
   chosen_category  text,
   ai_category      text,
   ai_confidence    real        check (ai_confidence between 0 and 1),
-  ai_correct       smallint    check (ai_correct in (0, 1))
+  ai_correct       smallint    check (ai_correct in (0, 1)),
+  ai_error_injected smallint   check (ai_error_injected in (0, 1)),
+  ai_error_caught  smallint    check (ai_error_caught in (0, 1))
 );
 
 create table if not exists public.feedback (

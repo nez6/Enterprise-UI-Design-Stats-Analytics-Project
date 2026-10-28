@@ -27,7 +27,7 @@ export function renderLesson1(root) {
 function stream(root) {
   const s = scene(root, {
     title: 'Every ticket is a dot',
-    story: 'Each dot is one ticket, placed by how long it took. The <b>AI agent</b> rows sit far to the left. The <b>ServiceNow</b> rows sit further right, and the documentation hunt doesn’t just shift, it <b>stretches</b>. That stretch is the noise this whole course is about.',
+    story: 'Each dot is one ticket, placed by how long it took. The <b>AI agent</b> rows sit far to the left. The <b>ServiceNow</b> rows sit further right, and they don’t just shift, they <b>stretch</b>. That stretch is the noise this whole course is about.',
   });
   const stats = el('div'); s.appendChild(stats);
   const box = s.appendChild(el('div', { class: 'viz' }));
@@ -71,7 +71,7 @@ function stream(root) {
 function balance(root) {
   const s = scene(root, {
     title: 'The mean is a balance point. The median is a halfway point.',
-    story: 'Twelve documentation-hunt tickets on a see-saw. The <b style="color:var(--yellow)">mean</b> is where the beam balances; the <b style="color:var(--blue)">median</b> has half the tickets on each side. <b>Drag the slowest ticket to the right.</b> One frustrated person moves the mean a long way and the median not at all.',
+    story: 'Twelve ServiceNow tickets on a see-saw. The <b style="color:var(--yellow)">mean</b> is where the beam balances; the <b style="color:var(--blue)">median</b> has half the tickets on each side. <b>Drag the slowest ticket to the right.</b> One frustrated person moves the mean a long way and the median not at all.',
     formula: String.raw`\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i \qquad \text{median} = x_{\left(\frac{n+1}{2}\right)}`,
   });
   const vals = [95, 120, 140, 150, 170, 185, 200, 220, 240, 265, 300, 360];
