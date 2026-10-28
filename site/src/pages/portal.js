@@ -81,6 +81,7 @@ function drawHome() {
             We record your ticket timings, your ratings, what you type into tickets, and any optional demographics. We do <b>not</b> record your name, email or IP address in the study data.
             Results are shown to the group only as charts, and small groups are hidden. Some details of the study will only be explained at the end.
             You’ll then get a participant code and can withdraw your data. Please don’t type personal or confidential information.
+            Questions? Message <b>Natalie Zachariah on Teams</b>.
           </div>
           <label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:6px 0 16px">
             <input id="consent" type="checkbox" style="margin-top:4px">
@@ -448,7 +449,7 @@ function drawDone() {
         <div class="consent-box">
           <b>Your participant code: <span class="p-number" style="font-size:15px">${esc(P.id)}</span></b><br>
           Now that you know what the study was about, you can withdraw. Your tickets and survey will be excluded from every chart and from the analysis.
-          You can also email Natalie later with this code to withdraw.
+          You can also message Natalie Zachariah on Teams with this code to withdraw later, until the analysis is finished.
           <div class="actions" style="margin-top:10px"><button class="btn danger" id="withdraw" type="button" ${P.withdrawn ? 'disabled' : ''}>${P.withdrawn ? 'Your data has been withdrawn' : 'Withdraw my data'}</button><span id="wd-msg" class="muted"></span></div>
         </div>
         <p>Otherwise, head to <a href="#/noise"><b>page 2</b></a> and watch everyone’s tickets turn into statistics.</p>

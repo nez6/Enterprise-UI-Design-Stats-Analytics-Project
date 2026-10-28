@@ -46,7 +46,7 @@ Each question is followed by the PI's response, or the remaining action. Status:
 
 6. **Who is recruited, and could anyone feel pressured?** On a work call, colleagues, or people junior to the presenter, may feel they *should* take part, and others can see who is clicking. ✅ The consent text now says participation is voluntary, people can watch without taking part, and there are no consequences. 🟡 Say this out loud at the start, and don't ask people to report whether they finished.
 7. **Are participants adults?** ✅ The consent checkbox now confirms the participant is 18 or older.
-8. **Does the consent text cover the essentials?** ✅ It now covers who runs the study, the purpose (without revealing the manipulation), duration, what is and isn't recorded, voluntariness, the right to stop, group display, that some details come at the end, and withdrawal. 🟡 Add a contact email for questions and withdrawal requests.
+8. **Does the consent text cover the essentials?** ✅ It now covers who runs the study, the purpose (without revealing the manipulation), duration, what is and isn't recorded, voluntariness, the right to stop, group display, that some details come at the end, and withdrawal. ✅ Contact route added: participants message Natalie Zachariah on Teams for questions and withdrawal requests.
 9. **Can people decline without others noticing?** Yes: it's a link on their own device, and there's no list of who took part. ✅
 10. **Incentives?** None. ✅
 11. **Can someone take part twice?** Yes ("start a new participant" button, or a new browser). 🟡 Ask people to take part once. Duplicates can be screened only roughly (identical demographics plus close timing), which the cleaning log should report. 🔵 v3 adds a one-per-browser guard.
@@ -117,7 +117,7 @@ Each question is followed by the PI's response, or the remaining action. Status:
 ## 5. Conditions before running the live session
 
 1. 🟡 Pre-register hypotheses, exclusions, stopping rule and analysis (one page on AsPredicted is enough).
-2. 🟡 Add a contact email to the consent text and debrief (`site/src/pages/portal.js`, search "consent-box").
+2. ✅ Contact route (Teams) is on the consent and debrief screens.
 3. 🟡 Set up Supabase with the **updated** `supabase/schema.sql`, put only the anon key in the site, and keep the service-role key off GitHub.
 4. 🟡 Use a fresh session label for each session (`?session=pathfinders-oct28`).
 5. 🟡 Read the voluntariness statement aloud at the start, and keep the reveal (page 4 onwards) until everyone has finished.
