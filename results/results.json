@@ -1,0 +1,507 @@
+{
+  "data_source": "simulated",
+  "n_participants": 65,
+  "n_tickets": 390,
+  "n_feedback": 65,
+  "n_snow_banner": 37,
+  "n_ai_banner": 25,
+  "n_with_demographics": 61,
+  "cleaning": [
+    {
+      "rule": "Raw data loaded",
+      "rows_before": 411,
+      "rows_after": 411,
+      "participants_before": 69,
+      "participants_after": 69,
+      "note": ""
+    },
+    {
+      "rule": "Excluded ids removed (dry runs / withdrawals)",
+      "rows_before": 411,
+      "rows_after": 405,
+      "participants_before": 69,
+      "participants_after": 68,
+      "note": ""
+    },
+    {
+      "rule": "Double-submitted rows removed",
+      "rows_before": 405,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
+      "note": ""
+    },
+    {
+      "rule": "Rows with impossible values removed",
+      "rows_before": 402,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
+      "note": ""
+    },
+    {
+      "rule": "Demographics validated (blanked, not dropped)",
+      "rows_before": 402,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
+      "note": "4 participant(s) have at least one missing/blank demographic"
+    },
+    {
+      "rule": "Participants with inconsistent banner assignment removed",
+      "rows_before": 402,
+      "rows_after": 402,
+      "participants_before": 68,
+      "participants_after": 68,
+      "note": ""
+    },
+    {
+      "rule": "Walk-aways removed (any ticket > 30 min)",
+      "rows_before": 402,
+      "rows_after": 396,
+      "participants_before": 68,
+      "participants_after": 67,
+      "note": ""
+    },
+    {
+      "rule": "Incomplete participants removed (< 6 tickets)",
+      "rows_before": 396,
+      "rows_after": 390,
+      "participants_before": 67,
+      "participants_after": 65,
+      "note": ""
+    }
+  ],
+  "power": {
+    "alpha_family": 0.05,
+    "alpha_each": 0.025,
+    "target_power": 0.8,
+    "attrition": 0.1,
+    "h1_h2": {
+      "effect_size_d": 0.8,
+      "test": "one-sided Mann-Whitney U, Holm across H1/H2",
+      "n_per_group_ttest": 25.52463124782632,
+      "are_correction": 0.864,
+      "n_per_group": 30,
+      "analysable_total": 60,
+      "recruit_total": 68,
+      "monte_carlo_sims": 150,
+      "monte_carlo_power_h1": 0.7533333333333333,
+      "monte_carlo_power_h2": 0.5533333333333333,
+      "monte_carlo_power_both": 0.4533333333333333,
+      "simulation_model_d_h1": 0.6682259461703808,
+      "simulation_model_d_h2": 0.5375480158054099
+    },
+    "h3": {
+      "effect_size_dz": 1.0,
+      "test": "one-sided Wilcoxon signed-rank",
+      "n_pairs_ttest": 7.7276179024108504,
+      "n_pairs": 9
+    },
+    "sensitivity_min_d_by_n_per_group": {
+      "10": 1.3249488712539945,
+      "15": 1.0598008505678362,
+      "20": 0.9091288650947541,
+      "25": 0.8087090091359758,
+      "30": 0.7356230148278837,
+      "40": 0.6342992921939922,
+      "50": 0.5658844232401936
+    }
+  },
+  "randomisation": {
+    "servicenow_banner": {
+      "n_banner": 37,
+      "n_none": 28,
+      "years_median_banner": 4.5,
+      "years_median_none": 5.0,
+      "years_p": 0.9767513712496394,
+      "job_level_p": 0.46827136370651223,
+      "job_level_min_expected": 2.2131147540983607,
+      "set_order_p": 0.3900932841832455
+    },
+    "ai_banner": {
+      "n_banner": 25,
+      "n_none": 40,
+      "years_median_banner": 4.0,
+      "years_median_none": 5.0,
+      "years_p": 0.11863592026065248,
+      "job_level_p": 0.1724310732924643,
+      "job_level_min_expected": 1.8852459016393444,
+      "set_order_p": 1.0
+    },
+    "cells": {
+      "servicenow_banner=0, ai_banner=0": 18,
+      "servicenow_banner=0, ai_banner=1": 10,
+      "servicenow_banner=1, ai_banner=0": 22,
+      "servicenow_banner=1, ai_banner=1": 15
+    }
+  },
+  "descriptives": [
+    {
+      "ticket": "SN \u00b7 Access",
+      "platform": "ServiceNow",
+      "n": 65,
+      "time_mean": 105.3862,
+      "time_median": 91.7,
+      "time_sd": 54.9295,
+      "time_iqr": 64.7,
+      "time_skew": 0.9057,
+      "efficiency_mean": 4.1231,
+      "frustration_mean": 5.0308,
+      "rage_quit_rate": 0.0154
+    },
+    {
+      "ticket": "SN \u00b7 Software",
+      "platform": "ServiceNow",
+      "n": 65,
+      "time_mean": 127.64,
+      "time_median": 109.3,
+      "time_sd": 67.9072,
+      "time_iqr": 77.7,
+      "time_skew": 1.4321,
+      "efficiency_mean": 3.8769,
+      "frustration_mean": 5.3077,
+      "rage_quit_rate": 0.0154
+    },
+    {
+      "ticket": "SN \u00b7 Facilities",
+      "platform": "ServiceNow",
+      "n": 65,
+      "time_mean": 119.6631,
+      "time_median": 113.0,
+      "time_sd": 48.3295,
+      "time_iqr": 71.0,
+      "time_skew": 0.6911,
+      "efficiency_mean": 3.6923,
+      "frustration_mean": 5.6,
+      "rage_quit_rate": 0.0154
+    },
+    {
+      "ticket": "AI \u00b7 Access",
+      "platform": "AI Agent",
+      "n": 65,
+      "time_mean": 28.7831,
+      "time_median": 28.4,
+      "time_sd": 9.5426,
+      "time_iqr": 13.6,
+      "time_skew": 0.7285,
+      "efficiency_mean": 6.6615,
+      "frustration_mean": 2.7077,
+      "rage_quit_rate": 0.0
+    },
+    {
+      "ticket": "AI \u00b7 Software",
+      "platform": "AI Agent",
+      "n": 65,
+      "time_mean": 31.5492,
+      "time_median": 30.3,
+      "time_sd": 12.9299,
+      "time_iqr": 13.9,
+      "time_skew": 1.3991,
+      "efficiency_mean": 6.7385,
+      "frustration_mean": 2.6923,
+      "rage_quit_rate": 0.0
+    },
+    {
+      "ticket": "AI \u00b7 Facilities",
+      "platform": "AI Agent",
+      "n": 65,
+      "time_mean": 39.4108,
+      "time_median": 38.0,
+      "time_sd": 15.1039,
+      "time_iqr": 16.1,
+      "time_skew": 1.0251,
+      "efficiency_mean": 5.2308,
+      "frustration_mean": 4.4154,
+      "rage_quit_rate": 0.0
+    }
+  ],
+  "h1": {
+    "n_a": 37,
+    "n_b": 28,
+    "mean_a": 4.342342342342343,
+    "mean_b": 3.3095238095238093,
+    "sd_a": 1.3777027006571718,
+    "sd_b": 0.7852999816251783,
+    "median_a": 4.0,
+    "median_b": 3.3333333333333335,
+    "mean_diff": 1.032818532818534,
+    "mean_diff_ci": [
+      0.490988606063288,
+      1.57464845957378
+    ],
+    "mwu_U": 742.5,
+    "mwu_p": 0.0014138863917073433,
+    "rank_biserial": 0.4333976833976834,
+    "rank_biserial_ci": [
+      0.1766167953667954,
+      0.6611969111969112
+    ],
+    "welch_t": 3.8141803633162166,
+    "welch_df": 59.03828894726309,
+    "welch_p": 0.00016456829906754352,
+    "cohens_d": 0.8892688127065128,
+    "cohens_d_ci": [
+      0.3750745435708326,
+      1.403463081842193
+    ],
+    "assumptions": {
+      "shapiro_p_a": 0.009723212561499868,
+      "shapiro_p_b": 0.3818614359666792,
+      "levene_p": 0.004575837982138967
+    },
+    "p_holm": 0.0028277727834146865,
+    "reject": true
+  },
+  "h2": {
+    "n_a": 25,
+    "n_b": 40,
+    "mean_a": 5.946666666666666,
+    "mean_b": 6.375,
+    "sd_a": 0.7738791177495933,
+    "sd_b": 1.2407779473096363,
+    "median_a": 6.0,
+    "median_b": 6.333333333333333,
+    "mean_diff": -0.4283333333333337,
+    "mean_diff_ci": [
+      -0.927694116602306,
+      0.07102744993563864
+    ],
+    "mwu_U": 421.0,
+    "mwu_p": 0.14366805322592996,
+    "rank_biserial": -0.158,
+    "rank_biserial_ci": [
+      -0.422025,
+      0.121
+    ],
+    "welch_t": -1.7141041209661247,
+    "welch_df": 62.99807924432664,
+    "welch_p": 0.045713083716786736,
+    "cohens_d": -0.39411403826757846,
+    "cohens_d_ci": [
+      -0.8983897556012688,
+      0.1101616790661119
+    ],
+    "assumptions": {
+      "shapiro_p_a": 0.5649541280795508,
+      "shapiro_p_b": 0.08957751440015832,
+      "levene_p": 0.004055342396330635
+    },
+    "p_holm": 0.14366805322592996,
+    "reject": false
+  },
+  "h3": {
+    "n_pairs": 65,
+    "sn_median": 102.2214450704061,
+    "ai_median": 32.42564651299676,
+    "share_faster_with_ai": 1.0,
+    "wilcoxon_W": 0.0,
+    "wilcoxon_p": 1.2025525149230378e-12,
+    "speedup": 3.3917610893307475,
+    "speedup_ci": [
+      3.155067576753699,
+      3.646211374950897
+    ],
+    "dz": -4.18355241119803,
+    "matched_rank_biserial": -1.0,
+    "shapiro_p_log_diff": 0.7528498526091377,
+    "reject": true
+  },
+  "h4": {
+    "n_a": 25,
+    "n_b": 40,
+    "mean_a": 0.14666666666666667,
+    "mean_b": 0.0,
+    "sd_a": 0.19436506316151,
+    "sd_b": 0.0,
+    "median_a": 0.0,
+    "median_b": 0.0,
+    "mean_diff": 0.14666666666666667,
+    "mean_diff_ci": [
+      0.06643671180871054,
+      0.2268966215246228
+    ],
+    "mwu_U": 700.0,
+    "mwu_p": 8.590746349305752e-06,
+    "rank_biserial": 0.4,
+    "rank_biserial_ci": [
+      0.2,
+      0.6
+    ],
+    "welch_t": 3.772968873135194,
+    "welch_df": 24.0,
+    "welch_p": 0.00046661843467075406,
+    "cohens_d": 1.2225816464976649,
+    "cohens_d_ci": [
+      0.6804804487519994,
+      1.7646828442433304
+    ],
+    "assumptions": {
+      "shapiro_p_a": 5.838692026602395e-06,
+      "shapiro_p_b": NaN,
+      "levene_p": 1.0315173319410802e-05
+    },
+    "ticket_level": {
+      "override_rate_warned": 0.1466666666666666,
+      "override_rate_unwarned": 0.0,
+      "chi2": 18.65217391304348,
+      "chi2_p": 1.568683079535776e-05,
+      "note": "tickets are not independent (3 per person); descriptive only"
+    },
+    "reject": true
+  },
+  "interaction": {
+    "mixed": {
+      "formula": "efficiency ~ platform * banner + (1 | participant)",
+      "interaction_coef": -1.1688470615039215,
+      "interaction_p": 0.00014750632625454751,
+      "converged": true,
+      "warnings": []
+    },
+    "anova": {
+      "platform": {
+        "F": 139.49154437713233,
+        "df": 1.0,
+        "p": 3.942591145512735e-22,
+        "partial_eta_sq": 0.5254086140648748
+      },
+      "banner": {
+        "F": 2.4593515699238826,
+        "df": 1.0,
+        "p": 0.11933498880274544,
+        "partial_eta_sq": 0.019144978858041267
+      },
+      "interaction": {
+        "F": 13.211499962568812,
+        "df": 1.0,
+        "p": 0.0004038217732509371,
+        "partial_eta_sq": 0.0949023605529796
+      },
+      "df_resid": 126.0,
+      "note": "two rows per person; the mixed model is the formal test"
+    },
+    "tukey_significant": 5,
+    "tukey_pairs": 6,
+    "cells": {
+      "AI Agent | Banner": {
+        "mean": 5.946666666666666,
+        "ci": 0.31944159959947,
+        "n": 25
+      },
+      "AI Agent | No banner": {
+        "mean": 6.375,
+        "ci": 0.39682003883103345,
+        "n": 40
+      },
+      "ServiceNow | Banner": {
+        "mean": 4.342342342342343,
+        "ci": 0.45934895015544663,
+        "n": 37
+      },
+      "ServiceNow | No banner": {
+        "mean": 3.3095238095238093,
+        "ci": 0.3045075438782634,
+        "n": 28
+      }
+    }
+  },
+  "preference": {
+    "n": 65,
+    "share_prefer_ai": 0.4307692307692308,
+    "pseudo_r2": 0.004881333384865294,
+    "terms": {
+      "speedup_log": {
+        "odds_ratio": 0.7925060935038473,
+        "or_ci": [
+          0.14572984482941714,
+          4.309796040583904
+        ],
+        "p": 0.7878103068470549
+      },
+      "ai_primed": {
+        "odds_ratio": 0.8133819074769075,
+        "or_ci": [
+          0.29208083207444957,
+          2.26509258656911
+        ],
+        "p": 0.6926323275033244
+      },
+      "snow_primed": {
+        "odds_ratio": 0.8148556466062357,
+        "or_ci": [
+          0.2954115841824793,
+          2.247676666585668
+        ],
+        "p": 0.6924733488438606
+      }
+    }
+  },
+  "survey": {
+    "nps": {
+      "nps_banner": -70.27027027027027,
+      "nps_none": -96.42857142857143,
+      "mwu_p": 0.016434235001593148
+    },
+    "trust": {
+      "mean_warned": 6.92,
+      "mean_unwarned": 6.8,
+      "mwu_p": 0.5976129671790564
+    }
+  },
+  "by_level": {
+    "IC / Associate": {
+      "n": 37,
+      "servicenow_banner_shift": 0.46198830409356795,
+      "servicenow_banner_shift_n": [
+        19,
+        18
+      ],
+      "ai_warning_shift": 0.06349206349206238,
+      "ai_warning_shift_n": [
+        16,
+        21
+      ]
+    },
+    "Lead / Manager": {
+      "n": 19,
+      "servicenow_banner_shift": 0.8219696969696972,
+      "servicenow_banner_shift_n": [
+        11,
+        8
+      ],
+      "ai_warning_shift": -0.3373015873015861,
+      "ai_warning_shift_n": [
+        7,
+        12
+      ]
+    },
+    "Director / Executive": {
+      "n": 5,
+      "servicenow_banner_shift": 3.8333333333333326,
+      "servicenow_banner_shift_n": [
+        4,
+        1
+      ],
+      "ai_warning_shift": null,
+      "ai_warning_shift_n": [
+        0,
+        5
+      ]
+    }
+  },
+  "manipulation_checks": {
+    "mc_snow": {
+      "pass_rate": 0.7846153846153846,
+      "pass_banner": 0.7567567567567568,
+      "pass_none": 0.8214285714285714,
+      "n": 65
+    },
+    "mc_ai": {
+      "pass_rate": 0.8769230769230769,
+      "pass_banner": 0.92,
+      "pass_none": 0.85,
+      "n": 65
+    }
+  },
+  "t3_floor_share": 0.24615384615384617
+}

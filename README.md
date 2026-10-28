@@ -1,33 +1,125 @@
-# The Enterprise Workflow & Applied Statistics Lab
+# SNOW Stats Lab
 
-A single-file Streamlit app (`app.py`) that does two things:
+**File noisy ServiceNow-style tickets, then learn statistics and AI from the group's own data.**
 
-1. **Runs a live split-test.** Participants work through six simulated IT tickets, comparing legacy enterprise ticketing with an AI bot workflow. The app records completion time, errors, rage-quits and per-test survey ratings.
-2. **Teaches a graduate statistics syllabus on that data.** It covers EDA, hypothesis testing, power, two-way ANOVA, logistic and OLS regression, Simpson's paradox and Bayesian updating, all as interactive Plotly visuals.
+**Live:**
+- SNOW Stats Lab: https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/?session=pathfinders
+- Statistics textbook (Streamlit, benchmark data only, no data collection): https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/streamlit/index.html
 
-## Quick start
+Republish both after changes with `./scripts/deploy_pages.sh` (it builds `site/` and pushes the `gh-pages` branch).
+
+A static website (GitHub Pages) with six pages:
+
+| # | Page | What it teaches |
+|---|---|---|
+| 1 | **Service Portal** | Participants file six noisy tickets: three in a ServiceNow-style catalog, three with an AI agent built into the form. They rate each one, then give feedback on ServiceNow and the AI. |
+| 2 | **The Shape of Noise** | Distributions, mean vs median (a draggable see-saw), SD/IQR/skew, and an animated **Central Limit Theorem** sampling machine |
+| 3 | **Bayes & the Agent** | **Bayes' theorem** as area, base-rate traps, the AI agent's naive Bayes brain, and trust as a Beta posterior |
+| 4 | **Did It Work?** | Permutation tests, t-tests and assumption checks, paired tests, power, two-way ANOVA + Tukey HSD, chi-square |
+| 5 | **Regression → ML** | Least squares drawn as squares, multiple regression, logistic regression and confusion matrices, overfitting, Simpson's paradox |
+| 6 | **LLMs & the Playbook** | Next-token probabilities, temperature and hallucination, calibration, the perception–performance gap, and an AI-in-ServiceNow implementation playbook |
+
+Every lesson redraws live as tickets arrive. It also has a 300-person benchmark class, so the charts are populated before anyone submits.
+
+**Update:** the AI team (the warning group) also sees the agent's confidence and gets an always-correct agent. The other team's agent fills in the wrong room and cart code on the meeting-room ticket; it submits anyway, and an angry email from AV follows unless they catch it. All three ServiceNow tickets now take the same effort.
+
+**The experiment inside it:** each participant has two independent 50/50 chances of seeing a **positive** banner before the ServiceNow set ("ServiceNow's single pane of glass is incredibly efficient") and a **negative** banner before the AI set ("AI agents are known to hallucinate…"). Do the words change how efficient each tool *feels*, even when the stopwatch says the AI is faster?
+
+> Not affiliated with or endorsed by ServiceNow, Inc. The portal is a look-alike training simulation with no logos and no login.
+
+---
+
+## Syllabus coverage
+
+| Chapter | Where |
+|---|---|
+| 1 Practical statistics: population vs sample, descriptive vs inferential, how much data | Page 2 (population vs sample, sampling, CLT), page 4 (power) |
+| 2 Probability distributions | Page 2 (field guide: binomial, Poisson, normal, lognormal, exponential), page 6 (softmax) |
+| 3 Logic of hypothesis testing | Page 4 (permutation test, null world) |
+| 4 Significance & power | Page 4 (power, “significant is not the same as important”) |
+| 5 Sampling | Page 2 (random, stratified, systematic, convenience; CLT) |
+| 6 Class balancing | Page 5 (oversampling, undersampling, class weights, SMOTE) |
+| 7 Parametric tests | Page 4 (Student and Welch t, paired t) |
+| 8 Nonparametric tests | Page 4 (Mann–Whitney, Wilcoxon signed-rank, permutation, chi-square) |
+| 9 ANOVA | Page 4 (two-way ANOVA, interaction, Tukey HSD) |
+| 10 Regression | Page 5 (OLS, multiple, logistic) |
+| 11 Bayesian statistics | Page 3 (Bayes as area, naive Bayes, Beta updating) |
+| 12 Model evaluation | Page 5 (confusion matrix, precision/recall, ROC/AUC, cross-validation, overfitting), page 6 (calibration) |
+
+## Run the website locally
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run app.py
+cd site
+npm install
+npm run dev          # http://localhost:5173 (demo mode: data stays in your browser)
+npm test             # checks the in-browser statistics against SciPy/statsmodels
 ```
 
-## Tabs
+Presenting: in any lesson, **→ / ↓ / Space** jump to the next scene and **← / ↑** go back. Switch the data source (top right) between *Live class*, *Benchmark* and *Live + benchmark*.
 
-| Tab | Chapters | What it shows |
+## Put it online (GitHub Pages + Supabase)
+
+**1. Create the shared database** (free tier is fine):
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open **SQL Editor**, paste [supabase/schema.sql](supabase/schema.sql) and run it. This creates the `submissions` and `feedback` tables, row-level security (anyone can insert and read; nobody can edit or delete), and live updates.
+3. In **Project Settings → API**, copy the **Project URL** and the **anon public** key.
+
+**2. Point the site at it:** in GitHub, go to **Settings → Secrets and variables → Actions → Variables** and add:
+- `SUPABASE_URL` = the project URL
+- `SUPABASE_ANON_KEY` = the anon key (it's designed to be public; the security policies protect the data)
+
+**Ethics and data protection:** read [docs/IRB_REVIEW.md](docs/IRB_REVIEW.md) before running a session. The public key can only insert data; exports need the secret `SUPABASE_SERVICE_KEY`, and only de-identified exports go in the repository.
+
+**3. Turn on Pages:** go to **Settings → Pages → Source** and select **GitHub Actions**. Every push to `main` that touches `site/` builds and deploys via [.github/workflows/pages.yml](.github/workflows/pages.yml). Your URL will be `https://<user>.github.io/Enterprise-UI-Design-Stats-Analytics-Project/`.
+
+**4. On the call:** share `…/?session=pathfinders-nov` (any label you like) so each session's data stays separate. The pill at the top right shows how many people are live.
+
+Without step 2 the site still works in **demo mode**: each browser keeps its own data, and tabs in the same browser update live.
+
+## The statistics course project (Python)
+
+The graded analysis runs on the same data with scripts, not notebooks:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+pytest                                   # cleaning-rule and helper tests
+python scripts/run_pipeline.py           # simulated pilot, end to end
+```
+
+After the live session:
+
+```bash
+export SUPABASE_URL=… SUPABASE_SERVICE_KEY=…   # secret: never commit or put in the site
+python scripts/export_supabase.py --session pathfinders-nov    # → data/raw/live_sessions.csv + live_feedback.csv
+python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
+```
+
+| Step | Script | Writes |
 |---|---|---|
-| 1 · Live Simulator | — | Scenario card, optional demographics, then the six tests. Tests 1–4 are clean baselines (two legacy, two AI assistant). Test 5 is the chaos AI bot. Test 6 is the primed documentation hunt, where the checkout code is buried in a KB article. Every test has a survey and an abandon button. |
-| 2 · EDA & Demographics | 1, 2 | Mean, median, SD, IQR and skewness per test; a mean-vs-median dumbbell chart; histograms and boxplots by job level and experience. |
-| 3 · Hypothesis Testing | 3, 4, 6 | Shapiro–Wilk and Levene checks, automatic selection of Student's t, Welch's t or Mann–Whitney U, a one- or two-sided toggle with p-value shading, and `TTestIndPower` curves. |
-| 4 · Two-Way ANOVA | 7, 9 | `ols(... C(workflow) + C(priming) + C(job_level) + C(workflow):C(priming))` with `anova_lm`, partial η², interaction plots, a priming-by-seniority test and Tukey's HSD. |
-| 5 · Regression | 10, 12 | Logistic model of rage-quits (with odds ratios), an OLS model of frustration drivers, residual diagnostics and a Simpson's paradox toggle. |
-| 6 · Bayes & Manifesto | 11 | Beta–Binomial trust updating, a discrete Bayes error calculator, and a data-driven executive summary. |
+| Power analysis | `scripts/power_analysis.py` | `results/power_analysis.json`, power-curve figure |
+| Simulated pilot (default runs only) | `scripts/generate_simulated_data.py` | `data/raw/simulated_pilot_*.csv` |
+| Cleaning (7 pre-registered rules) | `scripts/clean_data.py` | `data/clean/*.csv`, `results/cleaning_log.md` |
+| Analysis (H1–H4 + exploratory) | `scripts/analyze.py` | `results/results.json`, `results/tables/`, `results/figures/` |
+| Written report | `scripts/build_report.py` | [report/REPORT.md](report/REPORT.md) from [report/report_template.md](report/report_template.md) |
 
-## Experimental design notes
+> ⚠️ The committed results are from a **simulated pilot**, clearly labelled throughout. Regenerate everything from the live export before submitting.
 
-- **Priming is randomised.** Each live participant has a 50% chance of joining the primed arm. Primed participants see a banner before Test 5 (AI bot) and Test 6 (the ServiceNow "single pane of glass" line). Priming both an AI test and a legacy test keeps workflow × priming fully crossed.
-- **The ANOVA uses only Tests 5–6.** Tests 1–4 are never primed, so including them would confound priming with chaos.
-- **Benchmark data:** `generate_benchmark()` builds 300 participants × 6 tests with `np.random.seed(42)`. It has right-skewed chaos times, priming effects that are strongest for directors, a rage-quit model driven by chaos and experience, and a built-in Simpson's paradox between experience and perceived efficiency.
-- **Live telemetry stays in the browser session.** Download it as CSV from the sidebar before you reset.
+**Hypotheses.** H1: the praise banner raises ServiceNow ratings. H2: the warning lowers AI ratings. Both are primary, tested with one-sided Mann–Whitney U and Holm-corrected. H3: the AI is faster (paired Wilcoxon). H4: the warning increases AI overrides. The power analysis says to recruit **68 participants**.
+
+## Repository layout
+
+```
+site/                 The website (Vite + D3 + KaTeX), deployed to GitHub Pages
+  src/pages/          portal.js + lesson1–5.js (one file per page)
+  src/stats/core.js   In-browser statistics, tested against SciPy (site/tests/)
+  src/data/           Design, AI-agent classifier, benchmark class, Supabase/demo storage
+supabase/schema.sql   Database tables, security policies and realtime
+lab/                  Shared Python design, simulator and plotting style
+scripts/              Export, power, simulation, cleaning, analysis, report, pipeline
+data/                 Raw and cleaned data (see data/README.md)
+results/              Figures, tables, results.json, cleaning log
+report/               Report template (edit) and generated REPORT.md
+presentation/         Talk outline and speaker script
+tests/                Python tests
+```

@@ -1,0 +1,6 @@
+,coef,se,z,p
+Intercept,6.0427,0.1954,30.9247,0.0
+C(platform)[T.ServiceNow],-1.7591,0.203,-8.6636,0.0
+C(banner)[T.No banner],0.2723,0.2226,1.2233,0.2212
+C(platform)[T.ServiceNow]:C(banner)[T.No banner],-1.1688,0.308,-3.7952,0.0001
+Group Var,1.7256,0.5616,3.0727,0.0021
