@@ -3,7 +3,7 @@
 import * as d3 from 'd3';
 import { AI, LEGACY, TESTS } from '../data/design.js';
 import { onData } from '../data/context.js';
-import { describe, mean, median, normPdf, rng, sd } from '../stats/core.js';
+import { binomPmf, describe, expPdf, lognormPdf, mean, median, normPdf, poissonPmf, rng, sd } from '../stats/core.js';
 import { C, axes, callout, controls, el, emptyNote, f2, frame, hero, scene, statGrid, tex, tip } from '../viz/common.js';
 
 export function renderLesson1(root) {
@@ -11,11 +11,13 @@ export function renderLesson1(root) {
     kicker: 'Lesson 1 · Describing data',
     title: 'The Shape of Noise',
     lede: 'Every ticket you filed is a data point. Before any model or AI, we need to see the data: where it piles up, how far it spreads, and why one long tail can fool an average.',
-    chapters: ['Ch 1 · Data & distributions', 'Ch 2 · Centre, spread, shape', 'Sampling distributions', 'Central Limit Theorem'],
+    chapters: ['Ch 1 · Practical statistics', 'Ch 2 · Probability distributions', 'Ch 5 · Sampling', 'Central Limit Theorem'],
   });
   stream(root);
+  populationSample(root);
   balance(root);
   shape(root);
+  distributions(root);
   clt(root);
 }
 
@@ -230,4 +232,157 @@ function clt(root) {
   });
 
   callout(s, `When a vendor says their AI agent is “92% accurate”, that number is a <b>sample mean</b>. The CLT tells you its error bar: with 100 test tickets, ${tex(String.raw`SE=\sqrt{0.92\times0.08/100}\approx 2.7\%`)}, so the truth is plausibly anywhere from about 87% to 97%. <b>Ask for the n.</b>`, 'ai');
+}
+
+// ---------------------------------------------------------------------------
+// Scene: population vs sample, and how you sample (Ch. 1 & 5)
+// ---------------------------------------------------------------------------
+const DEPTS = [
+  { name: 'Engineering', share: 0.4, mu: Math.log(8), color: C.blue },
+  { name: 'Sales', share: 0.3, mu: Math.log(12), color: C.yellow },
+  { name: 'Operations', share: 0.2, mu: Math.log(20), color: C.teal },
+  { name: 'Executives', share: 0.1, mu: Math.log(2), color: C.purple },
+];
+
+export function populationSample(root) {
+  const s = scene(root, {
+    title: 'Population vs sample: you almost never see the whole thing',
+    story: 'Here is <b>every</b> ticket from last quarter: 1,200 of them, coloured by department. The average resolution time of all of them is a <b>parameter</b> (μ), and in real life you rarely know it. You see a <b>sample</b> and compute a <b>statistic</b> (x̄). Describing the sample is <b>descriptive</b> statistics; using it to say something about μ is <b>inferential</b> statistics. And <i>how</i> you pick the sample matters as much as how big it is.',
+    formula: String.raw`\underbrace{\mu}_{\text{population parameter}} \;\approx\; \underbrace{\bar x}_{\text{sample statistic}} \quad\text{only if the sample is representative}`,
+  });
+  const ctl = controls(s, `
+    <button class="lbtn hot" data-m="random">Simple random</button>
+    <button class="lbtn" data-m="stratified">Stratified by department</button>
+    <button class="lbtn" data-m="systematic">Every 20th ticket</button>
+    <button class="lbtn" data-m="convenience">Convenience: VIP queue first</button>
+    <button class="lbtn" id="rep">Repeat 500× →</button>`);
+  const r = rng(77);
+  const pop = [];
+  DEPTS.forEach((d) => { for (let i = 0; i < 1200 * d.share; i++) pop.push({ dept: d.name, color: d.color, hours: r.lognormal(d.mu, 0.6) }); });
+  const order = r.shuffle(pop.map((_, i) => i));          // arrival order of tickets
+  const mu = mean(pop.map((p) => p.hours));
+  const row = s.appendChild(el('div', { class: 'viz-row' }));
+  const gridBox = row.appendChild(el('div', { class: 'viz' })), histBox = row.appendChild(el('div', { class: 'viz' }));
+  const out = el('div'); s.appendChild(out);
+  s.appendChild(el('div', { class: 'legend' }, DEPTS.map((d) => `<span><i style="background:${d.color}"></i>${d.name} (${Math.round(d.share * 100)}%)</span>`).join('')));
+  const f = frame(gridBox, { width: 600, height: 260, margin: { top: 6, right: 6, bottom: 6, left: 6 } });
+  const cols = 60, cell = f.w / cols;
+  const dots = f.g.selectAll('circle').data(order).join('circle')
+    .attr('cx', (_, k) => (k % cols) * cell + cell / 2).attr('cy', (_, k) => Math.floor(k / cols) * cell + cell / 2)
+    .attr('r', cell * 0.32).attr('fill', (i) => pop[i].color).attr('fill-opacity', 0.25);
+  let method = 'random', means = [];
+  const draw = () => {
+    const n = 60;
+    if (method === 'random') return r.shuffle(order).slice(0, n);
+    if (method === 'systematic') { const start = Math.floor(r.random() * 20); return order.filter((_, k) => k % 20 === start); }
+    if (method === 'convenience') {
+      const vip = order.filter((i) => pop[i].dept === 'Executives'), rest = order.filter((i) => pop[i].dept !== 'Executives');
+      return [...vip, ...rest].slice(0, n);
+    }
+    return DEPTS.flatMap((d) => r.shuffle(order.filter((i) => pop[i].dept === d.name)).slice(0, Math.round(n * d.share)));
+  };
+  const show = (idx) => {
+    const set = new Set(idx);
+    dots.transition().duration(400).attr('fill-opacity', (i) => (set.has(i) ? 1 : 0.12)).attr('r', (i) => (set.has(i) ? cell * 0.45 : cell * 0.3));
+    const xbar = mean(idx.map((i) => pop[i].hours));
+    statGrid(out, [[`${mu.toFixed(1)} h`, 'population mean μ (usually unknown)', C.ink], [`${xbar.toFixed(1)} h`, 'this sample’s x̄', C.yellow],
+      [`${(xbar - mu >= 0 ? '+' : '')}${(xbar - mu).toFixed(1)} h`, 'error this time', Math.abs(xbar - mu) > 3 ? C.red : C.teal]]);
+  };
+  const drawHist = () => {
+    histBox.innerHTML = '';
+    const g = frame(histBox, { width: 420, height: 260, margin: { top: 16, right: 16, bottom: 40, left: 40 } });
+    const x = d3.scaleLinear().domain([0, Math.max(25, d3.max(means) || 0)]).range([0, g.w]);
+    const bins = d3.bin().domain(x.domain()).thresholds(40)(means);
+    const y = d3.scaleLinear().domain([0, d3.max(bins, (b) => b.length) || 1]).range([g.h, 0]);
+    axes(g, x, y, { xLabel: `sample means (hours) · ${means.length} samples`, yTicks: 3 });
+    g.g.selectAll('rect').data(bins).join('rect').attr('x', (b) => x(b.x0) + 0.5).attr('width', (b) => Math.max(0, x(b.x1) - x(b.x0) - 1))
+      .attr('y', (b) => y(b.length)).attr('height', (b) => g.h - y(b.length)).attr('fill', C.yellow).attr('fill-opacity', 0.75);
+    g.g.append('line').attr('x1', x(mu)).attr('x2', x(mu)).attr('y1', 0).attr('y2', g.h).attr('stroke', C.ink).attr('stroke-width', 2).attr('stroke-dasharray', '5 4');
+    g.g.append('text').attr('class', 'lbl').attr('x', x(mu) + 5).attr('y', 12).text('true μ');
+  };
+  ctl.querySelectorAll('[data-m]').forEach((b) => b.addEventListener('click', () => {
+    ctl.querySelectorAll('[data-m]').forEach((x) => x.classList.remove('hot')); b.classList.add('hot');
+    method = b.dataset.m; means = []; drawHist(); show(draw());
+  }));
+  ctl.querySelector('#rep').addEventListener('click', () => { for (let i = 0; i < 500; i++) means.push(mean(draw().map((k) => pop[k].hours))); drawHist(); });
+  show(draw()); drawHist();
+  callout(s, '<b>Random</b> and <b>systematic</b> samples scatter around the truth. <b>Stratified</b> samples scatter less, because every department is represented in proportion. The <b>convenience</b> sample is precise and <i>wrong</i>: repeating it 500 times never fixes bias. A bigger biased sample is just a more confident wrong answer.');
+  callout(s, 'The same trap catches AI: a model trained or evaluated only on the tickets that were easy to collect (one region, one language, the VIP queue) will look great and fail on everyone else. <b>“How much data?” matters less than “which data?”</b>', 'ai');
+}
+
+// ---------------------------------------------------------------------------
+// Scene: a gallery of probability distributions (Ch. 2)
+// ---------------------------------------------------------------------------
+const DISTS = {
+  binomial: { label: 'Binomial: how many of n tickets the AI gets right', discrete: true, params: [['n', 1, 40, 1, 10], ['p', 0.05, 0.95, 0.05, 0.85]],
+    tex: String.raw`P(X=k)=\binom{n}{k}p^k(1-p)^{n-k},\quad E[X]=np,\; \operatorname{Var}=np(1-p)` },
+  poisson: { label: 'Poisson: tickets arriving per hour', discrete: true, params: [['λ', 0.5, 20, 0.5, 4]],
+    tex: String.raw`P(X=k)=\frac{\lambda^k e^{-\lambda}}{k!},\quad E[X]=\operatorname{Var}=\lambda` },
+  normal: { label: 'Normal: averages of many tickets', discrete: false, params: [['μ', -3, 3, 0.1, 0], ['σ', 0.3, 3, 0.1, 1]],
+    tex: String.raw`f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}` },
+  lognormal: { label: 'Lognormal: how long one ticket takes', discrete: false, params: [['μ (log)', 2, 6, 0.1, 4.3], ['σ (log)', 0.1, 1.5, 0.05, 0.6]],
+    tex: String.raw`\ln X \sim \mathcal N(\mu,\sigma^2),\quad \text{median}=e^{\mu},\; \text{mean}=e^{\mu+\sigma^2/2}` },
+  exponential: { label: 'Exponential: minutes until the next ticket', discrete: false, params: [['rate', 0.05, 2, 0.05, 0.25]],
+    tex: String.raw`f(x)=\lambda e^{-\lambda x},\quad E[X]=1/\lambda \;\;(\text{memoryless})` },
+};
+
+export function distributions(root) {
+  const s = scene(root, {
+    title: 'A field guide to distributions',
+    story: 'Every kind of ticket data has a natural shape. <b>Counts out of n</b> are binomial. <b>Arrivals per hour</b> are Poisson. <b>Waiting times</b> are exponential. <b>Durations</b> are lognormal, the right tail you saw above. <b>Averages</b> become normal. Pick one, move its parameters, and see its shape and formula.',
+  });
+  const ctl = controls(s, `<label>Distribution <select id="dist">${Object.entries(DISTS).map(([k, d]) => `<option value="${k}">${d.label}</option>`).join('')}</select></label><span id="params"></span><button class="lbtn" id="fit">Fit to class ServiceNow times</button>`);
+  const form = el('div', { class: 'formula' }); s.appendChild(form);
+  const box = s.appendChild(el('div', { class: 'viz' }));
+  let times = [], showFit = false;
+  const vals = () => [...ctl.querySelectorAll('#params input')].map((i) => +i.value);
+  const build = () => {
+    const d = DISTS[ctl.querySelector('#dist').value];
+    ctl.querySelector('#params').innerHTML = d.params.map(([n, lo, hi, st, v]) => `<label>${n} <input type="range" min="${lo}" max="${hi}" step="${st}" value="${v}"><b>${v}</b></label>`).join(' ');
+    ctl.querySelectorAll('#params input').forEach((i) => i.addEventListener('input', () => { i.nextElementSibling.textContent = i.value; draw(); }));
+    ctl.querySelector('#fit').style.display = ctl.querySelector('#dist').value === 'lognormal' ? '' : 'none';
+    form.innerHTML = tex(d.tex, true); showFit = false; draw();
+  };
+  const draw = () => {
+    const key = ctl.querySelector('#dist').value, d = DISTS[key], v = vals();
+    box.innerHTML = '';
+    const f = frame(box, { height: 320 });
+    let xs, ys, xmax;
+    if (key === 'binomial') { xs = d3.range(0, v[0] + 1); ys = xs.map((k) => binomPmf(k, v[0], v[1])); }
+    else if (key === 'poisson') { xmax = Math.ceil(v[0] + 4 * Math.sqrt(v[0]) + 3); xs = d3.range(0, xmax + 1); ys = xs.map((k) => poissonPmf(k, v[0])); }
+    else if (key === 'normal') { xs = d3.range(-8, 8.01, 0.04); ys = xs.map((x) => normPdf(x, v[0], v[1])); }
+    else if (key === 'lognormal') { xmax = Math.exp(v[0] + 2.8 * v[1]); xs = d3.range(0.5, xmax, xmax / 400); ys = xs.map((x) => lognormPdf(x, v[0], v[1])); }
+    else { xmax = 5 / v[0]; xs = d3.range(0, xmax, xmax / 400); ys = xs.map((x) => expPdf(x, v[0])); }
+    const x = d.discrete ? d3.scaleBand().domain(xs).range([0, f.w]).padding(0.15) : d3.scaleLinear().domain(d3.extent(xs)).range([0, f.w]);
+    let ymax = d3.max(ys);
+    let bins = [];
+    if (showFit && key === 'lognormal' && times.length) {
+      bins = d3.bin().domain(x.domain()).thresholds(50)(times.filter((t) => t < x.domain()[1]));
+      const bw = (x.domain()[1] - x.domain()[0]) / 50;
+      bins.forEach((b) => { b.dens = b.length / (times.length * bw); });
+      ymax = Math.max(ymax, d3.max(bins, (b) => b.dens));
+    }
+    const y = d3.scaleLinear().domain([0, ymax * 1.1]).range([f.h, 0]);
+    f.g.append('g').attr('class', 'axis').attr('transform', `translate(0,${f.h})`).call(d.discrete ? d3.axisBottom(x).tickValues(xs.filter((_, i) => i % Math.ceil(xs.length / 15) === 0)) : d3.axisBottom(x).ticks(8));
+    f.g.append('g').attr('class', 'axis').call(d3.axisLeft(y).ticks(5));
+    f.g.selectAll('.fb').data(bins).join('rect').attr('x', (b) => x(b.x0)).attr('width', (b) => Math.max(0, x(b.x1) - x(b.x0) - 1)).attr('y', (b) => y(b.dens)).attr('height', (b) => f.h - y(b.dens)).attr('fill', C.blue).attr('fill-opacity', 0.35);
+    if (d.discrete) f.g.selectAll('.b').data(xs).join('rect').attr('x', (k) => x(k)).attr('width', x.bandwidth()).attr('y', (_, i) => y(ys[i])).attr('height', (_, i) => f.h - y(ys[i])).attr('fill', C.yellow).attr('rx', 2);
+    else {
+      f.g.append('path').attr('d', d3.area().x((_, i) => x(xs[i])).y0(f.h).y1((yy) => y(yy))(ys)).attr('fill', C.yellow).attr('fill-opacity', 0.18);
+      f.g.append('path').attr('d', d3.line().x((_, i) => x(xs[i])).y((yy) => y(yy))(ys)).attr('fill', 'none').attr('stroke', C.yellow).attr('stroke-width', 3);
+    }
+    if (bins.length) box.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>class ServiceNow ticket times (seconds)</span><span><i style="background:${C.yellow}"></i>fitted lognormal</span>`));
+  };
+  ctl.querySelector('#dist').addEventListener('change', build);
+  ctl.querySelector('#fit').addEventListener('click', () => {
+    if (!times.length) return;
+    const logs = times.map(Math.log), m = mean(logs), sdl = sd(logs);
+    const [a, b] = ctl.querySelectorAll('#params input');
+    a.max = Math.max(+a.max, m + 1); a.value = m.toFixed(2); a.nextElementSibling.textContent = a.value;
+    b.value = sdl.toFixed(2); b.nextElementSibling.textContent = b.value;
+    showFit = true; draw();
+  });
+  onData(({ rows }) => { times = rows.filter((r) => r.workflow === LEGACY && r.completion_time > 0).map((r) => r.completion_time); if (showFit) draw(); });
+  build();
+  callout(s, 'Choosing the right distribution is choosing the right model. Forecasting service-desk staffing uses <b>Poisson</b> arrivals; SLA risk uses the <b>lognormal</b> tail, not the average; “the AI got 17 of 20 right” is <b>binomial</b>, and that’s what gives its error bar.', 'ai');
 }

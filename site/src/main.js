@@ -11,12 +11,12 @@ import { renderLesson4 } from './pages/lesson4.js';
 import { renderLesson5 } from './pages/lesson5.js';
 
 const PAGES = [
-  { path: 'portal', num: 1, label: 'Service Portal', render: renderPortal, theme: 'portal' },
+  { path: 'portal', num: 1, label: 'Portal', render: renderPortal, theme: 'portal' },
   { path: 'noise', num: 2, label: 'The Shape of Noise', render: renderLesson1, theme: 'lesson' },
-  { path: 'bayes', num: 3, label: 'Bayes & the Agent', render: renderLesson2, theme: 'lesson' },
+  { path: 'bayes', num: 3, label: 'Bayes', render: renderLesson2, theme: 'lesson' },
   { path: 'testing', num: 4, label: 'Did It Work?', render: renderLesson3, theme: 'lesson' },
   { path: 'models', num: 5, label: 'Regression → ML', render: renderLesson4, theme: 'lesson' },
-  { path: 'ai', num: 6, label: 'LLMs & the Playbook', render: renderLesson5, theme: 'lesson' },
+  { path: 'ai', num: 6, label: 'LLMs & Playbook', render: renderLesson5, theme: 'lesson' },
 ];
 
 const topbar = document.getElementById('topbar');
@@ -31,12 +31,12 @@ function renderTopbar(active) {
       ${PAGES.map((p) => `<a href="#/${p.path}" class="${p === active ? 'active' : ''}"><span class="num">${p.num}</span>${p.label}</a>`).join('')}
     </nav>
     <div class="data-controls">
-      ${isLesson ? `<label class="source">Data
+      ${isLesson ? `<label class="source" title="Data source">
         <select id="source-select">${Object.entries(SOURCES).map(([k, v]) => `<option value="${k}" ${k === source() ? 'selected' : ''}>${v}</option>`).join('')}</select>
       </label>` : ''}
       <a class="ext-link" href="./streamlit/index.html" target="_blank" rel="noopener">Streamlit lab ↗</a>
       <span class="live-pill" title="${MODE === 'supabase' ? 'Shared live database' : 'Demo mode: data stays in this browser'}">
-        <span class="dot ${MODE}"></span><span id="live-count">${liveCount()}</span> live · ${SESSION}
+        <span class="dot ${MODE}"></span><span id="live-count">${liveCount()}</span> live<span class="sess"> · ${SESSION}</span>
       </span>
     </div>`;
   topbar.querySelector('#source-select')?.addEventListener('change', (e) => setSource(e.target.value));

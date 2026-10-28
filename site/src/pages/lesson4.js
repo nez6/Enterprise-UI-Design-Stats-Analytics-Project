@@ -4,7 +4,7 @@
 import * as d3 from 'd3';
 import { AI, CATEGORIES, JOB_LEVELS, LEGACY } from '../data/design.js';
 import { onData } from '../data/context.js';
-import { logistic, mean, ols, rng } from '../stats/core.js';
+import { logistic, mean, ols, rng, roc } from '../stats/core.js';
 import { C, SERIES, axes, callout, controls, el, emptyNote, f2, fmtP, frame, hero, pct, scene, statGrid } from '../viz/common.js';
 import { participants } from './lesson3.js';
 
@@ -13,14 +13,16 @@ export function renderLesson4(root) {
     kicker: 'Lesson 4 · Models',
     title: 'From Regression to Machine Learning',
     lede: 'A regression line is the simplest machine-learning model there is. Fit it, add more inputs, bend it into a probability, test it on data it hasn’t seen, and you’ve covered the core of how AI is trained and judged.',
-    chapters: ['Ch 12 · OLS regression', 'Ch 10 · Logistic regression', 'Classification metrics', 'Overfitting', 'Simpson’s paradox'],
+    chapters: ['Ch 10 · Regression', 'Ch 6 · Class balancing', 'Ch 12 · Model evaluation', 'Cross-validation', 'Simpson’s paradox'],
   });
   squares(root);
   multiple(root);
   logit(root);
+  balancing(root);
   overfit(root);
   simpson(root);
   confusion(root);
+  rocScene(root);
 }
 
 // ---------------------------------------------------------------------------
@@ -170,7 +172,7 @@ function logit(root) {
 function overfit(root) {
   const s = scene(root, {
     title: 'Memorising vs learning: overfitting',
-    story: 'Fit a curve to <b style="color:var(--blue)">training</b> people, then check it on <b style="color:var(--yellow)">test</b> people it has never seen. Turn up the complexity: training error always falls, but past a point the curve starts chasing noise and <b>test error rises</b>. Every AI model, from regression to GPT, lives on this curve.',
+    story: 'Fit a curve to <b style="color:var(--blue)">training</b> people, then check it on <b style="color:var(--yellow)">test</b> people it has never seen. <b style="color:var(--teal)">Cross-validation</b> estimates test error using only the training data, by rotating which fifth is held out. Turn up the complexity: training error always falls, but past a point the curve starts chasing noise and <b>test error rises</b>. Every AI model, from regression to GPT, lives on this curve.',
     formula: String.raw`\text{test error} = \text{bias}^2 + \text{variance} + \text{irreducible noise}`,
   });
   const ctl = controls(s, `<label>Polynomial degree <input type="range" id="deg" min="1" max="12" value="1"><b id="degv"></b></label><button class="lbtn" id="resplit">New random split</button>`);
@@ -193,13 +195,20 @@ function overfit(root) {
     f.g.selectAll('.te').data(test).join('circle').attr('cx', (p) => x(p.x)).attr('cy', (p) => y(p.y)).attr('r', 4).attr('fill', 'none').attr('stroke', C.yellow).attr('stroke-width', 1.5);
     const m = fitDeg(k);
     if (m) f.g.append('path').attr('d', d3.line().x((v) => x(v)).y((v) => y(pred(m, v, k)))(d3.range(-1, 1.001, 0.01))).attr('fill', 'none').attr('stroke', C.red).attr('stroke-width', 3);
-    const e = d3.range(1, 13).map((kk) => { const mm = fitDeg(kk); return mm ? { k: kk, tr: rmse(mm, train, kk), te: rmse(mm, test, kk) } : null; }).filter(Boolean);
+    // 5-fold cross-validation on the training people only: the honest way to pick complexity.
+    const folds = 5, cv = (kk) => d3.mean(d3.range(folds), (fi) => {
+      const tr = train.filter((_, i) => i % folds !== fi), va = train.filter((_, i) => i % folds === fi);
+      try { const mm = ols(tr.map((p) => poly(p.x, kk)), tr.map((p) => p.y)); return rmse(mm, va, kk); } catch { return NaN; }
+    });
+    const e = d3.range(1, 13).map((kk) => { const mm = fitDeg(kk); return mm ? { k: kk, tr: rmse(mm, train, kk), te: rmse(mm, test, kk), cv: cv(kk) } : null; }).filter(Boolean);
     const g = frame(errBox, { width: 420, height: 320 });
     const ex = d3.scaleLinear().domain([1, 12]).range([0, g.w]), ey = d3.scaleLinear().domain([0, Math.min(4, d3.max(e, (q) => Math.max(q.tr, q.te)) * 1.1)]).range([g.h, 0]).clamp(true);
     axes(g, ex, ey, { xLabel: 'complexity (degree)', yLabel: 'error (RMSE)' });
-    [['tr', C.blue], ['te', C.yellow]].forEach(([key, c]) => g.g.append('path').attr('d', d3.line().x((q) => ex(q.k)).y((q) => ey(q[key]))(e)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5));
+    [['tr', C.blue], ['te', C.yellow], ['cv', C.teal]].forEach(([key, c]) => g.g.append('path').attr('d', d3.line().defined((q) => Number.isFinite(q[key])).x((q) => ex(q.k)).y((q) => ey(q[key]))(e)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5).attr('stroke-dasharray', key === 'cv' ? '6 4' : null));
+    const best = e.filter((q) => Number.isFinite(q.cv)).reduce((a2, q) => (q.cv < a2.cv ? q : a2));
+    g.g.append('circle').attr('cx', ex(best.k)).attr('cy', ey(best.cv)).attr('r', 6).attr('fill', C.teal);
     g.g.append('line').attr('x1', ex(k)).attr('x2', ex(k)).attr('y1', 0).attr('y2', g.h).attr('stroke', C.red).attr('stroke-dasharray', '4 4');
-    errBox.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>training error</span><span><i style="background:${C.yellow}"></i>test error</span>`));
+    errBox.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>training error</span><span><i style="background:${C.teal}"></i>5-fold cross-validation (● = its pick)</span><span><i style="background:${C.yellow}"></i>test error</span>`));
   };
   ctl.querySelector('#deg').addEventListener('input', draw);
   ctl.querySelector('#resplit').addEventListener('click', () => { seed++; split(); draw(); });
@@ -282,4 +291,91 @@ function confusion(root) {
     const acc = d.filter((r) => r.ai_category === r.chosen_category).length / d.length;
     statGrid(out, [[pct(acc), 'agent accuracy', C.teal], [d.length, 'AI-agent tickets'], [pct(mean(d.map((r) => r.ai_confidence))), 'average stated confidence', C.yellow]]);
   });
+}
+
+// ---------------------------------------------------------------------------
+// Scene: class balancing (Ch. 6)
+// ---------------------------------------------------------------------------
+function balancing(root) {
+  const s = scene(root, {
+    title: 'Class balancing: when “95% accurate” means useless',
+    story: 'Train a model to spot <b>major incidents</b>. Only 5% of tickets are real incidents. A model that always answers “not an incident” is <b>95% accurate</b> and catches nothing. Logistic regression trained on the raw data learns that lazy answer too. Rebalance the <b>training</b> data and watch the decision threshold move. Always test on untouched, realistic data.',
+    formula: String.raw`\text{precision}=\frac{TP}{TP+FP}\qquad \text{recall}=\frac{TP}{TP+FN}\qquad F_1=\frac{2\,PR}{P+R}`,
+  });
+  const ctl = controls(s, `<label>Training data <select id="bal">
+      <option value="none">As collected (5% incidents)</option>
+      <option value="over">Oversample incidents (copy them up to 50/50)</option>
+      <option value="under">Undersample normal tickets (down to 50/50)</option>
+      <option value="weight">Class weights (count each incident 19×)</option></select></label>`);
+  const box = s.appendChild(el('div', { class: 'viz' }));
+  const out = el('div'); s.appendChild(out);
+  const r = rng(31);
+  const make = (n) => Array.from({ length: n }, () => { const y = r.random() < 0.05 ? 1 : 0; return { x: r.normal(y ? 1.7 : 0, 1), y }; });
+  const train = make(1400), test = make(1400);
+  const update = () => {
+    const how = ctl.querySelector('#bal').value, pos = train.filter((d) => d.y), neg = train.filter((d) => !d.y);
+    let set = train;
+    if (how === 'over' || how === 'weight') set = [...neg, ...Array.from({ length: neg.length }, (_, i) => pos[i % pos.length])];
+    if (how === 'under') set = [...pos, ...r.shuffle(neg).slice(0, pos.length)];
+    const m = logistic(set.map((d) => [d.x]), set.map((d) => d.y));
+    const cut = -m.beta[0] / m.beta[1];                        // where P(incident) = 0.5
+    let tp = 0, fp = 0, tn = 0, fn = 0;
+    test.forEach((d) => { const p = d.x >= cut; if (p && d.y) tp++; else if (p) fp++; else if (d.y) fn++; else tn++; });
+    box.innerHTML = '';
+    const f = frame(box, { height: 300 });
+    const x = d3.scaleLinear().domain([-4, 5.5]).range([0, f.w]);
+    const binsN = d3.bin().domain(x.domain()).thresholds(45)(test.filter((d) => !d.y).map((d) => d.x));
+    const binsP = d3.bin().domain(x.domain()).thresholds(45)(test.filter((d) => d.y).map((d) => d.x));
+    const y = d3.scaleSqrt().domain([0, d3.max(binsN, (b) => b.length)]).range([f.h, 0]);
+    axes(f, x, y, { xLabel: '“urgency score” the model sees', yLabel: 'test tickets (√ scale)', yTicks: 4 });
+    [[binsN, C.blue, 0.55], [binsP, C.red, 0.9]].forEach(([bins, c, o]) => f.g.append('g').selectAll('rect').data(bins).join('rect')
+      .attr('x', (b) => x(b.x0) + 0.5).attr('width', (b) => Math.max(0, x(b.x1) - x(b.x0) - 1)).attr('y', (b) => y(b.length)).attr('height', (b) => f.h - y(b.length)).attr('fill', c).attr('fill-opacity', o));
+    const cx = x(Math.max(-4, Math.min(5.5, cut)));
+    f.g.append('line').attr('x1', cx).attr('x2', cx).attr('y1', 0).attr('y2', f.h).attr('stroke', C.yellow).attr('stroke-width', 3);
+    f.g.append('text').attr('class', 'lbl').attr('fill', C.yellow).attr('x', cx + 6).attr('y', 14).text('flag as incident →');
+    box.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>normal tickets</span><span><i style="background:${C.red}"></i>real incidents (5%)</span><span><i style="background:${C.yellow}"></i>learned threshold</span>`));
+    const prec = tp + fp ? tp / (tp + fp) : 0, rec = tp / (tp + fn), f1 = prec + rec ? (2 * prec * rec) / (prec + rec) : 0;
+    statGrid(out, [[pct((tp + tn) / test.length), 'accuracy'], [pct(1 - test.filter((d) => d.y).length / test.length), '“always say no” accuracy', C.muted],
+      [pct(rec), 'recall: incidents caught', C.red], [pct(prec), 'precision: flags that were real', C.teal], [f2(f1), 'F1']]);
+  };
+  ctl.querySelector('#bal').addEventListener('change', update);
+  update();
+  callout(s, 'Rebalancing trades precision for recall; it doesn’t create information. <b>SMOTE</b> (in the <code>imbalanced-learn</code> library) synthesises new minority examples between existing ones instead of copying them. Whatever you do, <b>rebalance only the training set</b>: the test set must look like the real world, or your metrics will lie.', 'ai');
+}
+
+// ---------------------------------------------------------------------------
+// Scene: ROC curve and AUC (Ch. 12)
+// ---------------------------------------------------------------------------
+function rocScene(root) {
+  const s = scene(root, {
+    title: 'ROC and AUC: judging a model across every threshold',
+    story: 'A threshold picks one point on a trade-off. The <b>ROC curve</b> shows them all: for every possible threshold, how many real positives you catch (true-positive rate) against how many negatives you wrongly flag (false-positive rate). Here the “model” is the AI agent’s own <b>confidence</b>, predicting whether people kept its category. The area under the curve (<b>AUC</b>) is the chance that a random kept ticket had higher confidence than a random corrected one: 0.5 is a coin flip, 1.0 is perfect.',
+    formula: String.raw`\text{AUC} = P(\text{score}_{+} > \text{score}_{-}) = \frac{U}{n_{+}\,n_{-}}`,
+  });
+  const ctl = controls(s, `<label>Confidence threshold <input type="range" id="th" min="0" max="1" step="0.01" value="0.5"><b id="thv"></b></label>`);
+  const box = s.appendChild(el('div', { class: 'viz' }));
+  const out = el('div'); s.appendChild(out);
+  let res = null, data = [];
+  const draw = () => {
+    const th = +ctl.querySelector('#th').value; ctl.querySelector('#thv').textContent = pct(th);
+    box.innerHTML = '';
+    if (!res) return emptyNote(box, 'Need AI-agent tickets where people both kept and corrected the AI.');
+    const f = frame(box, { width: 560, height: 420, margin: { top: 20, right: 30, bottom: 46, left: 56 } });
+    const x = d3.scaleLinear().domain([0, 1]).range([0, f.w]), y = d3.scaleLinear().domain([0, 1]).range([f.h, 0]);
+    axes(f, x, y, { xLabel: 'false-positive rate', yLabel: 'true-positive rate', xFormat: d3.format('.0%'), yFormat: d3.format('.0%') });
+    f.g.append('line').attr('x1', x(0)).attr('y1', y(0)).attr('x2', x(1)).attr('y2', y(1)).attr('stroke', C.muted).attr('stroke-dasharray', '6 5');
+    f.g.append('path').attr('d', d3.area().x((p) => x(p.fpr)).y0(f.h).y1((p) => y(p.tpr)).curve(d3.curveStepAfter)(res.curve)).attr('fill', C.teal).attr('fill-opacity', 0.15);
+    f.g.append('path').attr('d', d3.line().x((p) => x(p.fpr)).y((p) => y(p.tpr)).curve(d3.curveStepAfter)(res.curve)).attr('fill', 'none').attr('stroke', C.teal).attr('stroke-width', 3);
+    const P = data.filter((d) => d.y).length, N = data.length - P;
+    const tpr = data.filter((d) => d.y && d.s >= th).length / P, fpr = data.filter((d) => !d.y && d.s >= th).length / N;
+    f.g.append('circle').attr('cx', x(fpr)).attr('cy', y(tpr)).attr('r', 9).attr('fill', C.yellow).attr('stroke', C.surface).attr('stroke-width', 2);
+    statGrid(out, [[f2(res.auc), 'AUC', C.teal], [pct(tpr), 'kept tickets above threshold (TPR)'], [pct(fpr), 'corrected tickets above threshold (FPR)', C.red]]);
+  };
+  ctl.querySelector('#th').addEventListener('input', draw);
+  onData(({ rows }) => {
+    data = rows.filter((r) => r.workflow === AI && Number.isFinite(r.ai_confidence) && (r.ai_correct === 0 || r.ai_correct === 1)).map((r) => ({ s: r.ai_confidence, y: r.ai_correct }));
+    res = data.length > 5 && new Set(data.map((d) => d.y)).size === 2 ? roc(data.map((d) => d.s), data.map((d) => d.y)) : null;
+    draw();
+  });
+  callout(s, 'Use AUC to compare models independently of any threshold, then pick the threshold from the costs: a missed major incident costs far more than a false alarm. Accuracy alone hides that choice.', 'ai');
 }

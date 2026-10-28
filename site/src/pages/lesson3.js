@@ -4,7 +4,7 @@
 import * as d3 from 'd3';
 import { AI, LEGACY } from '../data/design.js';
 import { onData } from '../data/context.js';
-import { chiSquareIndependence, cohensD, levene, mannWhitney, mean, normCdf, normInv, normPdf, rng, sd, shapiroWilk, tCdf, tInv, tPdf, tTest, tukeyHSD, twoWayAnova } from '../stats/core.js';
+import { chiSquareIndependence, cohensD, levene, mannWhitney, mean, normCdf, normInv, normPdf, rng, sd, shapiroWilk, tCdf, tInv, tPdf, tTest, tukeyHSD, twoProportionZ, twoWayAnova, wilcoxonSignedRank } from '../stats/core.js';
 import { C, axes, callout, controls, el, emptyNote, f2, fmtP, frame, hero, pct, scene, statGrid } from '../viz/common.js';
 
 const METRICS = {
@@ -32,7 +32,7 @@ export function renderLesson3(root) {
     kicker: 'Lesson 3 · Inference',
     title: 'Did the Banners Work?',
     lede: 'Some of you saw “ServiceNow’s single pane of glass is incredibly efficient.” Some saw “AI agents are known to hallucinate.” The stopwatch didn’t care. Did your ratings? This is the question behind every A/B test of every AI rollout.',
-    chapters: ['Ch 3 · Hypothesis tests', 'Ch 4 · Assumptions', 'Ch 6 · Power', 'Ch 7 · ANOVA', 'Ch 8 · Chi-square', 'Ch 9 · Interactions & post hoc'],
+    chapters: ['Ch 3 · Logic of hypothesis testing', 'Ch 4 · Significance & power', 'Ch 7 · Parametric tests', 'Ch 8 · Nonparametric tests', 'Ch 9 · ANOVA & post hoc'],
   });
   // Scene 1 owns the chosen comparison; scene 2 re-renders from it. The bus remembers the
   // latest groups so a listener added after the first emit still gets them.
@@ -42,6 +42,7 @@ export function renderLesson3(root) {
   tTestScene(root, bus);
   stopwatch(root);
   power(root);
+  practical(root);
   anova(root);
   chiSquare(root);
 }
@@ -201,7 +202,8 @@ function stopwatch(root) {
     statGrid(out, [[`${(1 / Math.exp(md)).toFixed(1)}×`, 'faster with the AI agent', C.teal],
       [`${(1 / Math.exp(md + crit * se)).toFixed(1)}–${(1 / Math.exp(md - crit * se)).toFixed(1)}×`, '95% CI'],
       [pct(d.filter((v) => v < 0).length / n), 'of people were faster with AI'],
-      [fmtP(tCdf(t, n - 1)), 'paired t-test (one-sided)']]);
+      [fmtP(tCdf(t, n - 1)), 'paired t-test (one-sided)'],
+      [fmtP(wilcoxonSignedRank(d, { alternative: 'less' }).p), 'Wilcoxon signed-rank (nonparametric)']]);
   });
   callout(s, 'Put this next to the ratings. If the AI is clearly faster but the people who saw the warning rate it lower anyway, then <b>perception is lagging performance</b>. That gap is what an AI leader has to manage.', 'ai');
 }
@@ -331,4 +333,48 @@ function chiSquare(root) {
       [pct(table[0][1] / rowT[0]), 'override rate, warned', C.yellow], [pct(table[1][1] / rowT[1]), 'override rate, not warned', C.blue]]);
   });
   callout(s, 'Overrides aren’t free: every unnecessary correction costs time and teaches the model nothing. The same test answers fairness questions too. Swap “saw the warning” for department, region or language, and a chi-square on override counts is a basic <b>AI adoption and fairness audit</b>.', 'ai');
+}
+
+// ---------------------------------------------------------------------------
+// Scene: statistically significant vs practically meaningful (Ch. 4)
+// ---------------------------------------------------------------------------
+function practical(root) {
+  const s = scene(root, {
+    title: 'Significant is not the same as important',
+    story: 'Two AI routing models: <b>Model A is 94% accurate, Model B is 93%</b>. Is A better? It depends on how many tickets you tested them on, and on how big a difference would actually matter to the service desk. Slide the test-set size and watch the confidence interval shrink. The p-value answers “is there a difference?”; the interval answers “how big could it be?”',
+    formula: String.raw`z = \frac{\hat p_A - \hat p_B}{\sqrt{\hat p(1-\hat p)\left(\frac{1}{n_A}+\frac{1}{n_B}\right)}}`,
+  });
+  const ctl = controls(s, `
+    <label>Test tickets per model <input type="range" id="n" min="2" max="5" step="0.05" value="3"><b id="nv"></b></label>
+    <label>Smallest difference that matters <input type="range" id="m" min="0.5" max="5" step="0.5" value="2"><b id="mv"></b></label>`);
+  const box = s.appendChild(el('div', { class: 'viz' }));
+  const out = el('div'); s.appendChild(out);
+  const update = () => {
+    const n = Math.round(10 ** +ctl.querySelector('#n').value), m = +ctl.querySelector('#m').value / 100;
+    ctl.querySelector('#nv').textContent = n.toLocaleString(); ctl.querySelector('#mv').textContent = `${(m * 100).toFixed(1)} pts`;
+    const r = twoProportionZ(Math.round(0.94 * n), n, Math.round(0.93 * n), n);
+    box.innerHTML = '';
+    const f = frame(box, { height: 200, margin: { top: 30, right: 30, bottom: 44, left: 30 } });
+    const x = d3.scaleLinear().domain([-0.06, 0.08]).range([0, f.w]).clamp(true);
+    f.g.append('rect').attr('x', x(-m)).attr('width', x(m) - x(-m)).attr('y', 0).attr('height', f.h).attr('fill', C.muted).attr('fill-opacity', 0.18);
+    f.g.append('text').attr('class', 'lbl muted').attr('x', x(0)).attr('y', -10).attr('text-anchor', 'middle').text('too small to matter');
+    f.g.append('g').attr('class', 'axis').attr('transform', `translate(0,${f.h})`).call(d3.axisBottom(x).ticks(8).tickFormat((v) => `${(v * 100).toFixed(0)} pts`));
+    f.g.append('text').attr('class', 'lbl muted').attr('x', f.w / 2).attr('y', f.h + 38).attr('text-anchor', 'middle').text('accuracy difference, Model A − Model B (95% CI)');
+    f.g.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', f.h).attr('stroke', C.ink2).attr('stroke-dasharray', '4 4');
+    const yy = f.h / 2;
+    f.g.append('line').attr('x1', x(r.ci[0])).attr('x2', x(r.ci[1])).attr('y1', yy).attr('y2', yy).attr('stroke', C.yellow).attr('stroke-width', 6).attr('stroke-linecap', 'round');
+    f.g.append('circle').attr('cx', x(r.diff)).attr('cy', yy).attr('r', 9).attr('fill', C.yellow).attr('stroke', C.surface).attr('stroke-width', 2);
+    const sig = r.p < 0.05, meaningful = r.ci[0] > m, trivial = r.ci[0] > -m && r.ci[1] < m;
+    const verdict = sig && meaningful ? 'Significant <b>and</b> big enough to matter.'
+      : sig && trivial ? '<b>Statistically significant but practically trivial</b>: the whole interval sits inside “too small to matter”.'
+      : sig ? 'Significant, but the interval still includes differences too small to care about.'
+      : trivial ? 'Not significant, and we can rule out any difference that matters: the models are <b>practically equivalent</b>.'
+      : '<b>Not significant, and inconclusive</b>: the interval still includes differences that would matter. Test on more tickets.';
+    statGrid(out, [[`p = ${r.p < 0.001 ? '< 0.001' : r.p.toFixed(3)}`, 'two-proportion z-test', sig ? C.teal : C.muted],
+      [`${(r.ci[0] * 100).toFixed(1)} to ${(r.ci[1] * 100).toFixed(1)} pts`, '95% CI for the difference', C.yellow]]);
+    out.appendChild(el('div', { class: 'callout' }, verdict));
+  };
+  ctl.querySelectorAll('input').forEach((i) => i.addEventListener('input', update));
+  update();
+  callout(s, 'Before choosing between two AI models, also ask: <b>is accuracy even the right metric?</b> (Not if the tickets you care about are rare; see class balancing on page 5.) And if both models were tested on the <i>same</i> tickets, use a paired test such as McNemar’s, which is more powerful than comparing two separate percentages.', 'ai');
 }

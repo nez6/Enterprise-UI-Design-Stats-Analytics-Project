@@ -72,3 +72,21 @@ test('power approximation is within 0.02 of statsmodels', () => {
   close(S.powerTwoSample(0.8, 24, 0.05, true), R.power.p24, 0.02, 'power');
   assert.ok(Math.abs(S.nForPower(0.8) - Math.ceil(R.power.n80)) <= 1);
 });
+
+test('Wilcoxon signed-rank (normal approximation)', () => {
+  for (const alt of ['two-sided', 'greater', 'less']) {
+    const r = S.wilcoxonSignedRank(D.dd, { alternative: alt }), ref = R[`wil_${alt}`];
+    close(r.p, ref.p, 1e-6, `p ${alt}`);
+    if (alt === 'two-sided') close(r.statistic, ref.W, 1e-9, 'W');
+  }
+});
+
+test('two-proportion z-test', () => {
+  const r = S.twoProportionZ(940, 1000, 930, 1000);
+  close(r.z, R.prop.z, 1e-9, 'z'); close(r.p, R.prop.p, 1e-6, 'p');
+});
+
+test('ROC AUC and pmfs', () => {
+  close(S.roc(D.sc, D.lab).auc, R.auc, 1e-9, 'auc');
+  close(S.binomPmf(7, 10, 0.8), R.binom, 1e-9, 'binom'); close(S.poissonPmf(3, 2.5), R.pois, 1e-9, 'pois');
+});

@@ -335,3 +335,47 @@ export const softmax = (logits, T = 1) => {
   const z = logits.map((l) => l / Math.max(T, 1e-6)), m = Math.max(...z), e = z.map((v) => Math.exp(v - m)), s = sum(e);
   return e.map((v) => v / s);
 };
+
+// ---------------------------------------------------------------------------
+// Added for the syllabus-gap scenes
+// ---------------------------------------------------------------------------
+
+// Wilcoxon signed-rank test (normal approximation with tie and zero handling as scipy's
+// zero_method="wilcox", correction=False, method="approx").
+export function wilcoxonSignedRank(d, { alternative = 'two-sided' } = {}) {
+  const nz = d.filter((v) => v !== 0), n = nz.length, r = rank(nz.map(Math.abs));
+  const Wplus = sum(r.filter((_, i) => nz[i] > 0)), Wminus = sum(r.filter((_, i) => nz[i] < 0));
+  const counts = new Map(); nz.map(Math.abs).forEach((v) => counts.set(v, (counts.get(v) || 0) + 1));
+  const tie = sum([...counts.values()].map((t) => t ** 3 - t));
+  const mu = (n * (n + 1)) / 4, sigma = Math.sqrt((n * (n + 1) * (2 * n + 1)) / 24 - tie / 48);
+  const z = (Wplus - mu) / sigma;
+  return { Wplus, Wminus, statistic: Math.min(Wplus, Wminus), z, p: pFromZ(z, alternative), n };
+}
+
+// Two-proportion z-test (pooled), e.g. "is 94% accuracy really better than 93%?"
+export function twoProportionZ(x1, n1, x2, n2, { alternative = 'two-sided' } = {}) {
+  const p1 = x1 / n1, p2 = x2 / n2, p = (x1 + x2) / (n1 + n2);
+  const se0 = Math.sqrt(p * (1 - p) * (1 / n1 + 1 / n2)), z = (p1 - p2) / se0;
+  const se = Math.sqrt((p1 * (1 - p1)) / n1 + (p2 * (1 - p2)) / n2);
+  return { p1, p2, diff: p1 - p2, z, p: pFromZ(z, alternative), ci: [p1 - p2 - 1.96 * se, p1 - p2 + 1.96 * se] };
+}
+
+// ROC curve and AUC for scores predicting a 0/1 label.
+export function roc(scores, labels) {
+  const pts = scores.map((s, i) => [s, labels[i]]).sort((a, b) => b[0] - a[0]);
+  const P = labels.filter((l) => l === 1).length, N = labels.length - P;
+  const curve = [{ fpr: 0, tpr: 0, threshold: Infinity }];
+  let tp = 0, fp = 0;
+  for (let i = 0; i < pts.length; i++) {
+    if (pts[i][1] === 1) tp++; else fp++;
+    if (i === pts.length - 1 || pts[i + 1][0] !== pts[i][0]) curve.push({ fpr: fp / N, tpr: tp / P, threshold: pts[i][0] });
+  }
+  let auc = 0;
+  for (let i = 1; i < curve.length; i++) auc += (curve[i].fpr - curve[i - 1].fpr) * (curve[i].tpr + curve[i - 1].tpr) / 2;
+  return { curve, auc };
+}
+
+export const binomPmf = (k, n, p) => jStat.binomial.pdf(k, n, p);
+export const poissonPmf = (k, l) => jStat.poisson.pdf(k, l);
+export const expPdf = (x, rate) => jStat.exponential.pdf(x, rate);
+export const lognormPdf = (x, mu, s) => jStat.lognormal.pdf(x, mu, s);

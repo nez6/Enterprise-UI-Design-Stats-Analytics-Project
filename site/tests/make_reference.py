@@ -35,3 +35,19 @@ R["power"] = dict(p24=TTestIndPower().power(0.8, 24, 0.05, alternative="larger")
 data = dict(a=a, b=b, ra=ra, rb=rb, c=c, tab=tab, x1=x1.tolist(), x2=x2.tolist(), y=y.tolist(), yl=yl.tolist(), A=A.tolist(), B=B.tolist(), yy=yy.tolist())
 json.dump(dict(ref=R, data=data), open("site/tests/reference.json", "w"), default=float)
 print("ok")
+
+# --- syllabus-gap additions -------------------------------------------------
+R2 = {}
+dd = (rng.normal(0.3, 1, 40)).round(1)
+for alt in ("two-sided", "greater", "less"):
+    r = stats.wilcoxon(dd, alternative=alt, method="approx", correction=False)
+    R2[f"wil_{alt}"] = dict(W=float(r.statistic), p=float(r.pvalue))
+from statsmodels.stats.proportion import proportions_ztest
+z, p = proportions_ztest([940, 930], [1000, 1000]); R2["prop"] = dict(z=float(z), p=float(p))
+sc = rng.random(60).round(2); lab = (rng.random(60) < sc).astype(int)
+from sklearn.metrics import roc_auc_score  # noqa: E402  (installed only for this check)
+R2["auc"] = float(roc_auc_score(lab, sc))
+R2["binom"] = float(stats.binom.pmf(7, 10, 0.8)); R2["pois"] = float(stats.poisson.pmf(3, 2.5))
+ref = json.load(open("site/tests/reference.json")); ref["ref"].update(R2); ref["data"].update(dict(dd=dd.tolist(), sc=sc.tolist(), lab=lab.tolist()))
+json.dump(ref, open("site/tests/reference.json", "w"), default=float)
+print("added gap references")

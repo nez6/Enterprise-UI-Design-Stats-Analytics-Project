@@ -2,6 +2,12 @@
 
 **File noisy ServiceNow-style tickets, then learn statistics and AI from the group's own data.**
 
+**Live:**
+- SNOW Stats Lab: https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/?session=pathfinders
+- Streamlit lab (runs in the browser): https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/streamlit/index.html
+
+Republish both after changes with `./scripts/deploy_pages.sh` (it builds `site/` and pushes the `gh-pages` branch).
+
 A static website (GitHub Pages) with six pages:
 
 | # | Page | What it teaches |
@@ -20,6 +26,23 @@ Every lesson redraws live as tickets arrive. It also has a 300-person benchmark 
 > Not affiliated with or endorsed by ServiceNow, Inc. The portal is a look-alike training simulation with no logos and no login.
 
 ---
+
+## Syllabus coverage
+
+| Chapter | Where |
+|---|---|
+| 1 Practical statistics: population vs sample, descriptive vs inferential, how much data | Page 2 (population vs sample, sampling, CLT), page 4 (power) |
+| 2 Probability distributions | Page 2 (field guide: binomial, Poisson, normal, lognormal, exponential), page 6 (softmax) |
+| 3 Logic of hypothesis testing | Page 4 (permutation test, null world) |
+| 4 Significance & power | Page 4 (power, “significant is not the same as important”) |
+| 5 Sampling | Page 2 (random, stratified, systematic, convenience; CLT) |
+| 6 Class balancing | Page 5 (oversampling, undersampling, class weights, SMOTE) |
+| 7 Parametric tests | Page 4 (Student and Welch t, paired t) |
+| 8 Nonparametric tests | Page 4 (Mann–Whitney, Wilcoxon signed-rank, permutation, chi-square) |
+| 9 ANOVA | Page 4 (two-way ANOVA, interaction, Tukey HSD) |
+| 10 Regression | Page 5 (OLS, multiple, logistic) |
+| 11 Bayesian statistics | Page 3 (Bayes as area, naive Bayes, Beta updating) |
+| 12 Model evaluation | Page 5 (confusion matrix, precision/recall, ROC/AUC, cross-validation, overfitting), page 6 (calibration) |
 
 ## Run the website locally
 
