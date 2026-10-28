@@ -86,6 +86,10 @@ create policy "anon insert" on public.submissions for insert to anon with check 
 create policy "anon insert" on public.feedback    for insert to anon with check (true);
 create policy "anon insert" on public.withdrawals for insert to anon with check (true);
 revoke select, update, delete on public.submissions, public.feedback, public.withdrawals from anon;
+-- Explicit grants, so this works when "Automatically expose new tables" is OFF (recommended).
+grant usage on schema public to anon;
+grant insert on public.submissions, public.feedback, public.withdrawals to anon;
+grant usage on all sequences in schema public to anon;
 
 -- De-identified views for the live lessons (owner rights; the anon key reads these only).
 create or replace view public.submissions_public as
