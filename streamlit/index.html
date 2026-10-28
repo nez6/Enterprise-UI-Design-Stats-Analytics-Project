@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enterprise AI & Statistics Lab</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.10.0/build/stlite.css">
+  <style>body{margin:0;background:#1a1a19;color:#f0efec;font-family:system-ui,sans-serif}#boot{padding:48px;text-align:center;opacity:.8}</style>
+</head>
+<body>
+  <!-- Runs the Streamlit lab entirely in the browser with stlite (Pyodide), so it can be hosted on GitHub Pages.
+       site/scripts/copy-streamlit.mjs copies app.py and legacy_lab/ next to this file at build time. -->
+  <div id="root"><div id="boot">Loading the statistics lab… the first visit downloads Python into your browser and takes about a minute.</div></div>
+  <script type="module">
+    import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.10.0/build/stlite.js";
+    const files = ["app.py", "legacy_lab/__init__.py", "legacy_lab/design.py", "legacy_lab/features.py", "legacy_lab/simulate.py"];
+    mount({
+      requirements: ["plotly", "statsmodels"],
+      entrypoint: "app.py",
+      files: Object.fromEntries(files.map((f) => [f, { url: `./${f}` }])),
+      streamlitConfig: { "theme.base": "dark", "theme.primaryColor": "#3987e5", "theme.backgroundColor": "#1a1a19",
+                         "theme.secondaryBackgroundColor": "#242423", "theme.textColor": "#f0efec", "client.toolbarMode": "viewer" },
+    }, document.getElementById("root"));
+  </script>
+</body>
+</html>
