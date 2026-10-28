@@ -15,6 +15,9 @@
 
 export const LEGACY = 'ServiceNow';
 export const AI = 'AI Agent';
+// What people see. Both halves are ServiceNow: the classic catalog and the same requests with AI built in.
+// (The stored values above stay the same so existing data and the database rules keep working.)
+export const LABEL = { [LEGACY]: 'Classic catalog', [AI]: 'AI-assisted catalog' };
 export const JOB_LEVELS = ['IC / Associate', 'Lead / Manager', 'Director / Executive'];
 export const JOB_ROLES = ['Project / Product Management', 'Engineering / Tech', 'Operations', 'Other'];
 
@@ -24,11 +27,11 @@ export const TICKET_TYPES = ['access', 'software', 'facilities'];
 // `fields` are the four mandatory fields every ticket has. `answer` is the correct value the AI
 // agent fills in. `cart` is the Shopping Cart reference code from that ticket's KB article.
 export const TESTS = {
-  1: { name: 'Password Reset', short: 'SN · Access', workflow: LEGACY, type: 'access', category: 'Access & Passwords', cart: 'CART-4410', kb: 'KB0011873',
+  1: { name: 'Password Reset', short: 'Classic · Access', workflow: LEGACY, type: 'access', category: 'Access & Passwords', cart: 'CART-4410', kb: 'KB0011873',
        prompt: 'You’re locked out of the expense system after too many attempts, and expenses are due today.' },
-  2: { name: 'Software Licence Request', short: 'SN · Software', workflow: LEGACY, type: 'software', category: 'Software', cart: 'CART-2208', kb: 'KB0012255',
+  2: { name: 'Software Licence Request', short: 'Classic · Software', workflow: LEGACY, type: 'software', category: 'Software', cart: 'CART-2208', kb: 'KB0012255',
        prompt: 'You need a Tableau licence to build the board dashboard for Monday.' },
-  3: { name: 'Boardroom AV', short: 'SN · Facilities', workflow: LEGACY, type: 'facilities', category: 'Facilities & AV', cart: 'CART-7781', kb: 'KB0012847',
+  3: { name: 'Boardroom AV', short: 'Classic · Facilities', workflow: LEGACY, type: 'facilities', category: 'Facilities & AV', cart: 'CART-7781', kb: 'KB0012847',
        prompt: 'The boardroom screen and microphones aren’t working, and the board call starts at 5:00 PM.' },
   4: { name: 'MFA Reset', short: 'AI · Access', workflow: AI, type: 'access', category: 'Access & Passwords', cart: 'CART-5150', kb: 'KB0013390',
        prompt: 'Your new phone means the two-factor codes stopped arriving and you can’t sign in to email.' },

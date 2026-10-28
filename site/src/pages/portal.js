@@ -62,10 +62,10 @@ function drawHome() {
       <div class="card">
         <h2>Your Friday-afternoon shift</h2>
         <p class="muted">You’re a project lead at a fast-growing company with <b>six urgent IT requests</b> to log before the end of the day.
-        You’ll file three in the classic <b>ServiceNow catalog</b> and three with the new <b>AI agent</b>. Describe each problem <b>in your own words</b>, just as you would at work.</p>
+        You’ll file three in the <b>classic catalog</b> and three in the <b>AI-assisted catalog</b>, where an AI agent built into ServiceNow fills the ticket in for you. Describe each problem <b>in your own words</b>, just as you would at work.</p>
         <div class="catalog" style="margin:16px 0 20px">
-          <div class="tile"><b>ServiceNow catalog</b><span class="muted">Password · Software · Boardroom AV</span></div>
-          <div class="tile"><b>✨ AI agent</b><span class="muted">MFA · Software install · Room camera</span></div>
+          <div class="tile"><b>Classic catalog</b><span class="muted">Password · Software · Boardroom AV</span></div>
+          <div class="tile"><b>✨ AI-assisted catalog</b><span class="muted">MFA · Software install · Room camera</span></div>
         </div>
         <form id="start">
           <div class="row2">
@@ -132,7 +132,7 @@ function drawSetIntro() {
     <div style="padding-top:28px"></div>
     <div class="card" style="max-width:760px;margin:0 auto">
       <p class="p-breadcrumb">Part ${part} of 2</p>
-      <h2>${wf === AI ? '✨ Meet the AI agent' : 'The ServiceNow catalog'}</h2>
+      <h2>${wf === AI ? '✨ The AI-assisted catalog' : 'The classic catalog'}</h2>
       <p class="muted" style="margin:8px 0 18px">${wf === AI
         ? 'For the next three requests, describe the problem and the AI agent built into the portal will fill in the whole ticket for you, including the shopping cart. Check its work, then submit.'
         : 'For the next three requests, use the standard catalog forms. Fill in the required fields, then check out through the Service Catalog Shopping Cart using the reference code in each ticket’s KB article.'}</p>
@@ -153,7 +153,7 @@ function shell(t, bodyHtml) {
     ${bannerHtml(bannerFor(meta.workflow))}
     <div class="p-grid">
       <div class="card">
-        <div class="p-breadcrumb">Home › ${meta.workflow === AI ? '✨ AI agent' : 'Service Catalog'} › ${meta.category}</div>
+        <div class="p-breadcrumb">Home › ${meta.workflow === AI ? '✨ AI-assisted catalog' : 'Classic catalog'} › ${meta.category}</div>
         <div class="p-record-head">
           <div><h2>${meta.name}</h2><span class="p-number">${task.number} · Ticket ${P.idx + 1} of 6</span></div>
           <span class="state-chip">${task.state || 'New'}</span>
@@ -354,7 +354,7 @@ function drawTicketFeedback() {
       <h2>Quick pulse check</h2>
       <p class="muted">Two taps. Your honest reaction is the data.</p>
       <div class="field"><label>How frustrating was this ticket?</label>${scaleHtml('frustration', 1, 10, '1 · not at all frustrating', '10 · extremely frustrating')}</div>
-      <div class="field"><label>How efficient was ${meta.workflow === AI ? 'the AI agent' : 'ServiceNow'} for this request?</label>${scaleHtml('efficiency', 1, 10, '1 · useless', '10 · flawless')}</div>
+      <div class="field"><label>How efficient was ${meta.workflow === AI ? 'the AI-assisted catalog' : 'the classic catalog'} for this request?</label>${scaleHtml('efficiency', 1, 10, '1 · useless', '10 · flawless')}</div>
       <div id="alerts"></div>
       <button class="btn primary" id="next">${P.idx === 5 ? 'Finish shift →' : 'Next ticket →'}</button>
     </div>`;
@@ -393,13 +393,13 @@ function drawFinalSurvey() {
     <div class="card" style="max-width:720px;margin:0 auto">
       <h2>Last step: your verdict</h2>
       <p class="muted">This feedback goes to the platform owner (that’s the class).</p>
-      <div class="field"><label>How likely are you to recommend the ServiceNow catalog to a colleague?</label>${scaleHtml('nps', 0, 10, '0 · not at all', '10 · extremely likely')}</div>
+      <div class="field"><label>How likely are you to recommend the classic catalog to a colleague?</label>${scaleHtml('nps', 0, 10, '0 · not at all', '10 · extremely likely')}</div>
       <div class="field"><label>How much would you trust the AI agent with your next ticket?</label>${scaleHtml('ai_trust', 1, 10, '1 · not at all', '10 · completely')}</div>
       <div class="field"><label>Next time, which would you rather use?</label>
-        <div class="chips"><button class="chip" type="button" data-p="0">ServiceNow catalog</button><button class="chip" type="button" data-p="1">✨ AI agent</button></div></div>
-      <div class="field"><label>Before the ServiceNow tickets, did you see a message about ServiceNow?</label>
+        <div class="chips"><button class="chip" type="button" data-p="0">Classic catalog</button><button class="chip" type="button" data-p="1">✨ AI-assisted catalog</button></div></div>
+      <div class="field"><label>Before the classic-catalog tickets, did you see a message about ServiceNow?</label>
         <div class="chips" data-mc="mc_snow"><button class="chip" type="button" data-v="yes">Yes</button><button class="chip" type="button" data-v="no">No</button><button class="chip" type="button" data-v="unsure">Not sure</button></div></div>
-      <div class="field"><label>Before the AI-agent tickets, did you see a message about AI?</label>
+      <div class="field"><label>Before the AI-assisted tickets, did you see a message about AI?</label>
         <div class="chips" data-mc="mc_ai"><button class="chip" type="button" data-v="yes">Yes</button><button class="chip" type="button" data-v="no">No</button><button class="chip" type="button" data-v="unsure">Not sure</button></div></div>
       <div class="field"><label for="comment">What should the platform team fix first? <span class="hint">(optional, no personal info)</span></label><textarea id="comment" maxlength="400"></textarea></div>
       <div id="alerts"></div>
@@ -442,8 +442,8 @@ function drawDone() {
         ${!P.aiPrimed ? (gotEmail ? ' It slipped through, hence the angry email.' : ' You caught it before submitting.') : ''}
         The question: do warnings, confidence scores and mistakes change how efficient a system <i>feels</i>, compared with what the stopwatch says? Please don’t tell people who haven’t done it yet.</div>
         <div class="stat-row">
-          <div><b>${med(LEGACY) ?? '–'}s</b><span>your median ServiceNow ticket</span></div>
-          <div><b>${med(AI) ?? '–'}s</b><span>your median AI-agent ticket</span></div>
+          <div><b>${med(LEGACY) ?? '–'}s</b><span>your median classic-catalog ticket</span></div>
+          <div><b>${med(AI) ?? '–'}s</b><span>your median AI-assisted ticket</span></div>
         </div>
         <p class="muted">The email from “AV Operations” was fictional, and so were the room mix-up and the cart codes. Nobody was actually sent to the wrong room.</p>
         <div class="consent-box">

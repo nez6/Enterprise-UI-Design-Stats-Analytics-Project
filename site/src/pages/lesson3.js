@@ -2,16 +2,16 @@
 // chi-square (Ch. 3, 4, 6, 7, 8, 9), all on the class's own two-banner experiment.
 
 import * as d3 from 'd3';
-import { AI, LEGACY } from '../data/design.js';
+import { AI, LABEL, LEGACY } from '../data/design.js';
 import { onData } from '../data/context.js';
 import { chiSquareIndependence, cohensD, levene, mannWhitney, mean, normCdf, normInv, normPdf, rng, sd, shapiroWilk, tCdf, tInv, tPdf, tTest, tukeyHSD, twoProportionZ, twoWayAnova, wilcoxonSignedRank } from '../stats/core.js';
 import { C, axes, callout, controls, el, emptyNote, f2, fmtP, frame, hero, pct, scene, statGrid } from '../viz/common.js';
 
 const METRICS = {
-  sn_eff: { label: 'H1 · ServiceNow efficiency rating: positive banner vs none', group: 'snow_primed', alt: 'greater' },
+  sn_eff: { label: 'H1 · Classic-catalog efficiency rating: praise banner vs none', group: 'snow_primed', alt: 'greater' },
   ai_eff: { label: 'H2 · AI agent efficiency rating: AI team (warning + confidence) vs other team', group: 'ai_primed', alt: 'less' },
   ai_frust: { label: 'AI agent frustration: AI team vs other team', group: 'ai_primed', alt: 'greater' },
-  sn_frust: { label: 'ServiceNow frustration: positive banner vs none', group: 'snow_primed', alt: 'less' },
+  sn_frust: { label: 'Classic-catalog frustration: praise banner vs none', group: 'snow_primed', alt: 'less' },
 };
 
 const geo = (xs) => Math.exp(mean(xs.map(Math.log)));
@@ -178,8 +178,8 @@ function tTestScene(root, bus) {
 function stopwatch(root) {
   const s = scene(root, {
     title: 'Meanwhile, the stopwatch',
-    story: 'Everyone used <b>both</b> systems, so each person is their own control. Each line is one person: their typical ServiceNow ticket on the left, their typical AI-agent ticket on the right. On a log scale, the average slope is the <b>speed-up ratio</b>.',
-    formula: String.raw`d_i = \ln(\text{AI time}_i) - \ln(\text{ServiceNow time}_i), \qquad t = \frac{\bar d}{s_d/\sqrt n}, \qquad \text{ratio} = e^{\bar d}`,
+    story: 'Everyone used <b>both</b> systems, so each person is their own control. Each line is one person: their typical classic-catalog ticket on the left, their typical AI-assisted ticket on the right. On a log scale, the average slope is the <b>speed-up ratio</b>.',
+    formula: String.raw`d_i = \ln(\text{AI time}_i) - \ln(\text{classic time}_i), \qquad t = \frac{\bar d}{s_d/\sqrt n}, \qquad \text{ratio} = e^{\bar d}`,
   });
   const box = s.appendChild(el('div', { class: 'viz' }));
   const out = el('div'); s.appendChild(out);
@@ -188,17 +188,17 @@ function stopwatch(root) {
     const pp = participants(rows).filter((p) => p.sn_time && p.ai_time);
     if (pp.length < 3) return emptyNote(box, 'Need at least three people who finished both sets.');
     const f = frame(box, { height: 380, margin: { top: 20, right: 40, bottom: 40, left: 70 } });
-    const x = d3.scalePoint().domain(['ServiceNow', 'AI agent']).range([f.w * 0.2, f.w * 0.8]);
+    const x = d3.scalePoint().domain(['Classic catalog', 'AI-assisted']).range([f.w * 0.2, f.w * 0.8]);
     const y = d3.scaleLog().domain(d3.extent(pp.flatMap((p) => [p.sn_time, p.ai_time]))).nice().range([f.h, 0]);
     f.g.append('g').attr('class', 'axis').call(d3.axisLeft(y).ticks(6).tickFormat((v) => `${d3.format('~r')(v)}s`));
     f.g.append('text').attr('class', 'lbl muted').attr('transform', 'rotate(-90)').attr('x', -f.h / 2).attr('y', -50).attr('text-anchor', 'middle').text('typical seconds per ticket (log)');
-    ['ServiceNow', 'AI agent'].forEach((k) => f.g.append('text').attr('class', 'lbl').attr('x', x(k)).attr('y', f.h + 26).attr('text-anchor', 'middle').text(k));
-    f.g.selectAll('.pl').data(pp).join('line').attr('x1', x('ServiceNow')).attr('x2', x('ServiceNow')).attr('y1', (p) => y(p.sn_time)).attr('y2', (p) => y(p.sn_time))
+    ['Classic catalog', 'AI-assisted'].forEach((k) => f.g.append('text').attr('class', 'lbl').attr('x', x(k)).attr('y', f.h + 26).attr('text-anchor', 'middle').text(k));
+    f.g.selectAll('.pl').data(pp).join('line').attr('x1', x('Classic catalog')).attr('x2', x('Classic catalog')).attr('y1', (p) => y(p.sn_time)).attr('y2', (p) => y(p.sn_time))
       .attr('stroke', (p) => (p.ai_time < p.sn_time ? C.teal : C.red)).attr('stroke-opacity', 0.35)
-      .transition().duration(900).delay((_, i) => i * 3).attr('x2', x('AI agent')).attr('y2', (p) => y(p.ai_time));
+      .transition().duration(900).delay((_, i) => i * 3).attr('x2', x('AI-assisted')).attr('y2', (p) => y(p.ai_time));
     const d = pp.map((p) => Math.log(p.ai_time) - Math.log(p.sn_time)), n = d.length, md = mean(d), se = sd(d) / Math.sqrt(n), t = md / se, crit = tInv(0.975, n - 1);
     const medSn = d3.median(pp, (p) => p.sn_time), medAi = d3.median(pp, (p) => p.ai_time);
-    f.g.append('line').attr('x1', x('ServiceNow')).attr('x2', x('AI agent')).attr('y1', y(medSn)).attr('y2', y(medAi)).attr('stroke', C.yellow).attr('stroke-width', 4);
+    f.g.append('line').attr('x1', x('Classic catalog')).attr('x2', x('AI-assisted')).attr('y1', y(medSn)).attr('y2', y(medAi)).attr('stroke', C.yellow).attr('stroke-width', 4);
     statGrid(out, [[`${(1 / Math.exp(md)).toFixed(1)}×`, 'faster with the AI agent', C.teal],
       [`${(1 / Math.exp(md + crit * se)).toFixed(1)}–${(1 / Math.exp(md - crit * se)).toFixed(1)}×`, '95% CI'],
       [pct(d.filter((v) => v < 0).length / n), 'of people were faster with AI'],
@@ -254,7 +254,7 @@ function power(root) {
 function anova(root) {
   const s = scene(root, {
     title: 'ANOVA: the lines that cross',
-    story: 'Ratings depend on two things: the <b>platform</b> (ServiceNow or AI agent) and whether you saw <b>that platform’s banner</b>. ANOVA splits the variation into pieces each factor explains, plus leftover noise. Each F is <b>signal ÷ noise</b>. If the banners work in opposite directions, the lines <b>cross</b>: that’s an interaction.',
+    story: 'Ratings depend on two things: the <b>platform</b> (classic catalog or AI-assisted) and whether you saw <b>that platform’s banner</b>. ANOVA splits the variation into pieces each factor explains, plus leftover noise. Each F is <b>signal ÷ noise</b>. If the banners work in opposite directions, the lines <b>cross</b>: that’s an interaction.',
     formula: String.raw`SS_{\text{total}} = SS_{\text{platform}} + SS_{\text{banner}} + SS_{\text{platform}\times\text{banner}} + SS_{\text{error}}, \qquad F = \frac{MS_{\text{effect}}}{MS_{\text{error}}}`,
   });
   const ctl = controls(s, `<label>Outcome <select id="y"><option value="efficiency">Perceived efficiency</option><option value="frustration">Frustration</option></select></label>`);
@@ -271,7 +271,7 @@ function anova(root) {
     const f = frame(plotBox, { width: 560, height: 340 });
     const x = d3.scalePoint().domain([LEGACY, AI]).range([70, f.w - 70]), y = d3.scaleLinear().domain([1, 10]).range([f.h, 0]);
     axes(f, d3.scaleLinear().range([0, f.w]), y, { yLabel: `mean ${yk} (±95% CI)`, xTicks: 0 });
-    f.g.selectAll('.xl').data([LEGACY, AI]).join('text').attr('class', 'lbl muted').attr('x', (w) => x(w)).attr('y', f.h + 22).attr('text-anchor', 'middle').text((w) => w);
+    f.g.selectAll('.xl').data([LEGACY, AI]).join('text').attr('class', 'lbl muted').attr('x', (w) => x(w)).attr('y', f.h + 22).attr('text-anchor', 'middle').text((w) => LABEL[w]);
     ['No banner', 'Banner'].forEach((p, k) => {
       const color = k ? C.yellow : C.blue;
       const pts = cells.filter((c) => c.p === p).map((c) => ({ w: c.w, m: mean(c.v), h: 1.96 * Math.sqrt(d3.variance(c.v) / c.v.length) }));
@@ -282,7 +282,7 @@ function anova(root) {
         f.g.append('circle').attr('cx', x(q.w) + dx).attr('cy', y(q.m)).attr('r', 6).attr('fill', color).attr('stroke', C.surface).attr('stroke-width', 2);
       });
     });
-    plotBox.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>No banner</span><span><i style="background:${C.yellow}"></i>Banner (positive for ServiceNow, warning for AI)</span>`));
+    plotBox.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>No banner</span><span><i style="background:${C.yellow}"></i>Banner (praise for classic, warning for AI)</span>`));
     let av;
     try { av = twoWayAnova(d.map((r) => r[yk]), d.map((r) => r.workflow), d.map(label)); } catch (e) { return emptyNote(tableBox, `ANOVA couldn’t be fitted: ${e.message}`); }
     const rowHtml = (name, r) => `<tr><td>${name}</td><td class="num">${f2(r.F)}</td><td class="num">${r.df}</td><td class="num">${fmtP(r.p)}</td><td class="num">${f2(r.partialEta2)}</td></tr>`;
@@ -290,7 +290,7 @@ function anova(root) {
       <table class="ltable"><tr><th>Term</th><th class="num">F</th><th class="num">df</th><th class="num">p</th><th class="num">partial η²</th></tr>
       ${rowHtml('Platform', av.A)}${rowHtml('Banner', av.B)}${rowHtml('Platform × banner', av.AB)}<tr><td>Residual</td><td></td><td class="num">${av.residual.df}</td><td></td><td></td></tr></table>
       <p style="color:var(--l-muted);font-size:13px;margin-top:10px">Each person contributes six tickets, so rows aren’t independent. The course report fits a mixed model with a random intercept per person as the formal test; this table shows the logic.</p>`;
-    const tk = tukeyHSD(cells.map((c) => c.v), cells.map((c) => `${c.w} · ${c.p}`));
+    const tk = tukeyHSD(cells.map((c) => c.v), cells.map((c) => `${LABEL[c.w]} · ${c.p}`));
     tukeyBox.innerHTML = `<p class="kicker" style="color:var(--teal)">Tukey HSD post hoc: every pair of cells, family-wise α = 0.05</p>
       <table class="ltable"><tr><th>Group A</th><th>Group B</th><th class="num">Mean diff (B − A)</th><th class="num">adj. p</th><th>Different?</th></tr>
       ${tk.map((t) => `<tr><td>${t.a}</td><td>${t.b}</td><td class="num">${f2(t.diff)}</td><td class="num">${fmtP(t.p)}</td><td>${t.reject ? '<b style="color:var(--yellow)">yes</b>' : 'no'}</td></tr>`).join('')}</table>`;

@@ -2,7 +2,7 @@
 // grounded playbook for putting AI into ServiceNow.
 
 import * as d3 from 'd3';
-import { AI, JOB_LEVELS, LEGACY } from '../data/design.js';
+import { AI, JOB_LEVELS, LABEL, LEGACY } from '../data/design.js';
 import { HALLUCINATED, chaosClassify } from '../data/classifier.js';
 import { onData } from '../data/context.js';
 import { mean, median, rng, softmax } from '../stats/core.js';
@@ -170,7 +170,7 @@ function gap(root) {
         .transition().duration(1000).attr('x2', x(b.t)).attr('y2', y(b.e));
       [[a, 'no banner'], [b, w === AI ? 'saw warning' : 'saw praise']].forEach(([p, lab]) => {
         f.g.append('circle').attr('cx', x(p.t)).attr('cy', y(p.e)).attr('r', 9).attr('fill', color).attr('stroke', C.surface).attr('stroke-width', 2);
-        f.g.append('text').attr('class', 'lbl').attr('x', x(p.t) + 14).attr('y', y(p.e)).attr('dy', '0.35em').text(`${w}: ${lab}`);
+        f.g.append('text').attr('class', 'lbl').attr('x', x(p.t) + 14).attr('y', y(p.e)).attr('dy', '0.35em').text(`${LABEL[w]}: ${lab}`);
       });
     });
     const fb = feedback.filter((q) => q.prefer_ai === 0 || q.prefer_ai === 1);
@@ -178,11 +178,11 @@ function gap(root) {
     const nps = (g) => { const d = feedback.filter((q) => Number.isFinite(q.nps_servicenow) && Boolean(q.snow_primed) === g).map((q) => q.nps_servicenow); return d.length ? Math.round(100 * (d.filter((v) => v >= 9).length - d.filter((v) => v <= 6).length) / d.length) : NaN; };
     const sn = pts.filter((p) => p.w === LEGACY), ai = pts.filter((p) => p.w === AI);
     statGrid(out, [
-      [`${(d3.mean(sn, (p) => p.t) / d3.mean(ai, (p) => p.t)).toFixed(1)}×`, 'AI agent speed advantage', C.teal],
-      [`${(sn[1].e - sn[0].e) >= 0 ? '+' : ''}${f2(sn[1].e - sn[0].e)}`, 'praise banner → ServiceNow rating', C.blue],
+      [`${(d3.mean(sn, (p) => p.t) / d3.mean(ai, (p) => p.t)).toFixed(1)}×`, 'AI-assisted speed advantage', C.teal],
+      [`${(sn[1].e - sn[0].e) >= 0 ? '+' : ''}${f2(sn[1].e - sn[0].e)}`, 'praise banner → classic-catalog rating', C.blue],
       [`${(ai[1].e - ai[0].e) >= 0 ? '+' : ''}${f2(ai[1].e - ai[0].e)}`, 'warning banner → AI rating', C.red],
       [Number.isFinite(pref(false)) ? `${pct(pref(false))} vs ${pct(pref(true))}` : '–', 'choose AI next time: unwarned vs warned'],
-      [Number.isFinite(nps(false)) ? `${nps(false)} vs ${nps(true)}` : '–', 'ServiceNow NPS: no praise vs praise'],
+      [Number.isFinite(nps(false)) ? `${nps(false)} vs ${nps(true)}` : '–', 'classic-catalog NPS: no praise vs praise'],
     ]);
   });
   callout(s, 'The lesson for an AI rollout: <b>the narrative people hear before they use it changes what they report afterwards</b>, sometimes by more than the product changes. Measure behaviour (time, completion, overrides), run the messaging as an experiment, and never let a satisfaction survey be your only scorecard.', 'ai');

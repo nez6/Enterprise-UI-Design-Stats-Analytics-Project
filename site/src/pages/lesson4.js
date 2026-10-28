@@ -31,7 +31,7 @@ export function renderLesson4(root) {
 function squares(root) {
   const s = scene(root, {
     title: 'Least squares, literally',
-    story: 'Each dot is a ServiceNow ticket: how long it took, and how frustrated the person felt. Any line makes errors (residuals). Square each one and add up the area. <b>Drag the two yellow handles</b> to make the total area as small as you can, then press <b>Snap to best fit</b> to see the line OLS finds.',
+    story: 'Each dot is a classic-catalog ticket: how long it took, and how frustrated the person felt. Any line makes errors (residuals). Square each one and add up the area. <b>Drag the two yellow handles</b> to make the total area as small as you can, then press <b>Snap to best fit</b> to see the line OLS finds.',
     formula: String.raw`\hat y = \beta_0 + \beta_1 x, \qquad \min_{\beta_0,\beta_1} \sum_i (y_i - \hat y_i)^2`,
   });
   const ctl = controls(s, `<button class="lbtn hot" id="snap">Snap to best fit</button><button class="lbtn" id="resetL">Reset line</button>`);
@@ -121,7 +121,7 @@ function multiple(root) {
 function logit(root) {
   const s = scene(root, {
     title: 'Bending the line into a probability',
-    story: 'At the end you chose: ServiceNow or the AI agent next time? That’s a yes/no outcome, so we squeeze the line through a <b>sigmoid</b> to get a probability. The x-axis is how much faster the AI was <i>for you</i>. Then pick a <b>threshold</b>: above it we predict “prefers AI”. Moving the threshold trades one kind of mistake for another. That trade-off is the whole of classification.',
+    story: 'At the end you chose: the classic catalog or the AI-assisted one next time? That’s a yes/no outcome, so we squeeze the line through a <b>sigmoid</b> to get a probability. The x-axis is how much faster the AI was <i>for you</i>. Then pick a <b>threshold</b>: above it we predict “prefers AI”. Moving the threshold trades one kind of mistake for another. That trade-off is the whole of classification.',
     formula: String.raw`P(\text{prefers AI}) = \sigma(\beta_0 + \beta_1\,\text{speed-up} + \beta_2\,\text{warned}) = \frac{1}{1+e^{-(\beta_0 + \beta_1 x_1 + \beta_2 x_2)}}`,
   });
   const ctl = controls(s, `<label>Threshold <input type="range" id="th" min="0.05" max="0.95" step="0.01" value="0.5"><b id="thv"></b></label>`);
@@ -135,7 +135,7 @@ function logit(root) {
     if (!model) return emptyNote(curveBox, 'Need final-survey answers with both preferences represented.');
     const f = frame(curveBox, { width: 560, height: 340 });
     const x = d3.scaleLinear().domain(d3.extent(data, (d) => d.x)).nice().range([0, f.w]), y = d3.scaleLinear().domain([0, 1]).range([f.h, 0]);
-    axes(f, x, y, { xLabel: 'speed-up: ln(ServiceNow time ÷ AI time)', yLabel: 'P(prefers AI)', yFormat: d3.format('.0%') });
+    axes(f, x, y, { xLabel: 'speed-up: ln(classic time ÷ AI-assisted time)', yLabel: 'P(prefers AI)', yFormat: d3.format('.0%') });
     const r = rng(9);
     f.g.selectAll('circle').data(data).join('circle').attr('cx', (d) => x(d.x)).attr('cy', (d) => y(d.y === 1 ? 0.97 - r.random() * 0.05 : 0.03 + r.random() * 0.05)).attr('r', 3.5)
       .attr('fill', (d) => (d.w ? C.yellow : C.blue)).attr('fill-opacity', 0.6);
@@ -146,9 +146,9 @@ function logit(root) {
     let tp = 0, fp = 0, tn = 0, fn = 0;
     data.forEach((d) => { const pred = model.predict([d.x, d.w]) >= th ? 1 : 0; if (pred && d.y) tp++; else if (pred) fp++; else if (d.y) fn++; else tn++; });
     cmBox.innerHTML = `<p class="kicker" style="color:var(--teal)">Confusion matrix</p>
-      <table class="ltable"><tr><th></th><th class="num">Predicted AI</th><th class="num">Predicted ServiceNow</th></tr>
+      <table class="ltable"><tr><th></th><th class="num">Predicted AI</th><th class="num">Predicted classic</th></tr>
       <tr><td>Actually chose AI</td><td class="num" style="color:var(--teal)"><b>${tp}</b> TP</td><td class="num" style="color:var(--red)">${fn} FN</td></tr>
-      <tr><td>Actually chose ServiceNow</td><td class="num" style="color:var(--red)">${fp} FP</td><td class="num" style="color:var(--teal)"><b>${tn}</b> TN</td></tr></table>
+      <tr><td>Actually chose classic</td><td class="num" style="color:var(--red)">${fp} FP</td><td class="num" style="color:var(--teal)"><b>${tn}</b> TN</td></tr></table>
       <p style="color:var(--l-ink2);font-size:13px;margin-top:12px">Warning odds ratio: <b style="color:var(--yellow)">${f2(model.oddsRatio[2])}</b> (${fmtP(model.p[2])}). Below 1 means the warning made people less likely to choose the AI, at the same speed-up.</p>`;
     statGrid(out, [[pct((tp + tn) / data.length), 'accuracy'], [tp + fp ? pct(tp / (tp + fp)) : '–', 'precision', C.teal], [tp + fn ? pct(tp / (tp + fn)) : '–', 'recall', C.teal], [f2(model.oddsRatio[1]), 'odds ratio per unit speed-up']]);
   };

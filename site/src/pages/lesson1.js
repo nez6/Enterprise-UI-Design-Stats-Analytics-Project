@@ -27,7 +27,7 @@ export function renderLesson1(root) {
 function stream(root) {
   const s = scene(root, {
     title: 'Every ticket is a dot',
-    story: 'Each dot is one ticket, placed by how long it took. The <b>AI agent</b> rows sit far to the left. The <b>ServiceNow</b> rows sit further right, and they don’t just shift, they <b>stretch</b>. That stretch is the noise this whole course is about.',
+    story: 'Each dot is one ticket, placed by how long it took. The <b>AI-assisted</b> rows sit far to the left. The <b>classic catalog</b> rows sit further right, and they don’t just shift, they <b>stretch</b>. That stretch is the noise this whole course is about.',
   });
   const stats = el('div'); s.appendChild(stats);
   const box = s.appendChild(el('div', { class: 'viz' }));
@@ -57,11 +57,11 @@ function stream(root) {
     statGrid(stats, [
       [new Set(rows.map((d) => d.participant_id)).size, 'participants'],
       [rows.length, 'tickets'],
-      [base.length ? `${median(base).toFixed(0)}s` : '–', 'median · ServiceNow', C.blue],
-      [chaos.length ? `${median(chaos).toFixed(0)}s` : '–', 'median · AI agent', C.teal],
+      [base.length ? `${median(base).toFixed(0)}s` : '–', 'median · classic catalog', C.blue],
+      [chaos.length ? `${median(chaos).toFixed(0)}s` : '–', 'median · AI-assisted', C.teal],
     ]);
   });
-  const lg = el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>ServiceNow catalog</span><span><i style="background:${C.teal}"></i>AI agent</span><span><i style="background:transparent;border:1.5px solid ${C.ink}"></i>Outlined = live ticket</span>`);
+  const lg = el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>Classic catalog</span><span><i style="background:${C.teal}"></i>AI-assisted catalog</span><span><i style="background:transparent;border:1.5px solid ${C.ink}"></i>Outlined = live ticket</span>`);
   s.appendChild(lg);
 }
 
@@ -71,7 +71,7 @@ function stream(root) {
 function balance(root) {
   const s = scene(root, {
     title: 'The mean is a balance point. The median is a halfway point.',
-    story: 'Twelve ServiceNow tickets on a see-saw. The <b style="color:var(--yellow)">mean</b> is where the beam balances; the <b style="color:var(--blue)">median</b> has half the tickets on each side. <b>Drag the slowest ticket to the right.</b> One frustrated person moves the mean a long way and the median not at all.',
+    story: 'Twelve classic-catalog tickets on a see-saw. The <b style="color:var(--yellow)">mean</b> is where the beam balances; the <b style="color:var(--blue)">median</b> has half the tickets on each side. <b>Drag the slowest ticket to the right.</b> One frustrated person moves the mean a long way and the median not at all.',
     formula: String.raw`\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i \qquad \text{median} = x_{\left(\frac{n+1}{2}\right)}`,
   });
   const vals = [95, 120, 140, 150, 170, 185, 200, 220, 240, 265, 300, 360];
@@ -142,7 +142,7 @@ function shape(root) {
 function clt(root) {
   const s = scene(root, {
     title: 'The Central Limit Theorem: order out of chaos',
-    story: 'Take the ugly, skewed ServiceNow ticket times. Grab <b>n</b> tickets at random and average them. Do it again, and again. The averages pile up into a <b>bell curve</b>, and its width shrinks like 1/√n, whatever shape the original data had. This one fact is why polling, A/B testing and every AI accuracy number with an error bar works.',
+    story: 'Take the ugly, skewed classic-catalog ticket times. Grab <b>n</b> tickets at random and average them. Do it again, and again. The averages pile up into a <b>bell curve</b>, and its width shrinks like 1/√n, whatever shape the original data had. This one fact is why polling, A/B testing and every AI accuracy number with an error bar works.',
     formula: String.raw`\bar X_n \;\approx\; \mathcal{N}\!\left(\mu,\; \frac{\sigma^2}{n}\right) \quad\text{for large } n \qquad\Longrightarrow\qquad SE = \frac{\sigma}{\sqrt n}`,
   });
   const ctl = controls(s, `
@@ -169,7 +169,7 @@ function clt(root) {
     const y = d3.scaleLinear().domain([0, d3.max(bins, (b) => b.length)]).range([topH, 0]);
     top.selectAll('rect').data(bins).join('rect').attr('x', (b) => x(b.x0) + 1).attr('width', (b) => Math.max(0, x(b.x1) - x(b.x0) - 2))
       .attr('y', (b) => y(b.length)).attr('height', (b) => topH - y(b.length)).attr('fill', C.blue).attr('fill-opacity', 0.55).attr('rx', 2);
-    top.append('text').attr('class', 'lbl muted').attr('x', 0).attr('y', -4).text(`Population: ${pop.length} ServiceNow ticket times (skewed)`);
+    top.append('text').attr('class', 'lbl muted').attr('x', 0).attr('y', -4).text(`Population: ${pop.length} classic-catalog ticket times (skewed)`);
     top.append('line').attr('x1', x(mu)).attr('x2', x(mu)).attr('y1', 0).attr('y2', topH).attr('stroke', C.yellow).attr('stroke-dasharray', '4 4');
     top.append('text').attr('class', 'lbl').attr('fill', C.yellow).attr('x', x(mu) + 6).attr('y', 12).text(`μ = ${mu.toFixed(0)}s`);
     bot.append('g').attr('class', 'axis').attr('transform', `translate(0,${botH})`).call(d3.axisBottom(x).ticks(8).tickFormat((d) => `${d}s`));
@@ -331,7 +331,7 @@ export function distributions(root) {
     title: 'A field guide to distributions',
     story: 'Every kind of ticket data has a natural shape. <b>Counts out of n</b> are binomial. <b>Arrivals per hour</b> are Poisson. <b>Waiting times</b> are exponential. <b>Durations</b> are lognormal, the right tail you saw above. <b>Averages</b> become normal. Pick one, move its parameters, and see its shape and formula.',
   });
-  const ctl = controls(s, `<label>Distribution <select id="dist">${Object.entries(DISTS).map(([k, d]) => `<option value="${k}">${d.label}</option>`).join('')}</select></label><span id="params"></span><button class="lbtn" id="fit">Fit to class ServiceNow times</button>`);
+  const ctl = controls(s, `<label>Distribution <select id="dist">${Object.entries(DISTS).map(([k, d]) => `<option value="${k}">${d.label}</option>`).join('')}</select></label><span id="params"></span><button class="lbtn" id="fit">Fit to class classic-catalog times</button>`);
   const form = el('div', { class: 'formula' }); s.appendChild(form);
   const box = s.appendChild(el('div', { class: 'viz' }));
   let times = [], showFit = false;
@@ -371,7 +371,7 @@ export function distributions(root) {
       f.g.append('path').attr('d', d3.area().x((_, i) => x(xs[i])).y0(f.h).y1((yy) => y(yy))(ys)).attr('fill', C.yellow).attr('fill-opacity', 0.18);
       f.g.append('path').attr('d', d3.line().x((_, i) => x(xs[i])).y((yy) => y(yy))(ys)).attr('fill', 'none').attr('stroke', C.yellow).attr('stroke-width', 3);
     }
-    if (bins.length) box.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>class ServiceNow ticket times (seconds)</span><span><i style="background:${C.yellow}"></i>fitted lognormal</span>`));
+    if (bins.length) box.appendChild(el('div', { class: 'legend' }, `<span><i style="background:${C.blue}"></i>class classic-catalog ticket times (seconds)</span><span><i style="background:${C.yellow}"></i>fitted lognormal</span>`));
   };
   ctl.querySelector('#dist').addEventListener('change', build);
   ctl.querySelector('#fit').addEventListener('click', () => {
