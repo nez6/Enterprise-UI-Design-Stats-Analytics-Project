@@ -79,12 +79,20 @@ export async function loadLive(session) {
   return { rows: rows.filter((r) => !gone.has(r.participant_id)), feedback: feedback.filter((r) => !gone.has(r.participant_id)) };
 }
 
-let poll = null;
 export function subscribe(fn) {
   listeners.add(fn);
-  // The public key can't read the raw tables, so it can't receive realtime events; poll instead.
-  if (supabase && !poll) poll = setInterval(() => notify({ type: 'poll' }), 8000);
   return () => listeners.delete(fn);
+}
+
+// The public key can't read the raw tables, so it can't receive realtime events: poll instead.
+// Polling only runs while someone is looking at a lesson with live data selected (in practice,
+// the presenter). With ~100 people filing tickets, polling everyone would download the whole
+// dataset thousands of times and could exhaust the free plan's bandwidth.
+let poll = null;
+export function setPolling(on, ms = 10000) {
+  if (!supabase) return;
+  if (on && !poll) poll = setInterval(() => notify({ type: 'poll' }), ms);
+  if (!on && poll) { clearInterval(poll); poll = null; }
 }
 
 export function clearLocal() {

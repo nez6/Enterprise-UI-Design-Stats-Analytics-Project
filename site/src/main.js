@@ -2,7 +2,7 @@ import 'katex/dist/katex.min.css';
 import './styles.css';
 
 import { MODE } from './data/store.js';
-import { SESSION, SOURCES, clearRenderers, liveCount, refresh, setSource, source } from './data/context.js';
+import { SESSION, SOURCES, clearRenderers, liveCount, refresh, setLessonActive, setSource, source } from './data/context.js';
 import { renderPortal } from './pages/portal.js';
 import { renderLesson1 } from './pages/lesson1.js';
 import { renderLesson2 } from './pages/lesson2.js';
@@ -56,6 +56,7 @@ function route() {
   app.innerHTML = '';
   app.className = page.theme;
   page.render(app);
+  setLessonActive(page.theme === 'lesson');
   window.scrollTo(0, 0);
 }
 
@@ -75,4 +76,5 @@ document.addEventListener('keydown', (e) => {
 
 window.addEventListener('hashchange', route);
 route();
-refresh();
+// Participants on the portal don't need the class data; fetch it only for live lesson views.
+if (source() !== 'benchmark') refresh();

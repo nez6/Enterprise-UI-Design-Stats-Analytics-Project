@@ -1,7 +1,7 @@
 // The dataset every lesson reads: the live class, the seeded benchmark, or both.
 // Lessons call onData(render); render is called now and again whenever new tickets arrive.
 
-import { loadLive, subscribe } from './store.js';
+import { MODE, loadLive, setPolling, subscribe } from './store.js';
 import { simulateClass } from './synthetic.js';
 
 const params = new URLSearchParams(location.search);
@@ -26,8 +26,14 @@ export function current() {
 export const source = () => state.source;
 export const liveCount = () => new Set(state.live.rows.map((r) => r.participant_id)).size;
 
+let lessonActive = false;
+const updatePolling = () => setPolling(lessonActive && state.source !== 'benchmark');
+export function setLessonActive(on) { lessonActive = on; updatePolling(); if (on && state.source !== 'benchmark') refresh(); }
+
 export function setSource(s) {
   state.source = s;
+  updatePolling();
+  if (s !== 'benchmark') refresh();
   try { localStorage.setItem('snowlab.source', s); } catch { /* ignore */ }
   emit();
 }
@@ -39,6 +45,8 @@ function emit() {
 }
 
 export async function refresh() {
+  // In live mode, only download the class data when someone is viewing it in a lesson.
+  if (MODE === 'supabase' && !(lessonActive && state.source !== 'benchmark')) return;
   state.loading = true;
   try { state.live = await loadLive(SESSION); } catch (e) { console.warn('Live data unavailable:', e.message); }
   state.loading = false;
