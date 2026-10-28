@@ -237,3 +237,5 @@ main.lesson { max-width: 1120px; margin: 0 auto; padding: 0 24px 120px; }
 .stat-row div { display: flex; flex-direction: column; }
 .stat-row b { font-size: 26px; }
 .stat-row span { font-size: 13px; color: var(--p-ink2); }
+.ext-link { text-decoration: none; opacity: 0.85; white-space: nowrap; }
+.ext-link:hover { opacity: 1; text-decoration: underline; }

@@ -10,3 +10,4 @@ site/.env.local
 
 # Streamlit app runtime data
 streamlit_app/data/
+site/public/streamlit/

@@ -16,6 +16,7 @@ Run with:  streamlit run app.py
 
 import os
 import random
+import sys
 import time
 import uuid
 from contextlib import contextmanager
@@ -175,6 +176,8 @@ def init_state():
     ss.setdefault("flash", None)       # error message that must survive one st.rerun()
 
 
+IN_BROWSER = sys.platform == "emscripten"  # running under stlite / Pyodide
+
 # Every completed test is appended here so data survives across browser sessions
 # and participants. Override with LAB_DATA_PATH; set it to "" to disable writing.
 DATA_PATH = os.environ.get("LAB_DATA_PATH", str(Path(__file__).parent / "data" / "raw" / "live_sessions.csv"))
@@ -265,6 +268,10 @@ with st.sidebar:
         st.rerun()
     st.divider()
     st.caption(
+        # The GitHub Pages build runs this app inside each visitor's browser (stlite), so there
+        # is no shared server file there: "live" means this browser only.
+        "This in-browser version keeps live data in this browser tab only. Download the CSV to keep it."
+        if IN_BROWSER else
         "Live data pools everyone using this server, but it is wiped when the server restarts. "
         "Download the CSV after your session to keep it."
     )

@@ -34,6 +34,7 @@ function renderTopbar(active) {
       ${isLesson ? `<label class="source">Data
         <select id="source-select">${Object.entries(SOURCES).map(([k, v]) => `<option value="${k}" ${k === source() ? 'selected' : ''}>${v}</option>`).join('')}</select>
       </label>` : ''}
+      <a class="ext-link" href="./streamlit/index.html" target="_blank" rel="noopener">Streamlit lab ↗</a>
       <span class="live-pill" title="${MODE === 'supabase' ? 'Shared live database' : 'Demo mode: data stays in this browser'}">
         <span class="dot ${MODE}"></span><span id="live-count">${liveCount()}</span> live · ${SESSION}
       </span>

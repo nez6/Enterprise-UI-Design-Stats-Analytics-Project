@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/copy-streamlit.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/copy-streamlit.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test tests/"
