@@ -7,3 +7,6 @@ __pycache__/
 site/node_modules/
 site/dist/
 site/.env.local
+
+# Streamlit app runtime data
+streamlit_app/data/
