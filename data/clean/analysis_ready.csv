@@ -1,0 +1,307 @@
+participant_id,source,submitted_at,years_experience,job_level,job_role,primed_arm,test_num,test_name,workflow,workflow_chaos,priming_exposed,completion_time,error_count,rage_quit,frustration,efficiency
+SIM-000,simulated,,1.0,IC / Associate,Other,0,1,Password Reset,Legacy Ticketing,0,0,38.8,0,0,4,3
+SIM-000,simulated,,1.0,IC / Associate,Other,0,2,Software License Request,Legacy Ticketing,0,0,67.8,1,0,5,3
+SIM-000,simulated,,1.0,IC / Associate,Other,0,3,VPN Access (AI Assistant),AI Bot,0,0,47.9,1,0,2,6
+SIM-000,simulated,,1.0,IC / Associate,Other,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,62.7,0,0,3,6
+SIM-000,simulated,,1.0,IC / Associate,Other,0,5,The Chaos AI Bot,AI Bot,1,0,123.5,1,0,6,2
+SIM-000,simulated,,1.0,IC / Associate,Other,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,98.6,5,0,8,2
+SIM-001,simulated,,,,,0,1,Password Reset,Legacy Ticketing,0,0,46.1,0,0,4,6
+SIM-001,simulated,,,,,0,2,Software License Request,Legacy Ticketing,0,0,49.5,0,0,2,5
+SIM-001,simulated,,,,,0,3,VPN Access (AI Assistant),AI Bot,0,0,51.4,0,0,2,7
+SIM-001,simulated,,,,,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,55.8,0,0,3,5
+SIM-001,simulated,,,,,0,5,The Chaos AI Bot,AI Bot,1,0,361.2,6,0,9,3
+SIM-001,simulated,,,,,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,473.0,3,0,9,2
+SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,20.3,0,0,2,10
+SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,42.8,1,0,3,8
+SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,28.5,0,0,1,7
+SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,32.2,0,0,1,9
+SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,92.7,3,0,7,5
+SIM-002,simulated,,17.0,Director / Executive,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,355.6,4,0,9,6
+SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,44.9,0,0,2,3
+SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,57.9,2,0,3,5
+SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,40.0,0,0,2,6
+SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,70.3,0,0,4,7
+SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,105.0,2,0,5,2
+SIM-003,simulated,,5.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,201.7,3,0,8,1
+SIM-005,simulated,,17.0,Director / Executive,Operations,0,1,Password Reset,Legacy Ticketing,0,0,29.3,0,0,3,8
+SIM-005,simulated,,17.0,Director / Executive,Operations,0,2,Software License Request,Legacy Ticketing,0,0,72.6,1,0,2,6
+SIM-005,simulated,,17.0,Director / Executive,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,31.1,1,0,4,10
+SIM-005,simulated,,17.0,Director / Executive,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,55.0,0,0,1,9
+SIM-005,simulated,,17.0,Director / Executive,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,360.5,2,0,9,5
+SIM-005,simulated,,17.0,Director / Executive,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,150.7,6,1,10,5
+SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,73.5,0,0,3,5
+SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,60.4,0,0,4,3
+SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,65.0,0,0,3,7
+SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,57.4,0,0,3,6
+SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,91.7,6,0,9,1
+SIM-006,simulated,,4.0,IC / Associate,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,288.7,2,0,9,3
+SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,35.3,0,0,4,9
+SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,37.5,0,0,3,6
+SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,26.3,0,0,2,10
+SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,38.5,0,0,1,9
+SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,165.3,2,0,7,5
+SIM-007,simulated,,19.0,Director / Executive,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,330.4,4,0,6,7
+SIM-008,simulated,,,,,0,1,Password Reset,Legacy Ticketing,0,0,38.4,0,0,4,6
+SIM-008,simulated,,,,,0,2,Software License Request,Legacy Ticketing,0,0,52.7,0,0,5,7
+SIM-008,simulated,,,,,0,3,VPN Access (AI Assistant),AI Bot,0,0,41.9,0,0,3,7
+SIM-008,simulated,,,,,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,75.4,0,0,4,7
+SIM-008,simulated,,,,,0,5,The Chaos AI Bot,AI Bot,1,0,170.4,1,0,8,3
+SIM-008,simulated,,,,,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,218.4,3,0,8,3
+SIM-009,simulated,,4.0,Lead / Manager,Operations,1,1,Password Reset,Legacy Ticketing,0,0,60.9,0,0,3,8
+SIM-009,simulated,,4.0,Lead / Manager,Operations,1,2,Software License Request,Legacy Ticketing,0,0,59.7,0,0,1,7
+SIM-009,simulated,,4.0,Lead / Manager,Operations,1,3,VPN Access (AI Assistant),AI Bot,0,0,58.6,0,0,3,7
+SIM-009,simulated,,4.0,Lead / Manager,Operations,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,49.5,0,0,3,7
+SIM-009,simulated,,4.0,Lead / Manager,Operations,1,5,The Chaos AI Bot,AI Bot,1,1,142.7,0,0,6,5
+SIM-009,simulated,,4.0,Lead / Manager,Operations,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,122.8,5,1,8,4
+SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,29.6,0,0,3,3
+SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,56.6,0,0,2,5
+SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,41.4,0,0,4,6
+SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,58.4,0,0,2,6
+SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,169.8,4,0,8,2
+SIM-010,simulated,,3.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,133.8,3,1,6,2
+SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,75.0,0,0,4,3
+SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,99.0,1,0,3,4
+SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,108.2,0,0,3,8
+SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,89.6,0,0,4,5
+SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,127.0,2,1,7,1
+SIM-011,simulated,,5.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,241.5,1,0,7,2
+SIM-012,simulated,,1.0,IC / Associate,Other,1,1,Password Reset,Legacy Ticketing,0,0,44.6,0,0,4,6
+SIM-012,simulated,,1.0,IC / Associate,Other,1,2,Software License Request,Legacy Ticketing,0,0,59.9,0,0,2,5
+SIM-012,simulated,,1.0,IC / Associate,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,31.4,0,0,4,5
+SIM-012,simulated,,1.0,IC / Associate,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,40.3,0,0,4,4
+SIM-012,simulated,,1.0,IC / Associate,Other,1,5,The Chaos AI Bot,AI Bot,1,1,345.6,4,0,8,2
+SIM-012,simulated,,1.0,IC / Associate,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,89.4,6,1,10,3
+SIM-013,simulated,,15.0,Director / Executive,Other,1,1,Password Reset,Legacy Ticketing,0,0,50.8,0,0,4,10
+SIM-013,simulated,,15.0,Director / Executive,Other,1,2,Software License Request,Legacy Ticketing,0,0,106.5,0,0,4,9
+SIM-013,simulated,,15.0,Director / Executive,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,58.9,0,0,3,10
+SIM-013,simulated,,15.0,Director / Executive,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,38.9,0,0,3,10
+SIM-013,simulated,,15.0,Director / Executive,Other,1,5,The Chaos AI Bot,AI Bot,1,1,88.7,4,0,6,6
+SIM-013,simulated,,15.0,Director / Executive,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,141.9,1,0,7,9
+SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,27.0,0,0,4,5
+SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,39.0,0,0,3,6
+SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,32.1,1,0,5,5
+SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,19.4,1,0,2,5
+SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,68.9,0,0,6,3
+SIM-014,simulated,,3.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,367.8,4,0,10,1
+SIM-015,simulated,,5.0,IC / Associate,Operations,1,1,Password Reset,Legacy Ticketing,0,0,31.2,0,0,3,6
+SIM-015,simulated,,5.0,IC / Associate,Operations,1,2,Software License Request,Legacy Ticketing,0,0,66.8,0,0,2,5
+SIM-015,simulated,,5.0,IC / Associate,Operations,1,3,VPN Access (AI Assistant),AI Bot,0,0,42.1,0,0,3,6
+SIM-015,simulated,,5.0,IC / Associate,Operations,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,39.5,0,0,2,4
+SIM-015,simulated,,5.0,IC / Associate,Operations,1,5,The Chaos AI Bot,AI Bot,1,1,198.5,4,0,9,1
+SIM-015,simulated,,5.0,IC / Associate,Operations,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,58.4,3,1,8,2
+SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,74.7,0,0,3,8
+SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,57.5,0,0,3,7
+SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,45.2,0,0,3,7
+SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,66.9,0,0,2,9
+SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,330.5,1,0,7,4
+SIM-016,simulated,,5.0,Lead / Manager,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,146.3,2,0,8,3
+SIM-017,simulated,,2.0,IC / Associate,Other,1,1,Password Reset,Legacy Ticketing,0,0,43.0,0,0,3,4
+SIM-017,simulated,,2.0,IC / Associate,Other,1,2,Software License Request,Legacy Ticketing,0,0,43.1,1,0,3,4
+SIM-017,simulated,,2.0,IC / Associate,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,75.3,0,0,3,6
+SIM-017,simulated,,2.0,IC / Associate,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.9,1,0,2,6
+SIM-017,simulated,,2.0,IC / Associate,Other,1,5,The Chaos AI Bot,AI Bot,1,1,63.1,2,0,7,2
+SIM-017,simulated,,2.0,IC / Associate,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,131.4,2,0,6,2
+SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,54.6,0,0,3,8
+SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,42.1,1,0,4,7
+SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,29.8,0,0,2,10
+SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,39.3,0,0,2,7
+SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,148.8,4,0,8,2
+SIM-018,simulated,,10.0,Lead / Manager,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,78.6,3,0,5,5
+SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,45.5,0,0,2,5
+SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,69.5,1,0,6,5
+SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,33.9,0,0,4,7
+SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,48.3,0,0,4,5
+SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,253.2,3,0,7,2
+SIM-020,simulated,,5.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,100.3,3,0,7,1
+SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,51.8,0,0,2,6
+SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,78.6,0,0,4,6
+SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,43.2,1,0,2,7
+SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,86.4,0,0,2,6
+SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,196.2,4,0,9,2
+SIM-021,simulated,,3.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,507.7,2,0,5,1
+SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,22.1,2,0,4,4
+SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,38.6,0,0,4,6
+SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,52.8,0,0,1,5
+SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,43.6,0,0,1,6
+SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,72.5,2,0,8,1
+SIM-022,simulated,,3.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,148.6,3,0,8,2
+SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,71.8,0,0,2,6
+SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,62.3,0,0,2,3
+SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,70.2,0,0,1,7
+SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,62.1,0,0,4,7
+SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,55.8,5,0,8,2
+SIM-023,simulated,,12.0,Lead / Manager,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,294.4,7,0,10,3
+SIM-024,simulated,,,,,0,1,Password Reset,Legacy Ticketing,0,0,41.5,0,0,2,6
+SIM-024,simulated,,,,,0,2,Software License Request,Legacy Ticketing,0,0,45.2,0,0,3,4
+SIM-024,simulated,,,,,0,3,VPN Access (AI Assistant),AI Bot,0,0,61.2,0,0,4,3
+SIM-024,simulated,,,,,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,36.3,0,0,4,5
+SIM-024,simulated,,,,,0,5,The Chaos AI Bot,AI Bot,1,0,149.4,1,0,8,4
+SIM-024,simulated,,,,,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,317.7,3,0,7,2
+SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,27.9,0,0,2,9
+SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,44.4,0,0,1,10
+SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,36.2,0,0,4,8
+SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,36.1,0,0,2,9
+SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,151.5,1,0,9,6
+SIM-025,simulated,,11.0,Director / Executive,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,118.9,2,0,9,3
+SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,72.7,0,0,3,6
+SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,59.5,1,0,3,5
+SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,52.4,0,0,3,9
+SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,71.0,0,0,1,4
+SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,249.4,1,0,7,1
+SIM-026,simulated,,6.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,217.8,2,0,7,2
+SIM-027,simulated,,7.0,IC / Associate,Other,1,1,Password Reset,Legacy Ticketing,0,0,56.8,1,0,1,3
+SIM-027,simulated,,7.0,IC / Associate,Other,1,2,Software License Request,Legacy Ticketing,0,0,67.5,0,0,3,5
+SIM-027,simulated,,7.0,IC / Associate,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,46.5,0,0,3,5
+SIM-027,simulated,,7.0,IC / Associate,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,96.7,0,0,2,4
+SIM-027,simulated,,7.0,IC / Associate,Other,1,5,The Chaos AI Bot,AI Bot,1,1,142.4,1,0,7,2
+SIM-027,simulated,,7.0,IC / Associate,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,201.2,1,1,9,1
+SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,59.6,0,0,3,4
+SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,73.4,0,0,3,4
+SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,65.6,1,0,1,6
+SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,63.2,1,0,2,6
+SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,157.9,0,0,7,2
+SIM-028,simulated,,4.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,377.1,2,0,8,2
+SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,52.7,0,0,2,6
+SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,107.5,0,0,3,6
+SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,34.0,2,0,4,8
+SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,58.8,1,0,1,7
+SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,370.3,3,0,7,2
+SIM-029,simulated,,10.0,Lead / Manager,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,40.7,4,0,7,3
+SIM-030,simulated,,22.0,Director / Executive,Operations,0,1,Password Reset,Legacy Ticketing,0,0,37.3,0,0,2,9
+SIM-030,simulated,,22.0,Director / Executive,Operations,0,2,Software License Request,Legacy Ticketing,0,0,42.8,1,0,4,9
+SIM-030,simulated,,22.0,Director / Executive,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,32.8,0,0,2,8
+SIM-030,simulated,,22.0,Director / Executive,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,42.3,0,0,1,10
+SIM-030,simulated,,22.0,Director / Executive,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,174.3,4,0,8,3
+SIM-030,simulated,,22.0,Director / Executive,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,310.8,2,0,9,3
+SIM-031,simulated,,10.0,Lead / Manager,Other,1,1,Password Reset,Legacy Ticketing,0,0,65.1,0,0,4,6
+SIM-031,simulated,,10.0,Lead / Manager,Other,1,2,Software License Request,Legacy Ticketing,0,0,91.4,0,0,2,6
+SIM-031,simulated,,10.0,Lead / Manager,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,92.1,0,0,3,8
+SIM-031,simulated,,10.0,Lead / Manager,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,57.3,0,0,3,7
+SIM-031,simulated,,10.0,Lead / Manager,Other,1,5,The Chaos AI Bot,AI Bot,1,1,1498.3,3,0,10,4
+SIM-031,simulated,,10.0,Lead / Manager,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,331.9,1,0,7,3
+SIM-032,simulated,,,,,1,1,Password Reset,Legacy Ticketing,0,0,54.9,0,0,3,6
+SIM-032,simulated,,,,,1,2,Software License Request,Legacy Ticketing,0,0,99.4,1,0,1,5
+SIM-032,simulated,,,,,1,3,VPN Access (AI Assistant),AI Bot,0,0,55.7,1,0,2,9
+SIM-032,simulated,,,,,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,27.2,0,0,4,6
+SIM-032,simulated,,,,,1,5,The Chaos AI Bot,AI Bot,1,1,42.7,1,0,7,4
+SIM-032,simulated,,,,,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,216.7,5,0,8,2
+SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,48.8,0,0,4,5
+SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,63.8,0,0,1,7
+SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,43.7,0,0,4,6
+SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,37.4,0,0,2,6
+SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,90.7,3,1,8,3
+SIM-033,simulated,,0.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,128.8,2,0,7,3
+SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,53.7,0,0,4,5
+SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,74.1,2,0,5,6
+SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,65.5,1,0,3,6
+SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,110.2,0,0,3,6
+SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,276.7,2,0,8,2
+SIM-034,simulated,,6.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,499.8,0,0,8,2
+SIM-035,simulated,,10.0,Lead / Manager,Other,1,1,Password Reset,Legacy Ticketing,0,0,23.7,0,0,4,7
+SIM-035,simulated,,10.0,Lead / Manager,Other,1,2,Software License Request,Legacy Ticketing,0,0,37.0,0,0,4,7
+SIM-035,simulated,,10.0,Lead / Manager,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,24.1,0,0,2,9
+SIM-035,simulated,,10.0,Lead / Manager,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,25.2,0,0,2,7
+SIM-035,simulated,,10.0,Lead / Manager,Other,1,5,The Chaos AI Bot,AI Bot,1,1,163.7,2,0,7,2
+SIM-035,simulated,,10.0,Lead / Manager,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,91.6,2,0,5,2
+SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,30.6,1,0,4,7
+SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,75.4,0,0,2,6
+SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,84.3,0,0,3,7
+SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,67.0,0,0,1,8
+SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,204.2,3,0,9,6
+SIM-036,simulated,,4.0,Lead / Manager,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,573.9,2,0,8,2
+SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,53.0,0,0,4,5
+SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,66.5,1,0,4,5
+SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,82.1,1,0,4,7
+SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,59.9,1,0,4,5
+SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,134.4,2,0,8,2
+SIM-037,simulated,,4.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,1308.8,4,0,10,2
+SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,36.0,0,0,4,4
+SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,65.3,0,0,3,5
+SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,46.7,0,0,3,5
+SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,61.2,0,0,3,5
+SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,98.1,3,0,5,2
+SIM-038,simulated,,7.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,1038.6,6,0,10,1
+SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,53.9,1,0,3,5
+SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,54.3,0,0,2,5
+SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,44.9,0,0,1,7
+SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,69.2,1,0,3,6
+SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,96.7,1,0,6,3
+SIM-039,simulated,,0.0,IC / Associate,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,204.1,6,0,7,2
+SIM-041,simulated,,1.0,IC / Associate,Operations,1,1,Password Reset,Legacy Ticketing,0,0,48.5,2,0,3,7
+SIM-041,simulated,,1.0,IC / Associate,Operations,1,2,Software License Request,Legacy Ticketing,0,0,109.5,1,0,3,4
+SIM-041,simulated,,1.0,IC / Associate,Operations,1,3,VPN Access (AI Assistant),AI Bot,0,0,73.7,0,0,5,4
+SIM-041,simulated,,1.0,IC / Associate,Operations,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.1,0,0,3,6
+SIM-041,simulated,,1.0,IC / Associate,Operations,1,5,The Chaos AI Bot,AI Bot,1,1,156.3,1,0,7,2
+SIM-041,simulated,,1.0,IC / Associate,Operations,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,346.5,5,0,8,1
+SIM-042,simulated,,6.0,IC / Associate,Operations,0,1,Password Reset,Legacy Ticketing,0,0,45.7,0,0,3,3
+SIM-042,simulated,,6.0,IC / Associate,Operations,0,2,Software License Request,Legacy Ticketing,0,0,30.4,0,0,4,5
+SIM-042,simulated,,6.0,IC / Associate,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,27.9,0,0,3,5
+SIM-042,simulated,,6.0,IC / Associate,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,36.6,0,0,5,7
+SIM-042,simulated,,6.0,IC / Associate,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,180.3,4,0,10,1
+SIM-042,simulated,,6.0,IC / Associate,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,567.6,4,0,9,1
+SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,34.5,2,0,4,6
+SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,31.2,0,0,2,7
+SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,31.7,0,0,2,6
+SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,69.8,0,0,2,5
+SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,115.9,4,0,8,1
+SIM-043,simulated,,3.0,IC / Associate,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,556.5,2,0,9,1
+SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,1,Password Reset,Legacy Ticketing,0,0,29.3,0,0,2,7
+SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,2,Software License Request,Legacy Ticketing,0,0,86.5,0,0,3,5
+SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,3,VPN Access (AI Assistant),AI Bot,0,0,87.6,0,0,4,6
+SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,60.8,1,0,4,6
+SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,5,The Chaos AI Bot,AI Bot,1,0,256.3,3,0,8,2
+SIM-044,simulated,,1.0,IC / Associate,Project / Product Management,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,265.6,3,0,9,3
+SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,82.1,0,0,3,6
+SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,39.7,0,0,4,5
+SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,41.7,0,0,2,8
+SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,83.4,0,0,3,6
+SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,130.2,2,0,7,1
+SIM-045,simulated,,1.0,IC / Associate,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,70.9,7,0,7,2
+SIM-046,simulated,,8.0,Lead / Manager,Other,1,1,Password Reset,Legacy Ticketing,0,0,46.5,0,0,3,6
+SIM-046,simulated,,8.0,Lead / Manager,Other,1,2,Software License Request,Legacy Ticketing,0,0,71.5,2,0,5,7
+SIM-046,simulated,,8.0,Lead / Manager,Other,1,3,VPN Access (AI Assistant),AI Bot,0,0,39.7,0,0,3,6
+SIM-046,simulated,,8.0,Lead / Manager,Other,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,59.8,0,0,3,7
+SIM-046,simulated,,8.0,Lead / Manager,Other,1,5,The Chaos AI Bot,AI Bot,1,1,158.7,1,0,5,3
+SIM-046,simulated,,8.0,Lead / Manager,Other,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,120.0,3,1,7,5
+SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,1,Password Reset,Legacy Ticketing,0,0,41.8,1,0,3,5
+SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,2,Software License Request,Legacy Ticketing,0,0,57.4,0,0,3,6
+SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,3,VPN Access (AI Assistant),AI Bot,0,0,54.4,0,0,2,6
+SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.8,0,0,1,5
+SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,5,The Chaos AI Bot,AI Bot,1,1,133.6,2,0,7,2
+SIM-047,simulated,,14.0,Lead / Manager,Project / Product Management,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,741.0,1,0,10,4
+SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,1,Password Reset,Legacy Ticketing,0,0,26.1,0,0,4,9
+SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,2,Software License Request,Legacy Ticketing,0,0,52.1,0,0,4,8
+SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,3,VPN Access (AI Assistant),AI Bot,0,0,20.8,0,0,3,10
+SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,37.0,1,0,2,9
+SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,5,The Chaos AI Bot,AI Bot,1,0,27.1,3,0,8,5
+SIM-048,simulated,,11.0,Director / Executive,Engineering / Tech,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,270.3,3,0,8,4
+SIM-049,simulated,,5.0,IC / Associate,Operations,0,1,Password Reset,Legacy Ticketing,0,0,24.6,0,0,5,5
+SIM-049,simulated,,5.0,IC / Associate,Operations,0,2,Software License Request,Legacy Ticketing,0,0,60.1,0,0,3,4
+SIM-049,simulated,,5.0,IC / Associate,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,38.6,0,0,2,6
+SIM-049,simulated,,5.0,IC / Associate,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,52.3,0,0,2,5
+SIM-049,simulated,,5.0,IC / Associate,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,58.6,1,1,8,1
+SIM-049,simulated,,5.0,IC / Associate,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,172.4,1,0,8,2
+SIM-050,simulated,,4.0,IC / Associate,Operations,0,1,Password Reset,Legacy Ticketing,0,0,40.0,0,0,2,4
+SIM-050,simulated,,4.0,IC / Associate,Operations,0,2,Software License Request,Legacy Ticketing,0,0,74.8,0,0,2,5
+SIM-050,simulated,,4.0,IC / Associate,Operations,0,3,VPN Access (AI Assistant),AI Bot,0,0,40.6,0,0,3,6
+SIM-050,simulated,,4.0,IC / Associate,Operations,0,4,Laptop Replacement (AI Assistant),AI Bot,0,0,80.8,0,0,4,6
+SIM-050,simulated,,4.0,IC / Associate,Operations,0,5,The Chaos AI Bot,AI Bot,1,0,162.5,0,0,8,1
+SIM-050,simulated,,4.0,IC / Associate,Operations,0,6,The Primed Documentation Hunt,Legacy Ticketing,1,0,94.6,1,1,8,1
+SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,55.8,0,0,3,9
+SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,44.7,1,0,3,8
+SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,52.6,0,0,4,7
+SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,75.2,0,0,2,9
+SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,143.4,9,0,7,5
+SIM-051,simulated,,20.0,Director / Executive,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,418.6,4,0,6,5
+SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,62.1,0,0,3,3
+SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,52.9,0,0,3,6
+SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,48.0,0,0,2,5
+SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,55.6,0,0,2,5
+SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,173.6,1,0,8,1
+SIM-052,simulated,,7.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,276.4,5,0,8,1
+SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,1,Password Reset,Legacy Ticketing,0,0,60.8,0,0,3,5
+SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,2,Software License Request,Legacy Ticketing,0,0,65.1,2,0,2,4
+SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,3,VPN Access (AI Assistant),AI Bot,0,0,48.0,0,0,2,4
+SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,4,Laptop Replacement (AI Assistant),AI Bot,0,0,80.0,0,0,4,5
+SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,5,The Chaos AI Bot,AI Bot,1,1,173.7,6,0,8,2
+SIM-053,simulated,,6.0,IC / Associate,Engineering / Tech,1,6,The Primed Documentation Hunt,Legacy Ticketing,1,1,400.9,3,0,10,1

@@ -1,0 +1,3 @@
+# Participant ids to exclude before analysis: researcher dry runs, demos, and
+# anyone who withdrew consent. One id per line; lines starting with # are ignored.
+SIM-DRYRUN-000

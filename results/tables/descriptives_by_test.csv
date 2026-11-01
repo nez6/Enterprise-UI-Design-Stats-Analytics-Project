@@ -1,0 +1,7 @@
+test,workflow,n,time_mean,time_median,time_sd,time_iqr,time_skew,frustration_mean,efficiency_mean,rage_quit_rate
+T1 Password,Legacy Ticketing,51,46.573,45.7,15.596,20.45,0.321,3.137,5.882,0.0
+T2 License,Legacy Ticketing,51,62.035,59.9,19.771,27.1,0.725,3.039,5.706,0.0
+T3 VPN,AI Bot,51,49.575,45.2,19.033,23.65,1.027,2.804,6.784,0.0
+T4 Laptop,AI Bot,51,56.816,57.3,18.977,28.2,0.449,2.588,6.412,0.0
+T5 Chaos Bot,AI Bot,51,188.284,151.5,204.934,86.7,5.437,7.529,2.667,0.059
+T6 Doc Hunt,Legacy Ticketing,51,293.327,218.4,241.165,231.6,2.234,7.941,2.647,0.157

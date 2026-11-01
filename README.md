@@ -1,33 +1,95 @@
-# The Enterprise Workflow & Applied Statistics Lab
+# Selling the Single Pane of Glass
 
-A single-file Streamlit app (`app.py`) that does two things:
+**Does a one-line efficiency claim change how people rate a broken ticketing workflow?**
+Module Project 2 (Statistical Analysis): a randomised experiment, run in a custom Streamlit simulator, with a fully scripted analysis pipeline.
 
-1. **Runs a live split-test.** Participants work through six simulated IT tickets, comparing legacy enterprise ticketing with an AI bot workflow. The app records completion time, errors, rage-quits and per-test survey ratings.
-2. **Teaches a graduate statistics syllabus on that data.** It covers EDA, hypothesis testing, power, two-way ANOVA, logistic and OLS regression, Simpson's paradox and Bayesian updating, all as interactive Plotly visuals.
+> ⚠️ **Data status:** the committed results and report come from a **simulated pilot** (`data/raw/simulated_pilot_raw.csv`) used to build and test the pipeline. After collecting real participants, regenerate everything with one command (see [Reproduce with real data](#reproduce-with-real-data)).
 
-## Quick start
+| Deliverable | Where |
+|---|---|
+| Written report | [report/REPORT.md](report/REPORT.md) (generated from [report/report_template.md](report/report_template.md)) |
+| Data collection instrument | [app.py](app.py) |
+| Cleaning / power / analysis scripts | [scripts/](scripts/) |
+| Raw and cleaned data | [data/](data/) (see the [data dictionary](data/README.md)) |
+| Figures and tables | [results/](results/) |
+| Presentation | [presentation/OUTLINE.md](presentation/OUTLINE.md) (8-minute script and slide plan) |
+| Collaboration workflow | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+## The experiment in one paragraph
+
+Participants play a project lead logging six urgent IT tickets at 4:45 PM on a Friday. Tests 1–4 are clean baselines (two legacy forms, two AI-assisted). Test 5 is a hallucinating AI bot. Test 6 is a "documentation hunt" whose submit button is hidden inside a dense KB article. Participants are randomised (permuted blocks of 4) to a **primed** arm, which sees *"ServiceNow's single pane of glass is incredibly efficient"* before Test 6 (and a similar AI claim before Test 5), or a **control** arm, which sees nothing. After every test they rate frustration and perceived efficiency (1–10). The app also logs completion time, errors and rage-quits.
+
+| | Hypothesis | Test |
+|---|---|---|
+| **H1 (primary)** | Priming raises Test 6 perceived efficiency | One-sided Mann–Whitney U |
+| H2 | Chaos tests take longer than baseline (within subjects) | One-sided Wilcoxon signed-rank, Holm-corrected |
+| H3 | Priming lowers chaos-test frustration | One-sided Mann–Whitney U, Holm-corrected |
+| H4 (exploratory) | Priming × job level | Two-way ANOVA + Tukey HSD; mixed model |
+| H5 (exploratory) | Predictors of rage-quitting | Logistic regression, clustered SEs |
+
+## Setup
 
 ```bash
+git clone https://github.com/nez6/Enterprise-UI-Design-Stats-Analytics-Project.git
+cd Enterprise-UI-Design-Stats-Analytics-Project
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+Tested with Python 3.12.
+
+## Reproduce the analysis (simulated pilot)
+
+```bash
+python scripts/run_pipeline.py
+```
+
+This runs five steps in order. Each step is also a standalone script:
+
+| Step | Script | Writes |
+|---|---|---|
+| 1. Power analysis | `scripts/power_analysis.py` | `results/power_analysis.json`, `results/figures/fig5_power_curve.png` |
+| 2. Simulated pilot | `scripts/generate_simulated_data.py` | `data/raw/simulated_pilot_raw.csv` |
+| 3. Cleaning | `scripts/clean_data.py --raw <file>` | `data/clean/*.csv`, `results/cleaning_log.{md,json}` |
+| 4. Analysis | `scripts/analyze.py` | `results/results.json`, `results/tables/*.csv`, `results/figures/*.png` |
+| 5. Report | `scripts/build_report.py` | `report/REPORT.md` |
+
+Every random step is seeded, so reruns reproduce the same numbers. Run the unit tests for the cleaning rules and effect-size helpers with `pytest`.
+
+## Collect real data
+
+```bash
 streamlit run app.py
 ```
 
-## Tabs
+- Each participant uses **Tab 1 · Live Simulator**: consent → optional demographics → six tests → debrief (about 10 minutes).
+- Every completed test is appended to `data/raw/live_sessions.csv`. Run all sessions from the same machine or deployment so they land in one file. To write somewhere else, set `LAB_DATA_PATH=/path/file.csv`.
+- If the app runs on a host with a read-only disk, participants can download their rows from the sidebar instead. Concatenate those CSVs into `data/raw/live_sessions.csv`.
+- Add your own test runs to `data/raw/excluded_ids.txt` before analysing.
+- **Don't tell participants about the banner** until data collection is finished. The debrief screen asks them not to.
+- Target: **54 participants** (from the power analysis, including 10% attrition).
 
-| Tab | Chapters | What it shows |
-|---|---|---|
-| 1 · Live Simulator | — | Scenario card, optional demographics, then the six tests. Tests 1–4 are clean baselines (two legacy, two AI assistant). Test 5 is the chaos AI bot. Test 6 is the primed documentation hunt, where the checkout code is buried in a KB article. Every test has a survey and an abandon button. |
-| 2 · EDA & Demographics | 1, 2 | Mean, median, SD, IQR and skewness per test; a mean-vs-median dumbbell chart; histograms and boxplots by job level and experience. |
-| 3 · Hypothesis Testing | 3, 4, 6 | Shapiro–Wilk and Levene checks, automatic selection of Student's t, Welch's t or Mann–Whitney U, a one- or two-sided toggle with p-value shading, and `TTestIndPower` curves. |
-| 4 · Two-Way ANOVA | 7, 9 | `ols(... C(workflow) + C(priming) + C(job_level) + C(workflow):C(priming))` with `anova_lm`, partial η², interaction plots, a priming-by-seniority test and Tukey's HSD. |
-| 5 · Regression | 10, 12 | Logistic model of rage-quits (with odds ratios), an OLS model of frustration drivers, residual diagnostics and a Simpson's paradox toggle. |
-| 6 · Bayes & Manifesto | 11 | Beta–Binomial trust updating, a discrete Bayes error calculator, and a data-driven executive summary. |
+Tabs 2–6 of the app are an interactive statistics textbook (EDA, hypothesis tests, ANOVA, regression, Bayesian updating). They run on live sessions or a 300-person synthetic benchmark.
 
-## Experimental design notes
+## Reproduce with real data
 
-- **Priming is randomised.** Each live participant has a 50% chance of joining the primed arm. Primed participants see a banner before Test 5 (AI bot) and Test 6 (the ServiceNow "single pane of glass" line). Priming both an AI test and a legacy test keeps workflow × priming fully crossed.
-- **The ANOVA uses only Tests 5–6.** Tests 1–4 are never primed, so including them would confound priming with chaos.
-- **Benchmark data:** `generate_benchmark()` builds 300 participants × 6 tests with `np.random.seed(42)`. It has right-skewed chaos times, priming effects that are strongest for directors, a rage-quit model driven by chaos and experience, and a built-in Simpson's paradox between experience and perceived efficiency.
-- **Live telemetry stays in the browser session.** Download it as CSV from the sidebar before you reset.
+```bash
+python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
+```
+
+The report regenerates with real numbers. Every result-dependent sentence (reject / fail to reject, abstract, interpretation) is filled in from `results/results.json`, and the "simulated data" banner disappears. Then reread the generated report and adjust the prose in `report/report_template.md` if the story has changed.
+
+## Repository layout
+
+```
+app.py                      Streamlit data-collection instrument + teaching dashboard
+lab/                        Shared code: design constants, simulator, plotting style
+scripts/                    Power analysis, simulation, cleaning, analysis, report, pipeline
+data/raw/                   Raw telemetry (simulated pilot; live_sessions.csv once collected)
+data/clean/                 Analysis-ready long table + one-row-per-participant table
+results/                    JSON results, CSV tables, PNG figures, cleaning log
+report/                     Report template (edit) and generated REPORT.md (don't edit)
+presentation/               Slide plan and 8-minute speaker script
+tests/                      pytest unit tests
+```
