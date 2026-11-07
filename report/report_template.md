@@ -1,4 +1,4 @@
-# Praise for the Incumbent, Warnings for the AI: How One Sentence Shifts Ratings of Enterprise Ticketing Tools
+# Praise for the Incumbent, Warnings for the AI: Does One Sentence Shift Ratings of Enterprise Ticketing Tools?
 
 **Author:** Natalie Zachariah · Module Project 2: Statistical Analysis · {{report_date}}
 
@@ -16,7 +16,7 @@ IT service management (ITSM) platforms such as ServiceNow, and the AI agents now
 
 Behavioural research suggests framing can shift judgments that should depend on experience. Anchoring and framing effects are well documented (Tversky & Kahneman, 1974; 1981), although some priming effects have not replicated (Doyen et al., 2012), so their size in applied settings needs testing directly. Usability research also separates **behavioural** measures (time on task, errors, abandonment) from **attitudinal** ones (ratings such as the SUS; Brooke, 1996), and the two can diverge.
 
-This study asks whether framing pushes perception **against** performance in both directions: up for a slow incumbent, down for a fast AI. If it does, satisfaction surveys collected after vendor or media messaging would mis-rank tools, and AI programmes would be judged unfairly at exactly the moment adoption decisions are made.
+This study asks whether framing pushes perception **against** performance in both directions: up for a slow incumbent, down for a fast AI. If it did, satisfaction surveys collected after vendor or media messaging could mis-rank tools, and AI programmes would be judged unfairly at exactly the moment adoption decisions are made.
 
 ## 3. Research Questions & Hypotheses
 
@@ -37,7 +37,7 @@ The directions were fixed before data collection, which justifies the one-sided 
 | Ticket | ServiceNow set (catalog forms) | AI agent set (AI fills the form) |
 |---|---|---|
 | Access | Password reset | MFA reset |
-| Software | Licence request (cost-centre format validation) | Software install |
+| Software | Licence request | Software install |
 | Facilities | Boardroom AV | Meeting-room camera: for the non-AI team, the agent fills in the **wrong room and cart code** |
 
 Every ServiceNow ticket takes the same effort: four mandatory fields, a description, and a Shopping Cart checkout whose reference code is in a KB article.
@@ -55,7 +55,7 @@ In the AI set, the participant types a description and an AI agent fills in the 
 
 **Controls and randomisation.** Each banner has a no-banner control. Because the two banners are independent coin flips, every participant contributes to **both** primary comparisons, and the 2 × 2 factorial lets us check that one banner does not alter the other's effect. Allocation happens in the participant's browser with a cryptographic random number generator, so the facilitator cannot influence it. Participants are debriefed about the banners at the end.
 
-**Ethics.** Participants consent on the start screen. No names or contact details are collected, demographics are optional, and participants are asked not to type personal information into tickets.
+**Ethics.** A mock IRB review (`docs/IRB_REVIEW.md`) guided the safeguards; it is a learning exercise, not a formal determination. Participants consent on the start screen, are debriefed on the deception at the end, and can withdraw their data. No names or contact details are collected, demographics are optional, and free text is neither displayed nor published.
 
 ## 5. Power Analysis
 
@@ -70,13 +70,15 @@ Power analysis was done before data collection with `statsmodels.stats.power` (`
 
 {{sensitivity_table}}
 
-**Simulation check.** Across {{p_mc_sims}} simulated studies of {{p_analysable}} participants under our simulation model (`lab/simulate.py`), the Holm-corrected tests rejected H1 in {{p_mc1}}, H2 in {{p_mc2}}, and both in {{p_mc_both}} of studies. The model implies effects of d ≈ {{p_dsim1}} (praise) and d ≈ {{p_dsim2}} (warning). The praise effect is the harder one to detect.
+**Simulation check.** Across {{p_mc_sims}} simulated studies of {{p_analysable}} participants under our simulation model (`lab/simulate.py`), the Holm-corrected tests rejected H1 in {{p_mc1}}, H2 in {{p_mc2}}, and both in {{p_mc_both}} of studies. The model implies effects of d ≈ {{p_dsim1}} (praise) and d ≈ {{p_dsim2}} (warning). The smaller warning effect is the harder one to detect.
 
 {{fig_power}}
 
+{{achieved_power}}
+
 ## 6. Data Collection & Cleaning
 
-**Collection.** Participants complete the study on the live site. Every rated ticket is inserted as one row in a Supabase (PostgreSQL) table, and every final survey as one row in a second table. Row-level security allows anonymous inserts and reads but no edits or deletions. `scripts/export_supabase.py` downloads both tables to `data/raw/`.
+**Collection.** Participants complete the study on the live site. Every rated ticket is inserted as one row in a Supabase (PostgreSQL) table, and every final survey as one row in a second table. With the public key, row-level security allows inserts only, and the site reads de-identified views with no free text. `scripts/export_supabase.py` writes the data to `data/raw/`; this report uses the de-identified copies, from which participants who withdrew have already been removed. The session was **{{session_label}}**.
 
 **Cleaning rules** (`scripts/clean_data.py`), fixed before outcomes were examined:
 
@@ -96,6 +98,10 @@ Long but genuine completion times under the 30-minute rule were **not** trimmed.
 
 **Randomisation check.** {{rand_text}}
 
+{{mc_text}}
+
+{{dropout_text}}
+
 ## 7. Statistical Analysis
 
 **Unit of analysis.** The participant. Each person's three ServiceNow ratings and three AI ratings are averaged, so two-sample tests compare independent people. **Software:** Python with pandas, SciPy (Virtanen et al., 2020) and statsmodels (Seabold & Perktold, 2010). The teaching site recomputes the same tests in the browser, and its implementation is checked against SciPy and statsmodels in `site/tests/`.
@@ -112,10 +118,10 @@ Long but genuine completion times under the 30-minute rule were **not** trimmed.
 
 *Test choice.* The outcomes are averages of 1–10 ratings: bounded, ordinal-ish and often skewed. The pre-specified test is a **one-sided Mann–Whitney U** (Mann & Whitney, 1947), with Welch's t (Welch, 1947) as a sensitivity check. Normality was checked with Shapiro–Wilk (Shapiro & Wilk, 1965) and equal variances with Levene's test (Levene, 1960).
 
-| | H1: ServiceNow, praise banner | H2: AI agent, warning banner |
+| | H1: ServiceNow, praise banner | H2: AI agent, AI team |
 |---|---|---|
-| Banner group: n, mean (SD), median | {{h1_n_a}}, {{h1_mean_a}} ({{h1_sd_a}}), {{h1_med_a}} | {{h2_n_a}}, {{h2_mean_a}} ({{h2_sd_a}}), {{h2_med_a}} |
-| No banner: n, mean (SD), median | {{h1_n_b}}, {{h1_mean_b}} ({{h1_sd_b}}), {{h1_med_b}} | {{h2_n_b}}, {{h2_mean_b}} ({{h2_sd_b}}), {{h2_med_b}} |
+| Banner / AI team: n, mean (SD), median | {{h1_n_a}}, {{h1_mean_a}} ({{h1_sd_a}}), {{h1_med_a}} | {{h2_n_a}}, {{h2_mean_a}} ({{h2_sd_a}}), {{h2_med_a}} |
+| No banner / other team: n, mean (SD), median | {{h1_n_b}}, {{h1_mean_b}} ({{h1_sd_b}}), {{h1_med_b}} | {{h2_n_b}}, {{h2_mean_b}} ({{h2_sd_b}}), {{h2_med_b}} |
 | Shapiro–Wilk p (banner / none) | {{h1_sh_a}} / {{h1_sh_b}} | {{h2_sh_a}} / {{h2_sh_b}} |
 | Levene p | {{h1_lev}} | {{h2_lev}} |
 | **Mann–Whitney U, one-sided p** | **U = {{h1_U}}, {{h1_p_eq}}** | **U = {{h2_U}}, {{h2_p_eq}}** |
@@ -129,6 +135,8 @@ Long but genuine completion times under the 30-minute rule were **not** trimmed.
 **Decision, H2:** {{h2_decision}}
 
 {{fig_h1h2}}
+
+{{sensitivity_text}}
 
 ### 7.3 H3 (performance check): is the AI agent actually faster?
 
@@ -163,6 +171,10 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 
 ### 7.6 Exploratory: choice, NPS, trust, and who is most affected
 
+{{platform_text}}
+
+{{planted_text}}
+
 {{explore_text}}
 
 {{fig_pp}}
@@ -174,8 +186,12 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 ## 9. Limitations
 
 - **Data.** {{limitation_data}}
-- **Power and effect sizes.** The study is powered for large effects (d = {{p_d}}). The praise effect implied by our own simulation model is closer to d ≈ {{p_dsim1}}, so a non-significant H1 would be weak evidence of no effect.
-- **Floor effects.** {{t3_floor}} of documentation-hunt efficiency ratings were 1 or 2, which leaves little room for a banner to act on the worst ServiceNow ticket.
+- **Power and effect sizes.** The study was planned for large effects (d = {{p_d}}) and fell short of its target sample. The praise effect implied by our own simulation model is closer to d ≈ {{p_dsim1}}, so a non-significant H1 is weak evidence of no effect.
+- **Abandoned tickets cut the clock short.** Completion time stops when someone gives up, and far more ServiceNow tickets were abandoned, so the measured speed-up is probably an underestimate.
+- **Scenarios are confounded with platform.** Each platform always had the same three scenarios, so speed and rating gaps between platforms may partly reflect easier scenarios.
+- **Uneven dropout.** Keeping completers only can bias platform comparisons if people leave because of one platform. See section 6 and the sensitivity check in section 7.2.
+- **Noticing.** Many participants did not report seeing the messages, which weakens both banner tests.
+- **No external pre-registration.** Hypotheses and cleaning rules were fixed in this repository before the session, but were not filed with an outside registry. Analyses marked post hoc were added after seeing the data.
 - **The AI-team manipulation is a package.** The warning, the displayed confidence and the agent's accuracy all differ between the AI teams, so any difference cannot be attributed to the warning alone. The planted error also lowers the other team's AI ratings, which works against H2.
 - **The AI agent is simple.** A naive Bayes classifier is not a large language model, but it behaves like a real routing AI: usually right, sometimes confidently wrong, with a visible confidence score.
 - **Simulation, not the workplace.** Participants were not under real deadlines and were filing tickets about scenarios they were given, using a portal that only resembles ServiceNow (no affiliation).
@@ -189,7 +205,7 @@ Each person contributes one mean rating per platform. A **linear mixed model** w
 **Recommendations for implementing AI in ServiceNow.**
 1. **Measure behaviour, not just opinion.** Time per ticket, completion, corrections and abandonment should sit next to every satisfaction score.
 2. **Run rollouts as experiments.** Randomise who gets the AI and what they are told, and size the pilot with a power analysis first.
-3. **Manage the narrative deliberately.** Warnings about AI shape ratings and overrides. Pair honest risk communication with evidence of performance, and keep evaluation surveys free of marketing.
+3. {{rec_framing}}
 4. **Report uncertainty.** Effect sizes with confidence intervals, and posteriors for accuracy claims, not single numbers.
 
 ## 11. References
@@ -226,4 +242,4 @@ Wilcoxon, F. (1945). Individual comparisons by ranking methods. *Biometrics Bull
 
 ---
 
-*Reproduce every number in this report with `python scripts/run_pipeline.py` (see README).*
+*Reproduce every number in this report with `python scripts/run_pipeline.py --raw data/raw/live_sessions_deidentified.csv` (see README).*

@@ -19,6 +19,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from lab.design import AI, LEGACY  # noqa: E402
+
 TEMPLATE = ROOT / "report" / "report_template.md"
 OUT = ROOT / "report" / "REPORT.md"
 
@@ -70,11 +72,13 @@ def build_values(R):
     I, pref, survey = R["interaction"], R["preference"], R["survey"]
     simulated = R["data_source"] != "live"
     v = {"report_date": date.today().strftime("%B %d, %Y")}
+    sessions = pd.read_csv(ROOT / R["raw_file"])["session_label"].dropna().unique() if "session_label" in pd.read_csv(ROOT / R["raw_file"], nrows=0) else []
+    v["session_label"] = ", ".join(map(str, sessions)) or "n/a"
     v["data_banner"] = (
         "> ⚠️ **These results come from a SIMULATED pilot dataset** (`data/raw/simulated_pilot_raw.csv`), generated to build and test the "
         "analysis pipeline before real participants were run. They are not empirical findings. After the live session, run "
         "`python scripts/export_supabase.py` and `python scripts/run_pipeline.py --raw data/raw/live_sessions.csv` to regenerate this report."
-        if simulated else "> Data: real participant sessions collected with the study site (`data/raw/live_sessions.csv`).")
+        if simulated else f"> Data: real participants from one live session, collected with the study site (`{R['raw_file']}`).")
     v.update(n_participants=R["n_participants"], n_snow_banner=R["n_snow_banner"], n_ai_banner=R["n_ai_banner"],
              n_with_demo=R["n_with_demographics"], n_feedback=R["n_feedback"])
 
@@ -126,13 +130,13 @@ def build_values(R):
     v.update(h3_sh=p_num(h3["shapiro_p_log_diff"]), h3_sn=f"{h3['sn_median']:.0f}", h3_ai=f"{h3['ai_median']:.0f}", h3_share=pct(h3["share_faster_with_ai"]),
              h3_W=f"{h3['wilcoxon_W']:.0f}", h3_p_eq=p_eq(h3["wilcoxon_p"]), h3_speedup=f"{h3['speedup']:.1f}",
              h3_speedup_ci=f"{h3['speedup_ci'][0]:.1f}–{h3['speedup_ci'][1]:.1f}×", h3_dz=f2(h3["dz"]), h3_rmp=f2(h3["matched_rank_biserial"]),
-             h3_decision="reject H₀. The AI agent was genuinely faster." if h3["reject"] else "fail to reject H₀. The AI agent was not reliably faster.")
+             h3_decision="reject H₀. AI-agent tickets were faster, though each platform had different scenarios (section 9)." if h3["reject"] else "fail to reject H₀. The AI agent was not reliably faster.")
     v["fig_h3"] = fig("fig3_h3_paired_times.png", "Figure 4. Each line is one participant's typical ServiceNow vs AI-agent time.")
     tl = h4["ticket_level"]
     v.update(h4_mean_a=pct(h4["mean_a"]), h4_mean_b=pct(h4["mean_b"]), h4_n_a=h4["n_a"], h4_n_b=h4["n_b"], h4_U=f"{h4['mwu_U']:.0f}",
              h4_p_eq=p_eq(h4["mwu_p"]), h4_r=f2(h4["rank_biserial"]), h4_r_ci=ci(h4["rank_biserial_ci"]),
              h4_t_warned=pct(tl["override_rate_warned"]), h4_t_unwarned=pct(tl["override_rate_unwarned"]), h4_chi=f2(tl["chi2"]), h4_chi_p=p_eq(tl["chi2_p"]),
-             h4_decision="reject H₀. Warned participants overrode the AI more often." if h4["reject"] else
+             h4_decision=(f"reject H₀. The AI team overrode the agent more often, even though its agent was always right. This rests on few overrides (ticket-level rates {pct(tl['override_rate_warned'])} vs {pct(tl['override_rate_unwarned'])}), the test is uncorrected and secondary, and the teams differ in more than the warning, so treat it as a lead for follow-up.") if h4["reject"] else
              "fail to reject H₀. The difference in override rates could be chance at this sample size.")
 
     # Interaction
@@ -160,43 +164,86 @@ def build_values(R):
     if "trust" in survey:
         s = survey["trust"]
         lines.append(f"**Trust in the AI agent.** Mean {s['mean_warned']:.2f} when warned vs {s['mean_unwarned']:.2f} unwarned (one-sided {p_eq(s['mwu_p'])}).")
-    lvl = [f"{k.split(' /')[0]}: praise {x['servicenow_banner_shift']:+.2f}, warning {x['ai_warning_shift']:+.2f} (n = {x['n']})"
+    lvl = [f"{k.split(' /')[0]}: praise {x['servicenow_banner_shift']:+.2f}, AI team {x['ai_warning_shift']:+.2f} (n = {x['n']})"
            for k, x in R["by_level"].items() if x["servicenow_banner_shift"] is not None and x["ai_warning_shift"] is not None]
     if lvl:
-        lines.append("**By job level** (banner minus no-banner mean rating): " + "; ".join(lvl) + ". Cells are small, so treat these as hypotheses for a follow-up.")
+        lines.append("**By job level** (banner minus no-banner mean rating): " + "; ".join(lvl) + ". Levels with fewer than 5 people on either side of a split are not reported. Treat these as hypotheses for a follow-up.")
     v["explore_text"] = "\n\n".join(lines)
-    v["fig_pp"] = fig("fig6_perception_performance.png", "Figure 6. Perception vs performance: each arrow is what a banner did to the same system.")
+    v["fig_pp"] = fig("fig6_perception_performance.png", "Figure 6. Perception vs performance: each arrow runs from the no-banner group to the banner group on the same platform.")
+
+    # Dropout, sensitivity, manipulation checks, planted error, platform ratings
+    D = R["dropout"]
+    ai_o, leg_o = D["by_order"]["ai_first"], D["by_order"]["legacy_first"]
+    S = D["sensitivity"]
+    share = lambda o: pct(o["excluded"] / o["started"]) if o["started"] else "n/a"
+    v["dropout_text"] = (f"**Who left.** {D['started']} people started and {R['n_participants']} were analysable. {ai_o['excluded']} of {ai_o['started']} ({share(ai_o)}) who began with the AI set "
+                         f"were excluded, against {leg_o['excluded']} of {leg_o['started']} ({share(leg_o)}) who began with ServiceNow (Fisher's exact {p_eq(D['fisher_p'])}). "
+                         f"{D['ai_first_left_at_switch']} of the AI-first exclusions stopped right after the AI set or after one ServiceNow ticket. Set order itself split {ai_o['started']} to {leg_o['started']} among starters (binomial {p_eq(D['order_balance_p'])}), against an expected 50/50. These checks were added after seeing the data. "
+                         "Because the plan keeps completers only, people who left over the ServiceNow experience may be missing from the comparison.")
+    v["sensitivity_text"] = (f"**Sensitivity to dropout** (post hoc). Keeping everyone with at least one ticket on the platform, apart from walk-aways: H1 {f2(S['h1']['mean_a'])} (n = {S['h1']['n_a']}) vs {f2(S['h1']['mean_b'])} (n = {S['h1']['n_b']}), "
+                             f"Holm {p_eq(S['h1']['p_holm'])}; H2 {f2(S['h2']['mean_a'])} (n = {S['h2']['n_a']}) vs {f2(S['h2']['mean_b'])} (n = {S['h2']['n_b']}), Holm {p_eq(S['h2']['p_holm'])}; "
+                             f"H3 {S['h3']['speedup']:.1f}× faster across {S['h3']['n']} people with both platforms ({p_eq(S['h3']['p'])}).")
+    mc = R["manipulation_checks"]
+    v["mc_text"] = ("**Did people notice?** " + " ".join(
+        f"For the {name}, {pct(mc[k]['pass_banner'])} of those shown it said they had seen it, and {pct(mc[k]['pass_none'])} of those not shown it correctly said they had not (n = {mc[k]['n']})."
+        for k, name in [("mc_snow", "praise banner"), ("mc_ai", "AI warning")] if k in mc) +
+        " All analyses keep participants as randomised, so a banner that went unnoticed weakens the test of its effect.") if mc else ""
+    pe, PR = R["planted_error"], R["platform_ratings"]
+    v["planted_text"] = (f"**The planted AI error.** {pe['caught']} of the {pe['rated']} participants whose agent filled in the wrong room and cart code caught it before submitting. "
+                         "It appeared only for the other team, so this rate has no comparison group.") if pe["rated"] else ""
+    eff_, fr_, ab_ = PR["efficiency"], PR["frustration"], PR["abandoned"]
+    v["platform_text"] = (f"**Ratings by platform.** Within people, the AI agent was rated {eff_['mean_diff']:+.2f} points on efficiency (95% CI {ci(eff_['ci'])}, d_z = {f2(eff_['dz'])}, Wilcoxon {p_eq(eff_['wilcoxon_p'])}) "
+                          f"and {fr_['mean_diff']:+.2f} on frustration (95% CI {ci(fr_['ci'])}, d_z = {f2(fr_['dz'])}, {p_eq(fr_['wilcoxon_p'])}). "
+                          f"{ab_[LEGACY]['n']} of {ab_[LEGACY]['of']} ServiceNow tickets were abandoned, against {ab_[AI]['n']} of {ab_[AI]['of']} AI tickets. "
+                          "Each platform always had the same scenarios, so these gaps cannot be separated from differences between the scenarios.")
+    target = H["recruit_total"]
+    v["achieved_power"] = (f"**Achieved sample.** {R['n_participants']} participants were analysable, against a target of {H['analysable_total']}" + (
+        ", so the primary tests can reliably detect only effects larger than the planned d. The banner groups were also unequal. Results are treated as a pilot, and non-significant results are not evidence of no effect."
+        if R["n_participants"] < H["analysable_total"] else ", which meets the plan.") + f" (Recruitment target: {target}.)")
 
     # Narrative
     def eff_sentence(h, which):
         return (f"{which} shifted ratings by {h['mean_diff']:+.2f} points (Holm {p_eq(h['p_holm'])}, r = {f2(h['rank_biserial'])})."
-                if h["reject"] else f"{which} did not detectably shift ratings (Holm {p_eq(h['p_holm'])}).")
+                if h["reject"] else f"{which} did not detectably shift ratings in the predicted direction (mean difference {h['mean_diff']:+.2f} points, Holm {p_eq(h['p_holm'])}).")
+    h2_reversed = h2["mean_diff"] > 0
+    any_banner = h1["reject"] or h2["reject"]
+    reversal = (f" The AI team's ratings were higher, the opposite of the prediction (two-sided, unadjusted and post hoc: {p_eq(h2['mwu_p_two_sided'])}). "
+                "That team also had an always-correct agent while the other team's agent made a planted error, so this gap cannot be credited to the warning, and the accuracy difference is a likely explanation."
+                if h2_reversed else "")
+    v["h2_decision"] += reversal
     v["abstract_h1"] = eff_sentence(h1, "the praise banner")
-    v["abstract_h2"] = eff_sentence(h2, "The hallucination warning")
+    v["abstract_h2"] = eff_sentence(h2, "The AI-team package (warning, displayed confidence, always-correct agent)")
     v["abstract_h1"] = v["abstract_h1"][0].lower() + v["abstract_h1"][1:]
     both = h1["reject"] and h2["reject"]
     v["abstract_close"] = ("Framing pushed perception against performance in both directions: a slower incumbent was rated up and a faster AI was rated down. "
                            "We discuss implications for how organisations evaluate and roll out AI." if both else
-                           "We discuss what the pattern means for how organisations evaluate legacy platforms and AI tools.")
+                           f"Participants also rated the AI agent {R['platform_ratings']['efficiency']['mean_diff']:+.2f} points on efficiency, but scenarios differed between platforms, and exclusions were uneven by which set came first. With fewer participants than planned, we treat this as a pilot.")
     v["h3_speedup"], v["h3_speedup_ci"] = f"{h3['speedup']:.1f}", f"{h3['speedup_ci'][0]:.1f}–{h3['speedup_ci'][1]:.1f}×"
+    D_ = R["dropout"]["by_order"]
+    D_sentence = (f"{D_['ai_first']['excluded']} of {D_['ai_first']['started']} AI-first starters were excluded, against {D_['legacy_first']['excluded']} of {D_['legacy_first']['started']} ServiceNow-first starters. "
+                  "If people tended to leave when they reached ServiceNow, the platform gap above is more likely understated than overstated.")
     v["interpretation"] = "\n\n".join([
         f"**Performance.** {'The AI agent was clearly faster' if h3['reject'] else 'The AI agent was not reliably faster'} "
-        f"({h3['speedup']:.1f}× per ticket, {pct(h3['share_faster_with_ai'])} of people faster with it). Whatever the ratings say, the stopwatch favours the AI.",
-        f"**Perception.** {eff_sentence(h1, 'The praise banner')} {eff_sentence(h2, 'The hallucination warning')} "
+        f"({h3['speedup']:.1f}× per ticket, {pct(h3['share_faster_with_ai'])} of people faster with it). Participants also rated it more efficient and less frustrating, but the scenarios differ between platforms, so neither gap is purely about the tool.",
+        f"**Perception.** {eff_sentence(h1, 'The praise banner')} {eff_sentence(h2, 'The AI-team package')}{reversal} "
         + ("The banners moved ratings in opposite directions while measured performance was identical across banner groups, which is the core of the perception–performance gap."
-           if both else "Where an effect was not detected, the confidence interval shows how large an effect remains plausible."),
-        f"**Behaviour.** {'Warned participants also overrode the AI more often, so framing changed what people did, not just what they said.' if h4['reject'] else 'Override rates did not differ reliably, so the warning changed ratings more clearly than it changed behaviour at this sample size.'}",
-        f"**Practical significance.** Mean shifts of {abs(h1['mean_diff']):.1f} (praise) and {abs(h2['mean_diff']):.1f} (warning) points on a ten-point scale, "
-        "from a single sentence each, are the size of difference that can flip a vendor comparison or a pilot go/no-go decision.",
+           if both else "A non-significant result in a sample this size does not show the absence of an effect."),
+        f"**Behaviour.** {'The AI team overrode the agent more often, which is a lead for follow-up rather than a firm finding, because overrides were few and the teams differ in more than the warning.' if h4['reject'] else 'Override rates did not differ reliably between the teams.'}",
+        f"**Selection.** {D_sentence}",
+        f"**Practical significance.** The confidence intervals on the mean differences are {ci(h1['mean_diff_ci'])} (praise) and {ci(h2['mean_diff_ci'])} (AI team) points on a ten-point scale. "
+        + ("Shifts of this size could matter to a vendor comparison or a pilot decision." if any_banner else
+           "These are wide: this sample can neither confirm nor rule out a banner effect large enough to matter in a vendor comparison or pilot decision."),
     ])
     v["limitation_data"] = ("Every number in this version comes from **simulated** participants generated by our own model (`lab/simulate.py`). It shows the pipeline works and "
                             "what the report will say; it says nothing about real people. Regenerate the report from the live session export." if simulated else
                             "The data come from real participants in one teaching session: a small convenience sample.")
-    v["t3_floor"] = pct(R["t3_floor_share"])
-    v["conclusion"] = (f"{'In this simulated pilot' if simulated else 'In this experiment'}, the AI agent was {h3['speedup']:.1f}× faster, yet one sentence of framing "
-                       f"{'raised ratings of the slower incumbent and lowered ratings of the faster AI' if both else 'was enough to move at least some ratings'}. "
-                       "For anyone leading AI adoption, the lesson is that **user perception is an outcome you have to measure and manage, not a neutral readout of quality.** "
-                       "Pair every survey with behavioural metrics, run rollouts as randomised experiments, and communicate AI risks with evidence rather than slogans.")
+    v["conclusion"] = (f"{'In this simulated pilot' if simulated else 'In this experiment'}, the AI agent was {h3['speedup']:.1f}× faster, and "
+                       + ("one sentence of framing raised ratings of the slower incumbent and lowered ratings of the faster AI. **User perception is an outcome you have to measure and manage, not a neutral readout of quality.**"
+                          if both else ("framing moved at least one rating." if any_banner else
+                          "this pilot did not show that one sentence of framing changes ratings, though it was too small to rule that out. **The main evidence here is about the tools, not the framing:** the AI-assisted flow was faster, rated better and rarely abandoned, subject to the scenario confound and uneven dropout."))
+                       + " A properly powered follow-up should separate the warning, the displayed confidence and the agent's accuracy, and counterbalance scenarios across platforms (`docs/IRB_REVIEW.md`, section 6).")
+    v["rec_framing"] = ("**Manage the narrative deliberately.** Messaging moved ratings here, so keep evaluation surveys free of marketing and pair honest risk communication with evidence of performance."
+                        if any_banner else "**Test messaging rather than assuming its effect.** This pilot could not confirm or rule out framing effects, so keep evaluation surveys free of marketing and check messaging with a randomised comparison before relying on it.")
     return v
 
 

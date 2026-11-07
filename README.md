@@ -8,7 +8,7 @@
 
 Republish both after changes with `./scripts/deploy_pages.sh` (it builds `site/` and pushes the `gh-pages` branch).
 
-A static website (GitHub Pages) with six pages:
+A static website (GitHub Pages) with seven pages:
 
 | # | Page | What it teaches |
 |---|---|---|
@@ -18,6 +18,7 @@ A static website (GitHub Pages) with six pages:
 | 4 | **Did It Work?** | Permutation tests, t-tests and assumption checks, paired tests, power, two-way ANOVA + Tukey HSD, chi-square |
 | 5 | **Regression → ML** | Least squares drawn as squares, multiple regression, logistic regression and confusion matrices, overfitting, Simpson's paradox |
 | 6 | **LLMs & the Playbook** | Next-token probabilities, temperature and hallucination, calibration, the perception–performance gap, and an AI-in-ServiceNow implementation playbook |
+| 7 | **Class Data** | The Oct 28 session's real, de-identified data: who was analysed, times, ratings, first-look results, and every ticket |
 
 Every lesson redraws live as tickets arrive. It also has a 300-person benchmark class, so the charts are populated before anyone submits.
 
@@ -55,7 +56,7 @@ npm run dev          # http://localhost:5173 (demo mode: data stays in your brow
 npm test             # checks the in-browser statistics against SciPy/statsmodels
 ```
 
-Presenting: in any lesson, **→ / ↓ / Space** jump to the next scene and **← / ↑** go back. Switch the data source (top right) between *Live class*, *Benchmark* and *Live + benchmark*.
+Presenting: in any lesson, **→ / ↓ / Space** jump to the next scene and **← / ↑** go back. Switch the data source (top right) between *Live class*, *Oct 28 class (cleaned)*, *Benchmark* and *Live + benchmark*. Links without `?session=` file new tickets under `pathfinders`, which is separate from the Oct 28 data.
 
 ## Put it online (GitHub Pages + Supabase)
 
@@ -84,16 +85,19 @@ The graded analysis runs on the same data with scripts, not notebooks:
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 pytest                                   # cleaning-rule and helper tests
-python scripts/run_pipeline.py           # simulated pilot, end to end
+python scripts/run_pipeline.py --raw data/raw/live_sessions_deidentified.csv   # reproduces the report from real data
+python scripts/run_pipeline.py           # or: simulated pilot, end to end (overwrites results and the report)
 ```
 
-After the live session:
+To download the data again:
 
 ```bash
-export SUPABASE_URL=… SUPABASE_SERVICE_KEY=…   # secret: never commit or put in the site
-python scripts/export_supabase.py --session pathfinders-nov    # → data/raw/live_sessions.csv + live_feedback.csv
-python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
+python scripts/export_supabase.py --public --session pathfinders-oct28   # de-identified copies; no secret key needed
+export SUPABASE_URL=… SUPABASE_SERVICE_KEY=…   # full export including free text; secret: never commit or put in the site
+python scripts/export_supabase.py --session pathfinders-oct28
 ```
+
+If Python reports `CERTIFICATE_VERIFY_FAILED` on a Mac, run `export SSL_CERT_FILE=/etc/ssl/cert.pem` first.
 
 | Step | Script | Writes |
 |---|---|---|
@@ -103,7 +107,7 @@ python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
 | Analysis (H1–H4 + exploratory) | `scripts/analyze.py` | `results/results.json`, `results/tables/`, `results/figures/` |
 | Written report | `scripts/build_report.py` | [report/REPORT.md](report/REPORT.md) from [report/report_template.md](report/report_template.md) |
 
-> ⚠️ The committed results are from a **simulated pilot**, clearly labelled throughout. Regenerate everything from the live export before submitting.
+The committed results and report come from the **real Oct 28 session** (46 started, 30 analysable). The simulated pilot files remain in `data/raw/` for testing the pipeline.
 
 **Hypotheses.** H1: the praise banner raises ServiceNow ratings. H2: the warning lowers AI ratings. Both are primary, tested with one-sided Mann–Whitney U and Holm-corrected. H3: the AI is faster (paired Wilcoxon). H4: the warning increases AI overrides. The power analysis says to recruit **68 participants**.
 
@@ -111,7 +115,7 @@ python scripts/run_pipeline.py --raw data/raw/live_sessions.csv
 
 ```
 site/                 The website (Vite + D3 + KaTeX), deployed to GitHub Pages
-  src/pages/          portal.js + lesson1–5.js (one file per page)
+  src/pages/          portal.js, lesson1–5.js, data.js (one file per page)
   src/stats/core.js   In-browser statistics, tested against SciPy (site/tests/)
   src/data/           Design, AI-agent classifier, benchmark class, Supabase/demo storage
 supabase/schema.sql   Database tables, security policies and realtime

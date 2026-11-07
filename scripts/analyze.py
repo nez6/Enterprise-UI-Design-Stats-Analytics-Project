@@ -37,6 +37,7 @@ from statsmodels.stats.multitest import multipletests
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from scripts.clean_data import WALKAWAY_SECONDS, read_excluded  # noqa: E402
 from lab.design import AI, JOB_LEVELS, LEGACY, TESTS  # noqa: E402
 from lab.plotting import AQUA, BLUE, INK, INK2, MUTED, ORANGE, plt, save  # noqa: E402
 
@@ -83,7 +84,7 @@ def two_group(x, y, alternative):
         n_a=len(x), n_b=len(y), mean_a=float(x.mean()), mean_b=float(y.mean()), sd_a=float(x.std(ddof=1)), sd_b=float(y.std(ddof=1)),
         median_a=float(np.median(x)), median_b=float(np.median(y)),
         mean_diff=float(x.mean() - y.mean()), mean_diff_ci=[float(ci.low), float(ci.high)],
-        mwu_U=float(mwu.statistic), mwu_p=float(mwu.pvalue),
+        mwu_U=float(mwu.statistic), mwu_p=float(mwu.pvalue), mwu_p_two_sided=float(stats.mannwhitneyu(x, y, alternative="two-sided").pvalue),
         rank_biserial=rank_biserial(x, y), rank_biserial_ci=boot_ci(rank_biserial, x, y),
         welch_t=float(welch.statistic), welch_df=float(welch.df), welch_p=float(welch.pvalue),
         cohens_d=d, cohens_d_ci=d_ci,
@@ -155,6 +156,56 @@ def h4_overrides(df, pp):
                                override_rate_unwarned=float(1 - t.loc[t.ai_primed == 0, "ai_correct"].mean()),
                                chi2=float(chi.statistic), chi2_p=float(chi.pvalue), note="tickets are not independent (3 per person); descriptive only")
     return res
+
+
+def platform_ratings(pp, df):
+    """Exploratory: paired AI-vs-ServiceNow ratings, and abandonment by platform."""
+    out = {}
+    for key, a, b in [("efficiency", "ai_eff", "sn_eff"), ("frustration", "ai_frust", "sn_frust")]:
+        d = pp[a] - pp[b]
+        ci = stats.ttest_1samp(d, 0).confidence_interval(0.95)
+        out[key] = dict(n=int(len(d)), mean_diff=float(d.mean()), ci=[float(ci.low), float(ci.high)], dz=float(d.mean() / d.std(ddof=1)),
+                        wilcoxon_p=float(stats.wilcoxon(d).pvalue))
+    g = df.groupby("workflow")["rage_quit"]
+    out["abandoned"] = {w: dict(n=int(g.get_group(w).sum()), of=int(len(g.get_group(w)))) for w in (LEGACY, AI)}
+    return out
+
+
+def dropout(raw):
+    """Who left, and would keeping them change H1, H2 or H3? Cleaning keeps completers only."""
+    raw = raw.copy()
+    people = raw.groupby("participant_id").agg(order=("set_order", "first"), tickets=("test_num", "nunique"), longest=("completion_time", "max"))
+    people["kept"] = (people.tickets == len(TESTS)) & (people.longest <= WALKAWAY_SECONDS)
+    tab = pd.crosstab(people.order, people.kept).reindex(index=["ai_first", "legacy_first"], columns=[False, True], fill_value=0)
+    stopped = people[(people.order == "ai_first") & ~people.kept & (people.tickets.between(3, 4))]
+    out = dict(by_order={o: dict(started=int(tab.loc[o].sum()), excluded=int(tab.loc[o, False])) for o in tab.index},
+               fisher_p=float(stats.fisher_exact(tab.values).pvalue), ai_first_left_at_switch=int(len(stopped)),
+               order_balance_p=float(stats.binomtest(int(tab.loc["ai_first"].sum()), int(tab.values.sum()), 0.5).pvalue),
+               started=int(len(people)))
+
+    # Sensitivity: everyone with at least one ticket on the platform, except walk-aways.
+    stay = raw[~raw.participant_id.isin(people[people.longest > WALKAWAY_SECONDS].index)]
+    def per_person(wf, col):
+        return stay[stay.workflow == wf].groupby("participant_id").agg(y=("efficiency", "mean"), arm=(col, "first"))
+    sn, ai = per_person(LEGACY, "snow_primed"), per_person(AI, "ai_primed")
+    sens = {}
+    for name, d, alt in [("h1", sn, "greater"), ("h2", ai, "less")]:
+        a, b = d.loc[d.arm == 1, "y"], d.loc[d.arm == 0, "y"]
+        sens[name] = dict(n_a=int(len(a)), n_b=int(len(b)), mean_a=float(a.mean()), mean_b=float(b.mean()), p=float(stats.mannwhitneyu(a, b, alternative=alt).pvalue))
+    rej, padj, _, _ = multipletests([sens["h1"]["p"], sens["h2"]["p"]], alpha=ALPHA, method="holm")
+    sens["h1"]["p_holm"], sens["h2"]["p_holm"] = float(padj[0]), float(padj[1])
+    t = stay.groupby(["participant_id", "workflow"])["completion_time"].apply(lambda s: np.exp(np.log(s).mean())).unstack().dropna()
+    dl = np.log(t[AI]) - np.log(t[LEGACY])
+    sens["h3"] = dict(n=int(len(dl)), speedup=float(np.exp(-dl.mean())), p=float(stats.wilcoxon(dl, alternative="less").pvalue))
+    out["sensitivity"] = sens
+    return out
+
+
+def planted_error(df):
+    d = df[df.ai_error_injected == 1]
+    caught = d.dropna(subset=["ai_error_caught"])
+    return dict(tickets=int(len(d)), caught=int(caught.ai_error_caught.sum()), rated=int(len(caught)),
+                arms={str(k): int(v) for k, v in d.ai_primed.value_counts().items()})
 
 
 def interaction(df):
@@ -246,13 +297,13 @@ def by_level(pp):
     for lvl in JOB_LEVELS:
         s = pp[pp.job_level == lvl]
         if len(s) < 5:            # privacy: never report a group of fewer than 5 people
-            out[lvl] = dict(n=int(len(s)), suppressed=True, servicenow_banner_shift=None, ai_warning_shift=None)
+            out[lvl] = dict(suppressed=True, servicenow_banner_shift=None, ai_warning_shift=None)
             continue
         row = dict(n=int(len(s)))
         for col, eff, key in [("snow_primed", "sn_eff", "servicenow_banner_shift"), ("ai_primed", "ai_eff", "ai_warning_shift")]:
             a, b = s.loc[s[col] == 1, eff], s.loc[s[col] == 0, eff]
-            row[key] = float(a.mean() - b.mean()) if len(a) and len(b) else None
-            row[key + "_n"] = [int(len(a)), int(len(b))]
+            # The same privacy rule applies to each side of a banner split.
+            row[key] = float(a.mean() - b.mean()) if min(len(a), len(b)) >= 5 else None
         out[lvl] = row
     return out
 
@@ -293,7 +344,7 @@ def figures(df, pp, desc, long, R):
               "Mean efficiency rating (1–10)")
     axes_[0].set_title(f"H1 · ServiceNow + praise banner\nHolm {p_eq(R['h1']['p_holm'])}")
     strip_box(axes_[1], {"No banner": pp.loc[pp.ai_primed == 0, "ai_eff"], "Banner": pp.loc[pp.ai_primed == 1, "ai_eff"]}, "")
-    axes_[1].set_title(f"H2 · AI agent + hallucination warning\nHolm {p_eq(R['h2']['p_holm'])}")
+    axes_[1].set_title(f"H2 · AI agent, AI team vs other team\nHolm {p_eq(R['h2']['p_holm'])}")
     save(fig, FIGS / "fig1_h1_h2_ratings.png")
 
     fig, ax = plt.subplots(figsize=(8, 4.2))
@@ -306,7 +357,7 @@ def figures(df, pp, desc, long, R):
     plain_log_axis(ax)
     ax.set_xticks(range(6), desc["ticket"], fontsize=8.5)
     ax.set_ylabel("Completion time (s, log scale)")
-    ax.set_title("AI-agent tickets are faster; the documentation hunt has the longest tail")
+    ax.set_title("Completion time by ticket")
     ax.legend(loc="upper right")
     save(fig, FIGS / "fig2_completion_times.png")
 
@@ -328,11 +379,11 @@ def figures(df, pp, desc, long, R):
         cells = [mean_ci(long.loc[(long.platform == p) & (long.banner == banner), "efficiency"]) for p in (LEGACY, AI)]
         ax.errorbar(np.arange(2) + (k - 0.5) * 0.06, [m for m, _ in cells], yerr=[h for _, h in cells], color=BANNER_COLORS[banner],
                     lw=2.2, marker="o", markersize=7, capsize=3, label=banner)
-    ax.set_xticks([0, 1], ["ServiceNow\n(banner = praise)", "AI agent\n(banner = warning)"])
+    ax.set_xticks([0, 1], ["ServiceNow\n(banner = praise)", "AI agent\n(banner = AI team)"])
     ax.set_xlim(-0.4, 1.4)
     ax.set_ylim(1, 10)
     ax.set_ylabel("Mean efficiency rating (±95% CI)")
-    ax.set_title("Each banner pulls ratings its own way")
+    ax.set_title("Mean efficiency by platform and banner")
     ax.legend(loc="upper left")
     save(fig, FIGS / "fig4_interaction.png")
 
@@ -340,9 +391,9 @@ def figures(df, pp, desc, long, R):
     for p, color in [(LEGACY, BLUE), (AI, AQUA)]:
         pts = [(df[(df.workflow == p) & (df.primed == b)].completion_time.median(), df[(df.workflow == p) & (df.primed == b)].efficiency.mean()) for b in (0, 1)]
         ax.annotate("", xy=pts[1], xytext=pts[0], arrowprops=dict(arrowstyle="-|>", color=ORANGE, lw=2))
-        for (x_, y_), lab in zip(pts, ["no banner", "warning" if p == AI else "praise"]):
+        for (x_, y_), lab in zip(pts, ["no banner", "AI team" if p == AI else "praise"]):
             ax.scatter([x_], [y_], s=90, color=color, edgecolor="white", linewidth=1.5, zorder=3)
-            ax.annotate(f"{p}: {lab}", (x_, y_), xytext=(8, -3), textcoords="offset points", fontsize=9, color=INK2)
+            ax.annotate(f"{p}: {lab}", (x_, y_), xytext=(0, -16), textcoords="offset points", fontsize=9, color=INK2, ha="center")
     ax.set_xscale("log")
     from matplotlib.ticker import FuncFormatter, LogLocator
     ax.xaxis.set_major_locator(LogLocator(base=10, subs=(1, 2, 3, 5, 7)))
@@ -351,7 +402,7 @@ def figures(df, pp, desc, long, R):
     ax.set_ylim(1, 10)
     ax.set_xlabel("Median seconds per ticket (log; faster ←)")
     ax.set_ylabel("Mean efficiency rating")
-    ax.set_title("Perception vs performance: banners move ratings, not the stopwatch")
+    ax.set_title("Perception vs performance, with and without each banner")
     save(fig, FIGS / "fig6_perception_performance.png")
 
 
@@ -393,7 +444,15 @@ def main():
     R["by_level"] = by_level(pp)
     fb = pd.read_csv(ROOT / "data" / "clean" / "feedback.csv")
     R["manipulation_checks"] = manipulation_checks(fb)
-    R["t3_floor_share"] = float((df.loc[df.test_num == 3, "efficiency"] <= 2).mean())
+    R["platform_ratings"] = platform_ratings(pp, df)
+    R["planted_error"] = planted_error(df)
+    raw = pd.read_csv(ROOT / clog["raw_file"])
+    gone = read_excluded(ROOT / "data" / "raw" / "excluded_ids.txt")
+    wd = ROOT / "data" / "raw" / "live_withdrawals.csv"
+    if wd.exists():
+        gone |= set(pd.read_csv(wd)["participant_id"].dropna())
+    R["raw_file"] = clog["raw_file"]
+    R["dropout"] = dropout(raw[~raw.participant_id.isin(gone)].drop_duplicates(["participant_id", "test_num"]))
 
     pd.DataFrame([
         ["H1", "Praise banner ↑ ServiceNow rating", "Mann–Whitney U (one-sided), Holm", R["h1"]["mwu_p"], R["h1"]["p_holm"], R["h1"]["rank_biserial"]],

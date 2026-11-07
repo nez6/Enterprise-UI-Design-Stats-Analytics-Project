@@ -5,7 +5,8 @@
 | File | What it is |
 |---|---|
 | `raw/simulated_pilot_raw.csv`, `raw/simulated_pilot_feedback.csv` | **Simulated** participants from `scripts/generate_simulated_data.py`, with deliberate mess (dropouts, a walk-away, duplicates, a dry run, missing demographics) to exercise the cleaning rules. Not real people. |
-| `raw/live_sessions.csv`, `raw/live_feedback.csv` | Real participants, exported from Supabase by `scripts/export_supabase.py`. |
+| `raw/live_sessions_deidentified.csv`, `raw/live_feedback_deidentified.csv` | **The data behind the report:** the Oct 28 session, with no free text or timestamps, and withdrawn participants removed. From `scripts/export_supabase.py --public`. |
+| `raw/live_sessions.csv`, `raw/live_feedback.csv` | Full exports with free text, using the secret key. Git-ignored: they stay on the researcher's machine. |
 | `raw/excluded_ids.txt` | Participant ids to drop before analysis (dry runs, withdrawals). |
 | `clean/analysis_ready.csv` | Cleaned tickets: one row per participant × ticket, completers only. |
 | `clean/feedback.csv` | Cleaned final surveys, one per participant. |
@@ -34,6 +35,7 @@ No names or contact details are collected. Ids are random (`P-xxxxxx`), and demo
 | `chosen_category` | Category finally submitted |
 | `ai_category`, `ai_confidence` | AI agent's guess and stated confidence (AI tickets only) |
 | `ai_correct` | 1 = participant kept the AI's category, 0 = changed it |
+| `ai_error_injected`, `ai_error_caught` | 1 = the agent made the planted error on this ticket; 1 = the participant corrected it |
 
 ## Final survey (`feedback` table / `*_feedback.csv`)
 
@@ -42,6 +44,7 @@ No names or contact details are collected. Ids are random (`P-xxxxxx`), and demo
 | `nps_servicenow` | 0–10, how likely to recommend the ServiceNow catalog |
 | `ai_trust` | 1–10, trust in the AI agent for the next ticket |
 | `prefer_ai` | 1 = would rather use the AI agent next time |
+| `mc_snow`, `mc_ai` | yes / no / unsure: "did you see a message about ServiceNow / AI?" |
 | `comment` | Optional free text (≤ 400 characters) |
 
 ## Participant table (`clean/participants.csv`)
