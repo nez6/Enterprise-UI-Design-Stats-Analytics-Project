@@ -9,6 +9,7 @@ import { renderLesson2 } from './pages/lesson2.js';
 import { renderLesson3 } from './pages/lesson3.js';
 import { renderLesson4 } from './pages/lesson4.js';
 import { renderLesson5 } from './pages/lesson5.js';
+import { renderData } from './pages/data.js';
 
 const PAGES = [
   { path: 'portal', num: 1, label: 'Portal', render: renderPortal, theme: 'portal' },
@@ -17,6 +18,7 @@ const PAGES = [
   { path: 'testing', num: 4, label: 'Did It Work?', render: renderLesson3, theme: 'lesson' },
   { path: 'models', num: 5, label: 'Regression → ML', render: renderLesson4, theme: 'lesson' },
   { path: 'ai', num: 6, label: 'LLMs & Playbook', render: renderLesson5, theme: 'lesson' },
+  { path: 'data', num: 7, label: 'Class Data', render: renderData, theme: 'lesson', fixedData: true },
 ];
 
 const topbar = document.getElementById('topbar');
@@ -31,7 +33,7 @@ function renderTopbar(active) {
       ${PAGES.map((p) => `<a href="#/${p.path}" class="${p === active ? 'active' : ''}"><span class="num">${p.num}</span>${p.label}</a>`).join('')}
     </nav>
     <div class="data-controls">
-      ${isLesson ? `<label class="source" title="Data source">
+      ${isLesson && !active.fixedData ? `<label class="source" title="Data source">
         <select id="source-select">${Object.entries(SOURCES).map(([k, v]) => `<option value="${k}" ${k === source() ? 'selected' : ''}>${v}</option>`).join('')}</select>
       </label>` : ''}
       <a class="ext-link" href="./streamlit/index.html" target="_blank" rel="noopener">Streamlit lab ↗</a>
@@ -56,7 +58,7 @@ function route() {
   app.innerHTML = '';
   app.className = page.theme;
   page.render(app);
-  setLessonActive(page.theme === 'lesson');
+  setLessonActive(page.theme === 'lesson' && !page.fixedData);
   window.scrollTo(0, 0);
 }
 
