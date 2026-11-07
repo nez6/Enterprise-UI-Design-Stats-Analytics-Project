@@ -1,70 +1,70 @@
 {
-  "data_source": "simulated",
-  "raw_file": "data/raw/simulated_pilot_raw.csv",
-  "n_feedback": 65,
+  "data_source": "live",
+  "raw_file": "data/raw/live_sessions_deidentified.csv",
+  "n_feedback": 29,
   "steps": [
     {
       "rule": "Raw data loaded",
-      "rows_before": 411,
-      "rows_after": 411,
-      "participants_before": 69,
-      "participants_after": 69,
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
       "note": ""
     },
     {
       "rule": "Excluded ids removed (dry runs / withdrawals)",
-      "rows_before": 411,
-      "rows_after": 405,
-      "participants_before": 69,
-      "participants_after": 68,
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
       "note": ""
     },
     {
       "rule": "Double-submitted rows removed",
-      "rows_before": 405,
-      "rows_after": 402,
-      "participants_before": 68,
-      "participants_after": 68,
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
       "note": ""
     },
     {
       "rule": "Rows with impossible values removed",
-      "rows_before": 402,
-      "rows_after": 402,
-      "participants_before": 68,
-      "participants_after": 68,
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
       "note": ""
     },
     {
       "rule": "Demographics validated (blanked, not dropped)",
-      "rows_before": 402,
-      "rows_after": 402,
-      "participants_before": 68,
-      "participants_after": 68,
-      "note": "4 participant(s) have at least one missing/blank demographic"
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": "13 participant(s) have at least one missing/blank demographic"
     },
     {
       "rule": "Participants with inconsistent banner assignment removed",
-      "rows_before": 402,
-      "rows_after": 402,
-      "participants_before": 68,
-      "participants_after": 68,
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
       "note": ""
     },
     {
       "rule": "Walk-aways removed (any ticket > 30 min)",
-      "rows_before": 402,
-      "rows_after": 396,
-      "participants_before": 68,
-      "participants_after": 67,
+      "rows_before": 223,
+      "rows_after": 213,
+      "participants_before": 46,
+      "participants_after": 44,
       "note": ""
     },
     {
       "rule": "Incomplete participants removed (< 6 tickets)",
-      "rows_before": 396,
-      "rows_after": 390,
-      "participants_before": 67,
-      "participants_after": 65,
+      "rows_before": 213,
+      "rows_after": 180,
+      "participants_before": 44,
+      "participants_after": 30,
       "note": ""
     }
   ]
