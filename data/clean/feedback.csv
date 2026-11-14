@@ -1,0 +1,30 @@
+participant_id,session_label,snow_primed,ai_primed,job_level,nps_servicenow,ai_trust,prefer_ai,mc_snow,mc_ai
+P-9591F9,pathfinders-oct28,1,0,,3.0,4.0,1.0,no,yes
+P-1D9D63,pathfinders-oct28,1,1,,5.0,6.0,0.0,no,no
+P-B7636C,pathfinders-oct28,1,1,IC / Associate,3.0,8.0,1.0,yes,yes
+P-2616BB,pathfinders-oct28,0,0,IC / Associate,5.0,5.0,0.0,unsure,unsure
+P-AE7827,pathfinders-oct28,1,1,IC / Associate,5.0,7.0,1.0,unsure,unsure
+P-6E32D1,pathfinders-oct28,0,0,Lead / Manager,0.0,8.0,1.0,unsure,unsure
+P-080D6A,pathfinders-oct28,0,1,IC / Associate,5.0,5.0,0.0,unsure,unsure
+P-42F4C2,pathfinders-oct28,1,1,IC / Associate,4.0,8.0,1.0,no,no
+P-0ABFC7,pathfinders-oct28,1,0,Lead / Manager,5.0,8.0,1.0,unsure,unsure
+P-82544D,pathfinders-oct28,0,1,Lead / Manager,1.0,7.0,1.0,unsure,unsure
+P-B174D6,pathfinders-oct28,1,1,,6.0,9.0,1.0,yes,unsure
+P-B79294,pathfinders-oct28,1,0,Lead / Manager,0.0,9.0,1.0,no,yes
+P-F3C8D5,pathfinders-oct28,1,0,IC / Associate,10.0,10.0,1.0,unsure,unsure
+P-D78AA4,pathfinders-oct28,1,0,Lead / Manager,1.0,9.0,1.0,yes,no
+P-59E1B4,pathfinders-oct28,1,0,,10.0,10.0,0.0,unsure,unsure
+P-3A4371,pathfinders-oct28,0,0,IC / Associate,2.0,7.0,1.0,no,yes
+P-641C0E,pathfinders-oct28,0,1,Director / Executive,4.0,4.0,1.0,unsure,unsure
+P-82BFFB,pathfinders-oct28,0,0,Director / Executive,9.0,9.0,1.0,unsure,yes
+P-603290,pathfinders-oct28,1,1,IC / Associate,10.0,10.0,1.0,unsure,yes
+P-B4265B,pathfinders-oct28,1,0,IC / Associate,3.0,5.0,1.0,yes,unsure
+P-AE8B4E,pathfinders-oct28,1,0,,7.0,4.0,0.0,yes,unsure
+P-682E1F,pathfinders-oct28,0,1,Lead / Manager,0.0,8.0,0.0,unsure,no
+P-783C6B,pathfinders-oct28,1,0,Lead / Manager,6.0,10.0,1.0,yes,no
+P-DD0AB6,pathfinders-oct28,0,1,IC / Associate,9.0,9.0,1.0,unsure,unsure
+P-B83DE8,pathfinders-oct28,0,1,,8.0,9.0,1.0,unsure,unsure
+P-15BE46,pathfinders-oct28,1,0,IC / Associate,2.0,9.0,1.0,yes,yes
+P-03B5B0,pathfinders-oct28,0,0,,4.0,2.0,0.0,no,unsure
+P-C01B0E,pathfinders-oct28,0,0,Lead / Manager,8.0,3.0,0.0,yes,yes
+P-44825F,pathfinders-oct28,0,0,IC / Associate,1.0,8.0,1.0,yes,yes

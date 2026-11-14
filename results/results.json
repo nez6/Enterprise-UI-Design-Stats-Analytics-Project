@@ -1,0 +1,565 @@
+{
+  "data_source": "live",
+  "n_participants": 30,
+  "n_tickets": 180,
+  "n_feedback": 29,
+  "n_snow_banner": 16,
+  "n_ai_banner": 12,
+  "n_with_demographics": 23,
+  "cleaning": [
+    {
+      "rule": "Raw data loaded",
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": ""
+    },
+    {
+      "rule": "Excluded ids removed (dry runs / withdrawals)",
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": ""
+    },
+    {
+      "rule": "Double-submitted rows removed",
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": ""
+    },
+    {
+      "rule": "Rows with impossible values removed",
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": ""
+    },
+    {
+      "rule": "Demographics validated (blanked, not dropped)",
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": "13 participant(s) have at least one missing/blank demographic"
+    },
+    {
+      "rule": "Participants with inconsistent banner assignment removed",
+      "rows_before": 223,
+      "rows_after": 223,
+      "participants_before": 46,
+      "participants_after": 46,
+      "note": ""
+    },
+    {
+      "rule": "Walk-aways removed (any ticket > 30 min)",
+      "rows_before": 223,
+      "rows_after": 213,
+      "participants_before": 46,
+      "participants_after": 44,
+      "note": ""
+    },
+    {
+      "rule": "Incomplete participants removed (< 6 tickets)",
+      "rows_before": 213,
+      "rows_after": 180,
+      "participants_before": 44,
+      "participants_after": 30,
+      "note": ""
+    }
+  ],
+  "power": {
+    "alpha_family": 0.05,
+    "alpha_each": 0.025,
+    "target_power": 0.8,
+    "attrition": 0.1,
+    "h1_h2": {
+      "effect_size_d": 0.8,
+      "test": "one-sided Mann-Whitney U, Holm across H1/H2",
+      "n_per_group_ttest": 25.52463124782632,
+      "are_correction": 0.864,
+      "n_per_group": 30,
+      "analysable_total": 60,
+      "recruit_total": 68,
+      "monte_carlo_sims": 300,
+      "monte_carlo_power_h1": 0.77,
+      "monte_carlo_power_h2": 0.5266666666666666,
+      "monte_carlo_power_both": 0.45,
+      "simulation_model_d_h1": 0.6682259461703808,
+      "simulation_model_d_h2": 0.5375480158054099
+    },
+    "h3": {
+      "effect_size_dz": 1.0,
+      "test": "one-sided Wilcoxon signed-rank",
+      "n_pairs_ttest": 7.7276179024108504,
+      "n_pairs": 9
+    },
+    "sensitivity_min_d_by_n_per_group": {
+      "10": 1.3249488712539945,
+      "15": 1.0598008505678362,
+      "20": 0.9091288650947541,
+      "25": 0.8087090091359758,
+      "30": 0.7356230148278837,
+      "40": 0.6342992921939922,
+      "50": 0.5658844232401936
+    }
+  },
+  "randomisation": {
+    "servicenow_banner": {
+      "n_banner": 16,
+      "n_none": 14,
+      "years_median_banner": 19.0,
+      "years_median_none": 13.0,
+      "years_p": 0.7745051264019047,
+      "job_level_p": 0.3610827875137553,
+      "job_level_min_expected": 0.9565217391304348,
+      "set_order_p": 0.6755858549092755
+    },
+    "ai_banner": {
+      "n_banner": 12,
+      "n_none": 18,
+      "years_median_banner": 18.0,
+      "years_median_none": 15.5,
+      "years_p": 0.8309373586400981,
+      "job_level_p": 0.5947964578933449,
+      "job_level_min_expected": 0.782608695652174,
+      "set_order_p": 1.0
+    },
+    "cells": {
+      "servicenow_banner=0, ai_banner=0": 8,
+      "servicenow_banner=0, ai_banner=1": 6,
+      "servicenow_banner=1, ai_banner=0": 10,
+      "servicenow_banner=1, ai_banner=1": 6
+    }
+  },
+  "descriptives": [
+    {
+      "ticket": "SN \u00b7 Access",
+      "platform": "ServiceNow",
+      "n": 30,
+      "time_mean": 126.5767,
+      "time_median": 102.35,
+      "time_sd": 94.4388,
+      "time_iqr": 65.175,
+      "time_skew": 2.4842,
+      "efficiency_mean": 4.8,
+      "frustration_mean": 6.1333,
+      "rage_quit_rate": 0.3
+    },
+    {
+      "ticket": "SN \u00b7 Software",
+      "platform": "ServiceNow",
+      "n": 30,
+      "time_mean": 90.8633,
+      "time_median": 80.15,
+      "time_sd": 56.5625,
+      "time_iqr": 52.075,
+      "time_skew": 1.9691,
+      "efficiency_mean": 4.6667,
+      "frustration_mean": 6.9667,
+      "rage_quit_rate": 0.4
+    },
+    {
+      "ticket": "SN \u00b7 Facilities",
+      "platform": "ServiceNow",
+      "n": 30,
+      "time_mean": 70.8867,
+      "time_median": 59.7,
+      "time_sd": 66.7966,
+      "time_iqr": 31.975,
+      "time_skew": 4.3534,
+      "efficiency_mean": 5.6,
+      "frustration_mean": 6.1667,
+      "rage_quit_rate": 0.3667
+    },
+    {
+      "ticket": "AI \u00b7 Access",
+      "platform": "AI Agent",
+      "n": 30,
+      "time_mean": 72.5833,
+      "time_median": 58.2,
+      "time_sd": 48.2464,
+      "time_iqr": 70.35,
+      "time_skew": 0.9666,
+      "efficiency_mean": 8.0333,
+      "frustration_mean": 3.1333,
+      "rage_quit_rate": 0.0333
+    },
+    {
+      "ticket": "AI \u00b7 Software",
+      "platform": "AI Agent",
+      "n": 30,
+      "time_mean": 61.14,
+      "time_median": 45.75,
+      "time_sd": 54.1069,
+      "time_iqr": 39.4,
+      "time_skew": 2.1084,
+      "efficiency_mean": 7.9667,
+      "frustration_mean": 3.4667,
+      "rage_quit_rate": 0.0
+    },
+    {
+      "ticket": "AI \u00b7 Facilities",
+      "platform": "AI Agent",
+      "n": 30,
+      "time_mean": 47.2067,
+      "time_median": 34.0,
+      "time_sd": 46.0128,
+      "time_iqr": 26.525,
+      "time_skew": 2.4668,
+      "efficiency_mean": 6.7333,
+      "frustration_mean": 3.8333,
+      "rage_quit_rate": 0.0333
+    }
+  ],
+  "h1": {
+    "n_a": 16,
+    "n_b": 14,
+    "mean_a": 5.270833333333334,
+    "mean_b": 4.738095238095239,
+    "sd_a": 2.7058749526279406,
+    "sd_b": 2.5693079031799795,
+    "median_a": 4.833333333333334,
+    "median_b": 4.666666666666666,
+    "mean_diff": 0.5327380952380949,
+    "mean_diff_ci": [
+      -1.4424224819639817,
+      2.5078986724401715
+    ],
+    "mwu_U": 120.5,
+    "mwu_p": 0.36940919692754437,
+    "mwu_p_two_sided": 0.7388183938550887,
+    "rank_biserial": 0.07589285714285714,
+    "rank_biserial_ci": [
+      -0.34375,
+      0.49107142857142855
+    ],
+    "welch_t": 0.5526809170886811,
+    "welch_df": 27.791452794439113,
+    "welch_p": 0.2924501406119967,
+    "cohens_d": 0.2015392647599315,
+    "cohens_d_ci": [
+      -0.517557835751558,
+      0.9206363652714211
+    ],
+    "assumptions": {
+      "shapiro_p_a": 0.6393699510368933,
+      "shapiro_p_b": 0.20834168642008882,
+      "levene_p": 0.9690954328430872
+    },
+    "p_holm": 0.7388183938550887,
+    "reject": false
+  },
+  "h2": {
+    "n_a": 12,
+    "n_b": 18,
+    "mean_a": 8.444444444444445,
+    "mean_b": 7.0,
+    "sd_a": 1.9557392016615676,
+    "sd_b": 2.038838577498974,
+    "median_a": 9.0,
+    "median_b": 7.333333333333334,
+    "mean_diff": 1.4444444444444446,
+    "mean_diff_ci": [
+      -0.08434848825310715,
+      2.9732373771419964
+    ],
+    "mwu_U": 159.0,
+    "mwu_p": 0.9858690110759268,
+    "mwu_p_two_sided": 0.031473372860074476,
+    "rank_biserial": 0.4722222222222222,
+    "rank_biserial_ci": [
+      0.04618055555555559,
+      0.8333333333333334
+    ],
+    "welch_t": 1.948255685527505,
+    "welch_df": 24.419415128581456,
+    "welch_p": 0.9685169675273787,
+    "cohens_d": 0.719845703036744,
+    "cohens_d_ci": [
+      -0.03297084509881398,
+      1.472662251172302
+    ],
+    "assumptions": {
+      "shapiro_p_a": 0.004114103237435592,
+      "shapiro_p_b": 0.2612722503921072,
+      "levene_p": 0.6118603771754451
+    },
+    "p_holm": 0.9858690110759268,
+    "reject": false
+  },
+  "h3": {
+    "n_pairs": 30,
+    "sn_median": 77.99990327132798,
+    "ai_median": 46.30093578882125,
+    "share_faster_with_ai": 0.8333333333333334,
+    "wilcoxon_W": 70.0,
+    "wilcoxon_p": 0.00023005343973636627,
+    "speedup": 1.689794218739423,
+    "speedup_ci": [
+      1.3237231914241676,
+      2.1571009106617707
+    ],
+    "dz": -0.8023127169044288,
+    "matched_rank_biserial": -0.6989247311827957,
+    "shapiro_p_log_diff": 0.003834669078565434,
+    "reject": true
+  },
+  "h4": {
+    "n_a": 12,
+    "n_b": 18,
+    "mean_a": 0.1388888888888889,
+    "mean_b": 0.01851851851851852,
+    "sd_a": 0.2228526411405072,
+    "sd_b": 0.07856742013183862,
+    "median_a": 0.0,
+    "median_b": 0.0,
+    "mean_diff": 0.12037037037037038,
+    "mean_diff_ci": [
+      -0.024435794293337754,
+      0.2651765350340785
+    ],
+    "mwu_U": 138.5,
+    "mwu_p": 0.024930101878453476,
+    "mwu_p_two_sided": 0.04986020375690695,
+    "rank_biserial": 0.2824074074074074,
+    "rank_biserial_ci": [
+      0.0,
+      0.5833333333333334
+    ],
+    "welch_t": 1.7980665945011238,
+    "welch_df": 12.841451259109471,
+    "welch_p": 0.047852428286551923,
+    "cohens_d": 0.7892778042890466,
+    "cohens_d_ci": [
+      0.032018553597718435,
+      1.5465370549803747
+    ],
+    "assumptions": {
+      "shapiro_p_a": 0.0004822530362190778,
+      "shapiro_p_b": 1.0574719828121024e-08,
+      "levene_p": 0.04319797629383086
+    },
+    "ticket_level": {
+      "override_rate_warned": 0.1470588235294118,
+      "override_rate_unwarned": 0.01851851851851849,
+      "chi2": 5.425863931841932,
+      "chi2_p": 0.019840616685604186,
+      "note": "tickets are not independent (3 per person); descriptive only"
+    },
+    "reject": true
+  },
+  "interaction": {
+    "mixed": {
+      "formula": "efficiency ~ platform * banner + (1 | participant)",
+      "interaction_coef": 0.7921525829550303,
+      "interaction_p": 0.5167571421628332,
+      "converged": true,
+      "warnings": []
+    },
+    "anova": {
+      "platform": {
+        "F": 19.304484997960166,
+        "df": 1.0,
+        "p": 5.0141518403638464e-05,
+        "partial_eta_sq": 0.2563523938644967
+      },
+      "banner": {
+        "F": 2.559454838881075,
+        "df": 1.0,
+        "p": 0.11526361916710645,
+        "partial_eta_sq": 0.04370694443660876
+      },
+      "interaction": {
+        "F": 0.5532649470833039,
+        "df": 1.0,
+        "p": 0.4600963334419871,
+        "partial_eta_sq": 0.009783077026604777
+      },
+      "df_resid": 56.0,
+      "note": "two rows per person; the mixed model is the formal test"
+    },
+    "tukey_significant": 3,
+    "tukey_pairs": 6,
+    "cells": {
+      "AI Agent | Banner": {
+        "mean": 8.444444444444445,
+        "ci": 1.2426174050599847,
+        "n": 12
+      },
+      "AI Agent | No banner": {
+        "mean": 7.0,
+        "ci": 1.0138905716325424,
+        "n": 18
+      },
+      "ServiceNow | Banner": {
+        "mean": 5.270833333333334,
+        "ci": 1.441858984530101,
+        "n": 16
+      },
+      "ServiceNow | No banner": {
+        "mean": 4.738095238095239,
+        "ci": 1.4834742171885327,
+        "n": 14
+      }
+    }
+  },
+  "preference": {
+    "n": 29,
+    "share_prefer_ai": 0.7241379310344828,
+    "pseudo_r2": 0.18304336975587188,
+    "terms": {
+      "speedup_log": {
+        "odds_ratio": 4.655809968190307,
+        "or_ci": [
+          0.8418782931924264,
+          25.747862410969255
+        ],
+        "p": 0.07794920008824022
+      },
+      "ai_primed": {
+        "odds_ratio": 1.3596117517721638,
+        "or_ci": [
+          0.21646999389650087,
+          8.539493544961257
+        ],
+        "p": 0.7431591792855036
+      },
+      "snow_primed": {
+        "odds_ratio": 1.4737613471161728,
+        "or_ci": [
+          0.20171423496528748,
+          10.767571800906596
+        ],
+        "p": 0.702305620756778
+      }
+    }
+  },
+  "survey": {
+    "nps": {
+      "nps_banner": -56.25,
+      "nps_none": -53.84615384615385,
+      "mwu_p": 0.2541820326855254
+    },
+    "trust": {
+      "mean_warned": 7.5,
+      "mean_unwarned": 7.0588235294117645,
+      "mwu_p": 0.5446974525269084
+    }
+  },
+  "by_level": {
+    "IC / Associate": {
+      "n": 13,
+      "servicenow_banner_shift": 1.6031746031746037,
+      "ai_warning_shift": 1.9682539682539675
+    },
+    "Lead / Manager": {
+      "n": 8,
+      "servicenow_banner_shift": null,
+      "ai_warning_shift": null
+    },
+    "Director / Executive": {
+      "suppressed": true,
+      "servicenow_banner_shift": null,
+      "ai_warning_shift": null
+    }
+  },
+  "manipulation_checks": {
+    "mc_snow": {
+      "pass_rate": 0.3103448275862069,
+      "pass_banner": 0.4375,
+      "pass_none": 0.15384615384615385,
+      "n": 29
+    },
+    "mc_ai": {
+      "pass_rate": 0.13793103448275862,
+      "pass_banner": 0.16666666666666666,
+      "pass_none": 0.11764705882352941,
+      "n": 29
+    }
+  },
+  "platform_ratings": {
+    "efficiency": {
+      "n": 30,
+      "mean_diff": 2.555555555555556,
+      "ci": [
+        1.467839893591672,
+        3.6432712175194393
+      ],
+      "dz": 0.8773065982591187,
+      "wilcoxon_p": 0.000278860821312543
+    },
+    "frustration": {
+      "n": 30,
+      "mean_diff": -2.9444444444444446,
+      "ci": [
+        -4.112102590544891,
+        -1.7767862983439984
+      ],
+      "dz": -0.9416057504250644,
+      "wilcoxon_p": 0.00011787431212884629
+    },
+    "abandoned": {
+      "ServiceNow": {
+        "n": 32,
+        "of": 90
+      },
+      "AI Agent": {
+        "n": 2,
+        "of": 90
+      }
+    }
+  },
+  "planted_error": {
+    "tickets": 18,
+    "caught": 5,
+    "rated": 18,
+    "arms": {
+      "0": 18
+    }
+  },
+  "raw_file": "data/raw/live_sessions_deidentified.csv",
+  "dropout": {
+    "by_order": {
+      "ai_first": {
+        "started": 30,
+        "excluded": 13
+      },
+      "legacy_first": {
+        "started": 16,
+        "excluded": 3
+      }
+    },
+    "fisher_p": 0.11685671267953388,
+    "ai_first_left_at_switch": 8,
+    "order_balance_p": 0.054076031858869555,
+    "started": 46,
+    "sensitivity": {
+      "h1": {
+        "n_a": 17,
+        "n_b": 19,
+        "mean_a": 5.137254901960785,
+        "mean_b": 4.4912280701754375,
+        "p": 0.27815089450163644,
+        "p_holm": 0.5563017890032729
+      },
+      "h2": {
+        "n_a": 20,
+        "n_b": 21,
+        "mean_a": 7.55,
+        "mean_b": 6.825396825396824,
+        "p": 0.9270305079727428,
+        "p_holm": 0.9270305079727428
+      },
+      "h3": {
+        "n": 33,
+        "speedup": 1.6629646611171574,
+        "p": 0.00012245948892086744
+      }
+    }
+  }
+}

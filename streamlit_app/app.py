@@ -2,21 +2,14 @@
 The Enterprise Workflow & Applied Statistics Lab
 ================================================
 
-A single-file Streamlit application with two jobs:
-
-1. A live split-test simulator that walks a participant through six enterprise
-   ticketing tasks (four clean baselines, a chaotic AI bot, and a primed
-   documentation hunt) and captures telemetry plus survey ratings.
-2. A visual statistics textbook (EDA -> hypothesis tests -> ANOVA -> regression
-   -> Bayesian updating) that runs every analysis on either that live telemetry
-   or a seeded benchmark dataset of 300 synthetic participants.
+A visual statistics textbook (EDA -> hypothesis tests -> ANOVA -> regression ->
+Bayesian updating) that runs every analysis on a seeded benchmark of 300 synthetic
+participants. It does not collect data: participants use the SNOW Stats Lab portal,
+which stores everything in one shared database.
 
 Run with:  streamlit run app.py
 """
 
-import random
-import time
-import uuid
 from contextlib import contextmanager
 
 import numpy as np
@@ -30,6 +23,12 @@ from statsmodels.stats.anova import anova_lm
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 from statsmodels.stats.power import TTestIndPower
 
+from legacy_lab.design import AI_BOT, JOB_LEVELS, LEGACY, TESTS
+from legacy_lab.features import enrich
+from legacy_lab.simulate import simulate_panel
+
+PORTAL_URL = "https://nez6.github.io/Enterprise-UI-Design-Stats-Analytics-Project/?session=pathfinders#/portal"
+
 st.set_page_config(
     page_title="Enterprise AI & Statistics Lab",
     page_icon="📊",
@@ -37,31 +36,8 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------------------------
-# Constants
+# Display constants
 # ---------------------------------------------------------------------------
-
-JOB_LEVELS = ["IC / Associate", "Lead / Manager", "Director / Executive"]
-JOB_ROLES = ["Project / Product Management", "Engineering / Tech", "Operations", "Other"]
-LEGACY, AI_BOT = "Legacy Ticketing", "AI Bot"
-
-TESTS = {
-    1: dict(name="Password Reset", short="T1 Password", workflow=LEGACY, chaos=0),
-    2: dict(name="Software License Request", short="T2 License", workflow=LEGACY, chaos=0),
-    3: dict(name="VPN Access (AI Assistant)", short="T3 VPN", workflow=AI_BOT, chaos=0),
-    4: dict(name="Laptop Replacement (AI Assistant)", short="T4 Laptop", workflow=AI_BOT, chaos=0),
-    5: dict(name="The Chaos AI Bot", short="T5 Chaos Bot", workflow=AI_BOT, chaos=1),
-    6: dict(name="The Primed Documentation Hunt", short="T6 Doc Hunt", workflow=LEGACY, chaos=1),
-}
-
-# Participants in the primed arm see a banner before each chaos test. Priming both
-# an AI test and a legacy test keeps the workflow x priming design fully crossed,
-# which the two-way ANOVA interaction term needs.
-PRIMING_TEXT = {
-    5: "As a reminder, our AI Assistant resolves 94% of tickets on first contact.",
-    6: "As a reminder, ServiceNow’s single pane of glass is incredibly efficient.",
-}
-
-CART_CODE = "CART-7781"
 
 # Palette: validated dark-mode categorical steps (blue, orange, aqua) on a #1a1a19 surface.
 PAL = dict(
@@ -159,551 +135,48 @@ def mean_ci(series):
     return s.mean(), stats.t.ppf(0.975, n - 1) * s.std(ddof=1) / np.sqrt(n)
 
 
-def enrich(df):
-    df = df.copy()
-    df["years_experience"] = pd.to_numeric(df["years_experience"], errors="coerce")
-    df["priming"] = np.where(df["priming_exposed"] == 1, "Primed", "Unprimed")
-    df["phase"] = np.where(df["workflow_chaos"] == 1, "Chaos (Tests 5–6)", "Baseline (Tests 1–4)")
-    df["test_label"] = df["test_num"].map(lambda t: TESTS[t]["short"])
-    df["completion_min"] = df["completion_time"] / 60
-    df["exp_bucket"] = pd.cut(
-        df["years_experience"], [-0.1, 3, 9, 15, 100],
-        labels=["0–3 yrs", "4–9 yrs", "10–15 yrs", "16+ yrs"],
-    )
-    return df
-
-
 # ---------------------------------------------------------------------------
 # Benchmark synthetic data
 # ---------------------------------------------------------------------------
 
 @st.cache_data
 def generate_benchmark(n=300, seed=42):
-    """Seeded synthetic panel: n participants x 6 tests, built to exhibit the
-    effects the textbook tabs teach (right-skewed chaos times, priming that hits
-    executives hardest, and a Simpson's paradox between experience and
-    perceived efficiency)."""
-    np.random.seed(seed)
-
-    # --- Participant-level attributes ------------------------------------
-    # Seniority is a pyramid, and years of experience are drawn from a band that
-    # overlaps neighbouring levels. That overlap is what lets the Simpson's
-    # paradox appear: experience and seniority are correlated but not identical.
-    levels = np.random.choice(JOB_LEVELS, n, p=[0.50, 0.32, 0.18])
-    year_ranges = {JOB_LEVELS[0]: (0, 7), JOB_LEVELS[1]: (4, 15), JOB_LEVELS[2]: (10, 25)}
-    years = np.array([np.random.randint(year_ranges[l][0], year_ranges[l][1] + 1) for l in levels])
-    roles = np.random.choice(JOB_ROLES, n, p=[0.35, 0.35, 0.20, 0.10])
-    primed_arm = np.random.binomial(1, 0.5, n)  # 50/50 randomisation, as in the live app
-    speed = np.random.lognormal(0, 0.18, n)     # some people are just faster at every task
-
-    # --- Effect-size knobs --------------------------------------------------
-    # level_eff_offset: seniors rate the system higher overall (the between-group
-    #   trend), while efficiency falls with years *within* a level (-0.12/yr below).
-    #   Together they produce the Simpson's paradox shown in Tab 5.
-    # prime_susceptibility: how far the banner moves frustration and efficiency.
-    #   Executives are the most suggestible, which drives Tab 4's job-level plot.
-    # base_time / time_sigma: chaos tests have a higher median and a much larger
-    #   lognormal sigma, which creates the long right tail Tab 2 is about.
-    level_mean_years = {JOB_LEVELS[0]: 3.5, JOB_LEVELS[1]: 9.5, JOB_LEVELS[2]: 17.5}
-    level_eff_offset = {JOB_LEVELS[0]: -1.3, JOB_LEVELS[1]: 0.0, JOB_LEVELS[2]: 1.9}
-    prime_susceptibility = {JOB_LEVELS[0]: 0.3, JOB_LEVELS[1]: 1.0, JOB_LEVELS[2]: 2.4}
-    base_time = {1: 45, 2: 60, 3: 50, 4: 55, 5: 150, 6: 240}
-    time_sigma = {1: 0.25, 2: 0.25, 3: 0.25, 4: 0.25, 5: 0.6, 6: 0.7}
-    base_frust = {1: 3.0, 2: 3.2, 3: 2.6, 4: 2.7, 5: 6.8, 6: 7.2}
-    base_eff = {1: 6.4, 2: 6.2, 3: 7.2, 4: 7.0, 5: 3.0, 6: 2.7}
-    base_errors = {1: 0.2, 2: 0.3, 3: 0.15, 4: 0.15, 5: 2.5, 6: 3.0}
-
-    rows = []
-    for i in range(n):
-        lvl, yrs = levels[i], years[i]
-        for t, meta in TESTS.items():
-            chaos = meta["chaos"]
-            legacy = meta["workflow"] == LEGACY
-            primed = int(primed_arm[i] and chaos)
-            # The banner names the legacy system, so it lands harder on Test 6.
-            prime_weight = 1.0 if legacy else 0.5
-
-            ct = base_time[t] * speed[i] * np.random.lognormal(0, time_sigma[t])
-            ct *= 1 - 0.008 * yrs if not chaos else 1.0
-            if t == 6 and lvl == JOB_LEVELS[2]:
-                ct *= 1.25  # executives are least practiced at hunting through KB articles
-
-            # Rage-quit follows a true logistic model, so Tab 5's regression can
-            # recover these coefficients: chaos raises the odds steeply, experience
-            # lowers them, and priming lowers them slightly (people persist when
-            # told the system is efficient). Baseline quit rate is about 1%.
-            logit = -4.2 + 3.0 * chaos + 0.5 * (t == 6) - 0.06 * yrs - 0.5 * primed
-            rage_quit = int(np.random.rand() < 1 / (1 + np.exp(-logit)))
-            if rage_quit:
-                ct *= np.random.uniform(0.4, 0.9)  # quitters stop the clock early
-
-            # Survey ratings are latent continuous scores, rounded and clipped to 1-10
-            # to match the slider scale participants actually use.
-
-            errors = np.random.poisson(base_errors[t])
-            frust = (
-                base_frust[t]
-                + 0.004 * (ct - base_time[t])
-                + 1.5 * rage_quit
-                + 0.25 * errors
-                - primed * prime_susceptibility[lvl] * prime_weight
-                + np.random.normal(0, 1.0)
-            )
-            eff = (
-                base_eff[t]
-                + level_eff_offset[lvl]
-                - 0.12 * (yrs - level_mean_years[lvl])
-                + primed * prime_susceptibility[lvl] * 1.2 * prime_weight
-                - 1.0 * rage_quit
-                + np.random.normal(0, 1.0)
-            )
-            rows.append(dict(
-                participant_id=f"BENCH-{i:03d}",
-                source="benchmark",
-                years_experience=int(yrs),
-                job_level=lvl,
-                job_role=roles[i],
-                primed_arm=int(primed_arm[i]),
-                test_num=t,
-                test_name=meta["name"],
-                workflow=meta["workflow"],
-                workflow_chaos=chaos,
-                priming_exposed=primed,
-                completion_time=round(float(ct), 1),
-                error_count=int(errors),
-                rage_quit=rage_quit,
-                frustration=int(np.clip(round(frust), 1, 10)),
-                efficiency=int(np.clip(round(eff), 1, 10)),
-            ))
-    return enrich(pd.DataFrame(rows))
+    """Benchmark dataset for the teaching tabs (see lab/simulate.py for the data-generating process)."""
+    return enrich(simulate_panel(n, seed))
 
 
 # ---------------------------------------------------------------------------
-# Session state
+# Sidebar and data
 # ---------------------------------------------------------------------------
-
-def init_state():
-    """The simulator is a small state machine. Streamlit reruns the whole script on
-    every click, so all progress has to live in session_state:
-
-        step 0 (intro) -> step 1..6 [phase "task" -> phase "survey"] -> step 7 (done)
-    """
-    ss = st.session_state
-    ss.setdefault("telemetry", [])     # one dict per completed test, across all participants
-    ss.setdefault("step", 0)           # 0 = intro, 1..6 = tests, 7 = finished
-    ss.setdefault("phase", "task")     # task | survey
-    ss.setdefault("participant", None) # demographics + id + randomised arm
-    ss.setdefault("t_start", None)     # wall-clock start of the current test
-    ss.setdefault("errors", 0)         # validation / fake-UI errors in the current test
-    ss.setdefault("attempts", 0)       # Test 5 submissions, also seeds its chaos
-    ss.setdefault("pending", None)     # task result waiting for its survey answers
-    ss.setdefault("flash", None)       # error message that must survive one st.rerun()
-
-
-def live_dataframe():
-    if not st.session_state.telemetry:
-        return pd.DataFrame()
-    return enrich(pd.DataFrame(st.session_state.telemetry))
-
-
-init_state()
-ss = st.session_state
-
-
-# ---------------------------------------------------------------------------
-# Sidebar
-# ---------------------------------------------------------------------------
+# Data collection happens in ONE place: the SNOW Stats Lab service portal, which stores
+# every ticket in the shared Supabase database. This app no longer runs its own
+# simulator or keeps its own data; it is a statistics textbook on a seeded benchmark.
 
 with st.sidebar:
     st.title("Enterprise AI & Statistics Lab")
-    st.caption("Split-testing legacy ticketing against an AI bot, with a full applied-statistics textbook attached.")
-    source = st.radio(
-        "Analysis data source",
-        ["Use Live Session Telemetry", "Use Benchmark Synthetic Data (N=300)"],
-        index=1,
-    )
-    live_df = live_dataframe()
-    n_live = live_df["participant_id"].nunique() if not live_df.empty else 0
-    c1, c2 = st.columns(2)
-    c1.metric("Live participants", n_live)
-    c2.metric("Live test rows", len(live_df))
-    if not live_df.empty:
-        st.download_button(
-            "⬇️ Download live telemetry (CSV)",
-            live_df.to_csv(index=False).encode(),
-            "live_telemetry.csv",
-            "text/csv",
-        )
-    if st.button("🔄 Reset session telemetry"):
-        for key in list(ss.keys()):
-            del ss[key]
-        st.rerun()
-    st.divider()
-    st.caption(
-        "Live telemetry lives only in this browser session. Download it before resetting "
-        "or closing the tab if you want to keep it."
-    )
+    st.caption("An interactive applied-statistics textbook on a 300-person simulated ticketing experiment.")
+    st.info("**Taking part?** Tickets are filed in the SNOW Stats Lab portal, the only place study data is "
+            "collected. This page never collects or stores your data.")
+    st.link_button("Open the SNOW Stats Lab portal", PORTAL_URL)
 
-bench_df = generate_benchmark()
-using_live = source.startswith("Use Live") and not live_df.empty
-df = live_df if using_live else bench_df
+df = generate_benchmark()
 
 st.title("The Enterprise Workflow & Applied Statistics Lab")
-if source.startswith("Use Live") and live_df.empty:
-    st.info(
-        "No live telemetry yet, so the analysis tabs are showing the **benchmark dataset**. "
-        "Complete the simulator in Tab 1 to analyse your own session."
-    )
-elif using_live:
-    st.caption(
-        f"Analysing **live telemetry**: {n_live} participant(s), {len(live_df)} rows. "
-        "Small samples make several models unstable, which is itself a lesson."
-    )
-else:
-    st.caption("Analysing the **benchmark dataset**: 300 synthetic participants × 6 tests, seed 42.")
+st.caption("Analysing the **benchmark dataset**: 300 synthetic participants × 6 tests, seed 42. No live data is collected here.")
 
 tabs = st.tabs([
-    "🧪 1 · Live Simulator",
-    "📊 2 · EDA & Demographics",
-    "⚖️ 3 · Hypothesis Testing",
-    "🧮 4 · Two-Way ANOVA",
-    "📈 5 · Regression",
-    "🧠 6 · Bayes & Manifesto",
+    "📊 1 · EDA & Demographics",
+    "⚖️ 2 · Hypothesis Testing",
+    "🧮 3 · Two-Way ANOVA",
+    "📈 4 · Regression",
+    "🧠 5 · Bayes & Manifesto",
 ])
-
-
-# ---------------------------------------------------------------------------
-# Tab 1 - The live experiment simulator
-# ---------------------------------------------------------------------------
-
-# Clean baseline forms: (kind, label, options, default index)
-CLEAN_FORMS = {
-    1: [
-        ("text", "Username / Employee ID", None, None),
-        ("select", "Affected system", ["Active Directory", "SAP", "Salesforce", "Workday"], None),
-        ("radio", "Urgency", ["Low", "Medium", "High"], None),
-    ],
-    2: [
-        ("select", "Software", ["Figma", "Tableau", "JetBrains All Products", "Adobe Creative Cloud"], None),
-        ("text", "Cost center code (e.g. CC-4410)", None, None),
-        ("area", "Business justification", None, None),
-    ],
-    3: [
-        ("area", "Tell Nova what you need", None, None),
-        ("select", "Nova's suggested category", ["Network › VPN Access", "Network › Wi-Fi", "Security › MFA"], 0),
-    ],
-    4: [
-        ("area", "Tell Nova what you need", None, None),
-        ("select", "Nova's suggested category", ["Hardware › Laptop Replacement", "Hardware › Monitor", "Hardware › Peripherals"], 0),
-        ("radio", "Delivery location", ["Office desk", "Home address on file"], 0),
-    ],
-}
-
-BOT_GREETINGS = {
-    3: "Hi! I'm **Nova**, your IT assistant. I've already detected you're on the corporate network and pre-filled the category.",
-    4: "Welcome back! I've pulled your asset record (MBP-2021-0442) and pre-selected a replacement category.",
-}
-
-CHAOS_REPLIES = [
-    "Great question! Have you considered that the outage might be a feature?",
-    "I've analysed your request and determined it is a request. Please clarify the request.",
-    "Based on synergy vectors, I recommend rebooting the cloud.",
-    "I'm 87% confident this relates to printers. Or possibly DNS. It's always DNS.",
-    "Your ticket has been categorised as 'Vibes › Unclear'. Would you like to escalate to a different AI?",
-    "Per policy, I can't help with production outages, but I can write you a haiku about one.",
-]
-HALLUCINATED = [
-    "Quantum Printer Calibration",
-    "Blockchain › Mood Ledger",
-    "Cloud › Weather (Actual Clouds)",
-    "Synergy › Paradigm Shift Request",
-    "Hardware › Emotional Support Monitor",
-    "Network › Vibe Check",
-    "AI › Ask Another AI",
-    "Facilities › Ceiling Bandwidth",
-]
-CHAOS_CORRECT = "Incident › Production Outage (Sev 1)"
-CHAOS_ERRORS = [
-    "⚠️ Error 503: Nova's context window overflowed. Please re-enter your request.",
-    "🤖 Nova: I've escalated this to Tier 3… wait, I've un-escalated it. Please resubmit.",
-    "TypeError: undefined is not a ticket (at nova.js:4471)",
-    "Session token hallucinated. Please try again.",
-]
-
-
-def finish_task(rage_quit=False):
-    """Stop the clock and hand the result to the survey phase. The row is only
-    written to telemetry after the survey, so every row has ratings."""
-    ss.pending = dict(
-        completion_time=round(time.time() - ss.t_start, 1),
-        error_count=ss.errors,
-        rage_quit=int(rage_quit),
-    )
-    ss.phase = "survey"
-    st.rerun()
-
-
-def abandon_button(test_num, prominent=False):
-    label = "🏳️ Abandon Ticket / I Give Up"
-    key = f"{ss.participant['id']}_abandon_{test_num}"
-    if prominent:
-        clicked = st.button(label, type="primary", key=key)
-    else:
-        clicked = st.button(label, key=key, help="Logs this test as a rage-quit.")
-    if clicked:
-        finish_task(rage_quit=True)
-
-
-def render_clean_test(test_num):
-    """Tests 1-4: ordinary, well-behaved forms. Widget keys include the participant
-    id so the next participant starts with blank fields."""
-    pid = ss.participant["id"]
-    if test_num in BOT_GREETINGS:
-        st.chat_message("assistant").markdown(BOT_GREETINGS[test_num])
-    with st.form(f"{pid}_form_{test_num}"):
-        values = []
-        for i, (kind, label, options, default) in enumerate(CLEAN_FORMS[test_num]):
-            key = f"{pid}_t{test_num}_f{i}"
-            if kind == "text":
-                values.append(st.text_input(label, key=key))
-            elif kind == "area":
-                values.append(st.text_area(label, key=key, height=90))
-            elif kind == "select":
-                values.append(st.selectbox(label, options, index=default, key=key, placeholder="Choose…"))
-            elif kind == "radio":
-                values.append(st.radio(label, options, index=default, key=key, horizontal=True))
-        submitted = st.form_submit_button("Submit ticket", type="primary")
-    if submitted:
-        if any(v in (None, "") for v in values):
-            ss.errors += 1
-            st.error("Validation failed: every field is required.")
-        else:
-            finish_task()
-    abandon_button(test_num)
-
-
-def render_chaos_bot():
-    """Test 5: a half-broken AI assistant. It gives vague replies, hallucinates
-    subcategories, offers nonsense priorities and throws fake errors."""
-    pid = ss.participant["id"]
-    # The RNG is seeded per attempt so options stay stable while the user is
-    # choosing (a reshuffle on every rerun would make the form unusable). They
-    # reshuffle, and the hallucinations rotate, after each failed submission.
-    rng = random.Random(f"{pid}-{ss.attempts}")
-    st.chat_message("assistant").markdown(
-        "Hi, I'm **Nova 2.0 (beta)** ✨ — now with *generative categorisation*! " + rng.choice(CHAOS_REPLIES)
-    )
-    options = rng.sample(HALLUCINATED, 5) + [CHAOS_CORRECT]
-    rng.shuffle(options)
-    priority_opts = rng.sample(["P1", "Urgent-ish", "P∞", "Medium Rare", "P0.5", "Whenever"], 4)
-    with st.form(f"{pid}_form_5_{ss.attempts}"):
-        desc = st.text_area("Describe the production outage to Nova", key=f"{pid}_t5_desc", height=90)
-        sub = st.selectbox("Subcategory (AI-generated)", options, index=None, placeholder="Nova is thinking…")
-        st.radio("Priority (Nova-suggested)", priority_opts, horizontal=True)
-        submitted = st.form_submit_button("Send to Nova", type="primary")
-    # Errors are stored and shown after st.rerun() because the rerun is what
-    # rebuilds the form with freshly shuffled options.
-    if ss.flash:
-        st.error(ss.flash)
-        ss.flash = None
-    if submitted:
-        ss.attempts += 1
-        # Order of checks: missing input, then a hallucinated category, then a random
-        # fake outage. Fake outages stop after 3 attempts so the test is always
-        # winnable for anyone who persists.
-        if not desc or sub is None:
-            ss.errors += 1
-            ss.flash = "Nova: I can't categorise silence. Please describe the issue and pick a subcategory."
-            st.rerun()
-        elif sub != CHAOS_CORRECT:
-            ss.errors += 1
-            ss.flash = f"Nova: '{sub}' isn't a real category in this universe. Ticket rejected."
-            st.rerun()
-        elif ss.attempts < 4 and rng.random() < 0.65:
-            ss.errors += 1
-            ss.flash = rng.choice(CHAOS_ERRORS)
-            st.rerun()
-        else:
-            finish_task()
-    abandon_button(5)
-
-
-DENSE_FILLER = (
-    "In accordance with the Unified Request Fulfilment Framework (URFF) and subject to the governance "
-    "provisions of Annex 14(c), all service interactions shall be classified, triaged, and routed through "
-    "the appropriate assignment group as defined in the Configuration Management Database, except where "
-    "superseded by regional addenda, change-freeze windows, or ad-hoc executive exceptions logged under "
-    "the Exception Register (see KB0009921, KB0011004, and the deprecated KB0003318). Requesters are "
-    "reminded that SLA clocks commence upon validated categorisation rather than submission, and that "
-    "partially completed records are auto-archived after 72 business hours. "
-)
-
-
-def render_doc_hunt():
-    """Test 6: the form has no submit button. Users must scroll past the filler, open
-    the KB article and spot the cart code (paragraph 1.3), then check out from
-    inside the article. Plain widgets are used instead of st.form, because a form
-    must have a submit button."""
-    pid = ss.participant["id"]
-    st.markdown("#### 🎥 Request: Conference Room AV setup for the 5:00 PM board call")
-    abandon_button(6, prominent=True)
-    st.selectbox("Request type", ["Facilities", "AV / Conferencing", "General Inquiry"], index=None,
-                 key=f"{pid}_t6_type", placeholder="Choose…")
-    st.text_input("Room number", key=f"{pid}_t6_room")
-    st.text_area("Describe your request", key=f"{pid}_t6_desc", height=90)
-    st.caption("ℹ️ For your convenience, the submission process has been streamlined. See documentation below.")
-    st.markdown(
-        "<div class='dense-doc'>" + "".join(
-            f"<p><b>§{i}.</b> {DENSE_FILLER}</p>" for i in range(1, 7)
-        ) + "</div>",
-        unsafe_allow_html=True,
-    )
-    with st.expander("📎 KB0012847 — Unified Request Fulfilment Procedures (Rev. 47) · documentation link"):
-        st.markdown(
-            "<div class='dense-doc'>"
-            f"<p><b>1.1 Scope.</b> {DENSE_FILLER}</p>"
-            f"<p><b>1.2 Definitions.</b> {DENSE_FILLER}</p>"
-            "<p><b>1.3 Submission.</b> Pursuant to the platform consolidation initiative, discrete request "
-            "forms no longer transmit records directly. Requesters must instead add the item to the Service "
-            "Catalog Shopping Cart by entering the cart reference code CART-7781 in the Cart Reference field "
-            "below and proceeding to checkout, after which the record is created in a pending-approval state "
-            f"and routed per Annex 14(c). {DENSE_FILLER}</p>"
-            f"<p><b>1.4 Exceptions.</b> {DENSE_FILLER}</p>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
-        code = st.text_input("Cart Reference", key=f"{pid}_t6_code")
-        if st.button("🛒 Proceed to Checkout", key=f"{pid}_t6_checkout"):
-            filled = all(ss.get(f"{pid}_t6_{k}") for k in ("type", "room", "desc"))
-            if code.strip().upper() != CART_CODE:
-                ss.errors += 1
-                st.error("Checkout failed: invalid cart reference. Please consult the documentation.")
-            elif not filled:
-                ss.errors += 1
-                st.error("Checkout failed: the request form above is incomplete.")
-            else:
-                finish_task()
-
-
-def render_survey(test_num):
-    pid = ss.participant["id"]
-    res = ss.pending
-    if res["rage_quit"]:
-        st.warning(f"Ticket abandoned after **{res['completion_time']:.1f}s**. Logged as a rage-quit.")
-    else:
-        st.success(f"Test {test_num} complete in **{res['completion_time']:.1f}s** with {res['error_count']} error(s).")
-    with st.form(f"{pid}_survey_{test_num}"):
-        st.markdown("**Quick pulse check**")
-        frust = st.slider("Frustration (1 = calm, 10 = rage)", 1, 10, 5)
-        eff = st.slider("Perceived system efficiency (1 = useless, 10 = flawless)", 1, 10, 5)
-        label = "Finish the grind 🏁" if test_num == 6 else f"On to Test {test_num + 1} →"
-        nxt = st.form_submit_button(label, type="primary")
-    if nxt:
-        p = ss.participant
-        meta = TESTS[test_num]
-        # Priming exposure is per row: primed-arm participants only see a banner on
-        # chaos tests, so their baseline rows count as unprimed.
-        primed = int(p["primed_arm"] and meta["chaos"])
-        ss.telemetry.append(dict(
-            participant_id=p["id"],
-            source="live",
-            years_experience=p["years"],
-            job_level=p["level"],
-            job_role=p["role"],
-            primed_arm=p["primed_arm"],
-            test_num=test_num,
-            test_name=meta["name"],
-            workflow=meta["workflow"],
-            workflow_chaos=meta["chaos"],
-            priming_exposed=primed,
-            completion_time=res["completion_time"],
-            error_count=res["error_count"],
-            rage_quit=res["rage_quit"],
-            frustration=frust,
-            efficiency=eff,
-        ))
-        ss.step += 1
-        ss.phase = "task"
-        ss.t_start = None
-        ss.errors = 0
-        ss.attempts = 0
-        ss.pending = None
-        st.rerun()
-
-
-with tabs[0]:
-    if ss.step == 0:
-        st.subheader("Phase 1 · The Scenario")
-        st.markdown(
-            "<div class='scenario-card'><b>The Scenario:</b> <i>“You are a Project Lead at a fast-growing "
-            "tech firm. It’s 4:45 PM on a Friday, and you must log 6 urgent IT/System requests before "
-            "end-of-day. Your goal: Survive the enterprise ticketing system and get your tickets resolved "
-            "as fast as possible.”</i></div>",
-            unsafe_allow_html=True,
-        )
-        st.markdown("**Optional demographics** (recommended for science, every field can be skipped)")
-        with st.form("demographics"):
-            c1, c2, c3 = st.columns(3)
-            years = c1.number_input("Years of experience (25 = 25+)", 0, 25, value=None, step=1)
-            level = c2.selectbox("Job level", JOB_LEVELS, index=None, placeholder="Prefer not to say")
-            role = c3.selectbox("Job role", JOB_ROLES, index=None, placeholder="Prefer not to say")
-            start = st.form_submit_button("🚀 Start the 4:45 PM grind", type="primary")
-        st.caption(
-            "You'll be randomly assigned to a primed or control arm. Your timings and ratings stay in this "
-            "browser session unless you download them."
-        )
-        if start:
-            ss.participant = dict(
-                id=f"LIVE-{uuid.uuid4().hex[:6].upper()}",
-                years=years,
-                level=level,
-                role=role,
-                primed_arm=random.randint(0, 1),
-            )
-            ss.step = 1
-            st.rerun()
-
-    elif 1 <= ss.step <= 6:
-        t = ss.step
-        meta = TESTS[t]
-        st.progress((t - 1) / 6, text=f"Test {t} of 6 · {meta['workflow']}")
-        st.subheader(f"Test {t} · {meta['name']}")
-        if ss.phase == "task":
-            if ss.participant["primed_arm"] and t in PRIMING_TEXT:
-                st.markdown(f"<div class='priming-banner'>📣 {PRIMING_TEXT[t]}</div>", unsafe_allow_html=True)
-            # The clock starts the first time the test page renders and survives
-            # the reruns triggered by typing and clicking within the test.
-            if ss.t_start is None:
-                ss.t_start = time.time()
-            if t <= 4:
-                render_clean_test(t)
-            elif t == 5:
-                render_chaos_bot()
-            else:
-                render_doc_hunt()
-        else:
-            render_survey(t)
-
-    else:
-        st.subheader("🏁 You survived Friday at 4:45 PM")
-        mine = live_df[live_df["participant_id"] == ss.participant["id"]]
-        bench_median = bench_df.groupby("test_num")["completion_time"].median()
-        summary = mine[["test_num", "test_name", "completion_time", "error_count", "rage_quit", "frustration", "efficiency"]].copy()
-        summary["benchmark_median_time"] = summary["test_num"].map(bench_median).round(1)
-        st.dataframe(summary, hide_index=True)
-        arm = "primed" if ss.participant["primed_arm"] else "control"
-        st.caption(f"You were in the **{arm}** arm. Switch the sidebar to live telemetry to analyse your session.")
-        if st.button("➕ Run another participant", type="primary"):
-            ss.step = 0
-            ss.participant = None
-            st.rerun()
-
 
 # ---------------------------------------------------------------------------
 # Tab 2 - EDA & demographics (Chapters 1 & 2)
 # ---------------------------------------------------------------------------
 
-with tabs[1]:
+with tabs[0]:
     st.header("Exploratory Data Analysis & Demographics")
     chapter("Chapters 1 & 2", "Describing a distribution: centre, spread, shape", r"""
 The **mean** $\bar x = \frac{1}{n}\sum x_i$ is the balance point of the data, so a handful of very
@@ -827,7 +300,7 @@ COMPARISONS = {
         "Within-subject comparison treated as independent, for illustration."),
 }
 
-with tabs[2]:
+with tabs[1]:
     st.header("Hypothesis Testing & Assumptions")
     chapter("Chapters 3, 4 & 6", "From a question to a p-value", r"""
 A hypothesis test asks: *if there were truly no difference ($H_0$), how surprising is what we saw?*
@@ -1014,7 +487,7 @@ $\alpha$. The usual target is 80%. Cohen's benchmarks are small $d=0.2$, medium 
 # Tab 4 - Two-way ANOVA & demographic interactions (Chapters 7 & 9)
 # ---------------------------------------------------------------------------
 
-with tabs[3]:
+with tabs[2]:
     st.header("Two-Way ANOVA & Demographic Interactions")
     chapter("Chapters 7 & 9", "Partitioning variance between factors", r"""
 ANOVA splits the total variability in an outcome into pieces explained by each factor, plus what's
@@ -1124,7 +597,7 @@ def coef_table(res, odds=False):
     return out.round(4)
 
 
-with tabs[4]:
+with tabs[3]:
     st.header("Logistic Regression & OLS Modelling")
     chapter("Chapter 10", "Logistic regression: modelling a yes/no outcome", r"""
 A rage-quit is binary, so we model its **log-odds** as a straight line:
@@ -1258,7 +731,7 @@ and a bent Q–Q line signals non-normal errors.
 # Tab 6 - Bayesian updating & manifesto (Chapter 11 & conclusion)
 # ---------------------------------------------------------------------------
 
-with tabs[5]:
+with tabs[4]:
     st.header("Bayesian Updating & the AI Governance Manifesto")
     chapter("Chapter 11", "Bayes' theorem: trust as a belief that updates", r"""
 $$P(\text{reliable}\mid\text{data})=\frac{P(\text{data}\mid\text{reliable})\,P(\text{reliable})}{P(\text{data})}$$
